@@ -160,6 +160,7 @@ class _MainState extends ConsumerState<Main> with WindowListener, WidgetsBinding
     switch (state) {
       case AppLifecycleState.resumed:
         enableTimeOut();
+        enableDefaultNavbarOverlay();
         break;
       case AppLifecycleState.hidden:
         break;
@@ -170,6 +171,15 @@ class _MainState extends ConsumerState<Main> with WindowListener, WidgetsBinding
       default:
         break;
     }
+  }
+
+  void enableDefaultNavbarOverlay() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+    ));
   }
 
   void enableTimeOut() async {
