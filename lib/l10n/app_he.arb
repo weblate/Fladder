@@ -36,7 +36,7 @@
     "backgroundOpacity": "שקיפות רקע",
     "biometricsFailedCheckAgain": "ביומטרי נכשל. יש לבדוק את ההגדרות ולנסות מחדש.",
     "bold": "מובלט",
-    "cancel": "לבטל",
+    "cancel": "ביטול",
     "change": "לשנות",
     "chapter": "{count, plural, one{פרק} other{פרקים}}",
     "@chapter": {
@@ -50,7 +50,7 @@
     },
     "clear": "לנקות",
     "clearAllSettings": "לנקות את כלל ההגדרות",
-    "clearAllSettingsQuestion": "לנקות את כלל ההגדרות?",
+    "clearAllSettingsQuestion": "לנקות את כל ההגדרות?",
     "clearChanges": "לנקות את השינויים",
     "clearSelection": "לנקות בחירה",
     "close": "לסגור",
@@ -77,7 +77,7 @@
     "displayLanguage": "שפת תצוגה",
     "downloadsClearDesc": "למחוק את כל המידע המסונכרן, לנקות את כל המידע לכל משתמש מסונכרן?",
     "downloadsClearTitle": "לנקות מידע מסונכרן",
-    "downloadsPath": "דרך",
+    "downloadsPath": "נתיב",
     "downloadsSyncedData": "מידע מסונכרן",
     "downloadsTitle": "הורדות",
     "dynamicText": "דינאמי",
@@ -100,7 +100,7 @@
     "addToQueue": "הוסף לתור",
     "ascending": "בסדר עולה",
     "audioPlayerPlaybackOptionsTitle": "אפשרויות השמעה",
-    "audioPlayerRepeatAll": "",
+    "audioPlayerRepeatAll": "חזור על הכל",
     "audioPlayerShuffle": "ערבב",
     "showArtist": "הצג אמן",
     "track": "{count, plural, one{רצועת שמע} other{רצועות שמע}}",
@@ -220,5 +220,13 @@
                 "example": "1"
             }
         }
-    }
+    },
+    "includePassword": "כולל סיסמה",
+    "hide": "הסתר",
+    "home": "בית",
+    "homeBannerDetailed": "מפורט",
+    "homeBannerTV": "טלוויזיה",
+    "info": "מידע",
+    "libraryFetchNoItemsFound": "לא נמצאו פריטים. נסו הגדרות שונות.",
+    "list": "רשימה"
 }
