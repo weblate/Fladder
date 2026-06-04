@@ -15,7 +15,7 @@
     },
     "addAsFavorite": "הוסף למועדפים",
     "addToCollection": "הוסף לאוסף",
-    "addToPlaylist": "הוסף לרשימת ניגון",
+    "addToPlaylist": "הוסף לרשימת השמעה",
     "advanced": "מתקדם",
     "all": "הכל",
     "amoledBlack": "שחור אמולד",
@@ -31,11 +31,11 @@
             }
         }
     },
-    "audio": "שמע",
+    "audio": "{count, plural, one{שמע} other{שמע}}",
     "autoPlay": "ניגון אוטומטי",
     "backgroundOpacity": "שקיפות רקע",
     "biometricsFailedCheckAgain": "ביומטרי נכשל. יש לבדוק את ההגדרות ולנסות מחדש.",
-    "bold": "מובלט",
+    "bold": "מודגש",
     "cancel": "ביטול",
     "change": "לשנות",
     "chapter": "{count, plural, one{פרק} other{פרקים}}",
@@ -69,7 +69,7 @@
     "dateAdded": "תאריך הוספה",
     "dateLastContentAdded": "תאריך הוספת התוכן האחרון",
     "datePlayed": "תאריך ניגון",
-    "days": "ימים",
+    "days": "{count, plural, one{יום} other{ימים}}",
     "delete": "מחיקה",
     "disableFilters": "לכבות את המסננים",
     "disabled": "כבוי",
@@ -228,5 +228,14 @@
     "homeBannerTV": "טלוויזיה",
     "info": "מידע",
     "libraryFetchNoItemsFound": "לא נמצאו פריטים. נסו הגדרות שונות.",
-    "list": "רשימה"
+    "list": "רשימה",
+    "addedToQueue": "{count, plural, one{נוספה רצועה אחת לתור} other{נוספו {count} רצועות לתור}}",
+    "@addedToQueue": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "audioPlayerRepeatOne": "חזור פעם אחת"
 }
