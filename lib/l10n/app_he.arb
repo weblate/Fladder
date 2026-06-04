@@ -1,12 +1,8 @@
 {
     "nativeName": "אנגלית",
-    "@nativeName": {},
     "about": "אודות",
-    "@about": {},
     "accept": "לאשר",
-    "@accept": {},
     "active": "פעיל",
-    "@active": {},
     "actor": "{count, plural, one{שחקן} other{שחקנים}}",
     "@actor": {
         "description": "actor",
@@ -18,23 +14,14 @@
         }
     },
     "addAsFavorite": "הוסף למועדפים",
-    "@addAsFavorite": {},
     "addToCollection": "הוסף לאוסף",
-    "@addToCollection": {},
     "addToPlaylist": "הוסף לרשימת ניגון",
-    "@addToPlaylist": {},
     "advanced": "מתקדם",
-    "@advanced": {},
     "all": "הכל",
-    "@all": {},
     "amoledBlack": "שחור אמולד",
-    "@amoledBlack": {},
     "appLockAutoLogin": "כניסה אוטומטית",
-    "@appLockAutoLogin": {},
     "appLockBiometrics": "ביומטרים",
-    "@appLockBiometrics": {},
     "appLockPasscode": "סיסמה",
-    "@appLockPasscode": {},
     "appLockTitle": "הגדר את שיטת ההתחברות עבור {userName}",
     "@appLockTitle": {
         "description": "Pop-up to pick a login method",
@@ -45,19 +32,12 @@
         }
     },
     "audio": "שמע",
-    "@audio": {},
     "autoPlay": "ניגון אוטומטי",
-    "@autoPlay": {},
     "backgroundOpacity": "שקיפות רקע",
-    "@backgroundOpacity": {},
     "biometricsFailedCheckAgain": "ביומטרי נכשל. יש לבדוק את ההגדרות ולנסות מחדש.",
-    "@biometricsFailedCheckAgain": {},
     "bold": "מובלט",
-    "@bold": {},
     "cancel": "לבטל",
-    "@cancel": {},
     "change": "לשנות",
-    "@change": {},
     "chapter": "{count, plural, one{פרק} other{פרקים}}",
     "@chapter": {
         "description": "chapter",
@@ -69,101 +49,176 @@
         }
     },
     "clear": "לנקות",
-    "@clear": {},
     "clearAllSettings": "לנקות את כלל ההגדרות",
-    "@clearAllSettings": {},
     "clearAllSettingsQuestion": "לנקות את כלל ההגדרות?",
-    "@clearAllSettingsQuestion": {},
     "clearChanges": "לנקות את השינויים",
-    "@clearChanges": {},
     "clearSelection": "לנקות בחירה",
-    "@clearSelection": {},
     "close": "לסגור",
-    "@close": {},
     "code": "קוד",
-    "@code": {},
-    "collectionFolder": "תקית אוספים",
-    "@collectionFolder": {},
+    "collectionFolder": "{count, plural, one{תיקיית אוספים} other{תיקיות אוספים}}",
     "color": "צבע",
-    "@color": {},
     "combined": "מאוחד",
-    "@combined": {},
     "communityRating": "דירוג קהילה",
-    "@communityRating": {},
     "controls": "שליטה",
-    "@controls": {},
     "dashboard": "מסך שליטה",
-    "@dashboard": {},
     "dashboardContinue": "להמשיך",
-    "@dashboardContinue": {},
     "dashboardContinueListening": "להמשיך להאזין",
-    "@dashboardContinueListening": {},
     "dashboardContinueReading": "להמשיך לקרוא",
-    "@dashboardContinueReading": {},
     "dashboardContinueWatching": "להמשיך לצפות",
-    "@dashboardContinueWatching": {},
     "nextUp": "הבא בתור",
-    "@nextUp": {},
     "dateAdded": "תאריך הוספה",
-    "@dateAdded": {},
     "dateLastContentAdded": "תאריך הוספת התוכן האחרון",
-    "@dateLastContentAdded": {},
     "datePlayed": "תאריך ניגון",
-    "@datePlayed": {},
     "days": "ימים",
-    "@days": {},
     "delete": "מחיקה",
-    "@delete": {},
     "disableFilters": "לכבות את המסננים",
-    "@disableFilters": {},
     "disabled": "כבוי",
-    "@disabled": {},
     "discovered": "גילוי",
-    "@discovered": {},
     "displayLanguage": "שפת תצוגה",
-    "@displayLanguage": {},
     "downloadsClearDesc": "למחוק את כל המידע המסונכרן, לנקות את כל המידע לכל משתמש מסונכרן?",
-    "@downloadsClearDesc": {},
     "downloadsClearTitle": "לנקות מידע מסונכרן",
-    "@downloadsClearTitle": {},
     "downloadsPath": "דרך",
-    "@downloadsPath": {},
     "downloadsSyncedData": "מידע מסונכרן",
-    "@downloadsSyncedData": {},
     "downloadsTitle": "הורדות",
-    "@downloadsTitle": {},
     "dynamicText": "דינאמי",
-    "@dynamicText": {},
     "editMetadata": "לערוך מידע צללים",
-    "@editMetadata": {},
     "empty": "ריק",
-    "@empty": {},
     "enabled": "דלוק",
-    "@enabled": {},
     "error": "תקלה",
-    "@error": {},
     "failedToLoadImage": "לא היה ניתן לטעון את התמונה",
-    "@failedToLoadImage": {},
     "favorite": "מועדף",
-    "@favorite": {},
     "favorites": "מועדפים",
-    "@favorites": {},
     "fetchingLibrary": "מושך ספריית חפצים…",
-    "@fetchingLibrary": {},
     "folders": "תיקיות",
-    "@folders": {},
     "fontColor": "צבע גופן",
-    "@fontColor": {},
     "fontSize": "גודל גופן",
-    "@fontSize": {},
     "forceRefresh": "ריענון מאולץ",
-    "@forceRefresh": {},
     "goTo": "לך אל",
-    "@goTo": {},
     "grid": "רשת",
-    "@grid": {},
     "group": "קבוצה",
-    "@group": {},
     "groupBy": "לקבץ לפי",
-    "@groupBy": {}
+    "addToQueue": "הוסף לתור",
+    "ascending": "בסדר עולה",
+    "audioPlayerPlaybackOptionsTitle": "אפשרויות השמעה",
+    "audioPlayerRepeatAll": "",
+    "audioPlayerShuffle": "ערבב",
+    "showArtist": "הצג אמן",
+    "track": "{count, plural, one{רצועת שמע} other{רצועות שמע}}",
+    "@track": {
+        "description": "track",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "backgroundBlur": "טשטוש רקע",
+    "generateLoginLink": "קוד עבור {userName}",
+    "@generateLoginLink": {
+        "description": "Code for a user to share",
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "shareLoginLink": "שתף קישור התחברות",
+    "shareQRCode": "שתף קוד QR",
+    "copyLoginLink": "העתק קישור",
+    "invalidAuthLink": "קישור התחברות לא תקין",
+    "continuePage": "המשך - עמוד {page}",
+    "@continuePage": {
+        "description": "Continue - page 1",
+        "placeholders": {
+            "page": {
+                "type": "int"
+            }
+        }
+    },
+    "gestures": "מחוות",
+    "dashboardRecentlyAdded": "נוסף לאחרונה ב {name}",
+    "@dashboardRecentlyAdded": {
+        "description": "Recently added on home screen",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "deleteFileFromSystem": "ביטול פריט {item} ימחק אותו הן ממערכת הקבצים והן בספריית המדיה שלך. אתה בטוח שאתה רוצה להמשיך?",
+    "@deleteFileFromSystem": {
+        "description": "Delete file from system",
+        "placeholders": {
+            "item": {
+                "type": "String"
+            }
+        }
+    },
+    "deleteItem": "מחיקת {item}?",
+    "@deleteItem": {
+        "description": "deleteItem",
+        "placeholders": {
+            "item": {
+                "type": "String"
+            }
+        }
+    },
+    "descending": "בסדר יורד",
+    "director": "{count, plural, other{במאי} two{במאים}}",
+    "@director": {
+        "description": "director",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "episode": "{count, plural, other{פרקים} one{פרק} }",
+    "@episode": {
+        "description": "episode",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "filter": "{count, plural, other{מסננים} one{מסנן}}",
+    "@filter": {
+        "description": "filter",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "incorrectPinTryAgain": "PIN שגוי. נסה שוב.",
+    "invalidUrl": "כתובת אתר לא תקינה",
+    "lockscreen": "מסך נעילה",
+    "login": "התחבר",
+    "logout": "התנתק",
+    "logoutUserPopupTitle": "לנתק את {userName}?",
+    "@logoutUserPopupTitle": {
+        "description": "Pop-up for logging out the user",
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "markAsUnwatched": "סמן כלא נצפה",
+    "markAsWatched": "סמן כנצפה",
+    "mediaTypeBook": "{count, plural, one{ספר} other{ספרים}}",
+    "@mediaTypeBook": {
+        "description": "Book (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    }
 }
