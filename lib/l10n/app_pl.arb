@@ -1931,5 +1931,33 @@
     "seerrMovies": "Odkryj filmy",
     "seerrSeries": "Odkryj seriale",
     "seekForwardInstant": "Przewiń do przodu (natychmiast)",
-    "seekBackInstant": "Przewiń do tyłu (natychmiast)"
+    "seekBackInstant": "Przewiń do tyłu (natychmiast)",
+    "addToQueue": "Dodaj do kolejki",
+    "audioPlayerPlaybackOptionsTitle": "Ustawienia odtwarzania",
+    "audioPlayerRepeatAll": "Powtarzaj wszystkie",
+    "audioPlayerRepeatOff": "Powtarzanie wyłączone",
+    "audioPlayerRepeatOne": "Powtarzaj jeden",
+    "audioPlayerShuffle": "Miksuj",
+    "showArtist": "Pokaż artystę",
+    "queue": "Kolejka",
+    "queueIsEmpty": "Kolejka jest pusta",
+    "queueItemCount": "{count} elementów",
+    "@queueItemCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "removeFromQueue": "Usuń z kolejki",
+    "quiet": "Cicho",
+    "loud": "Głośno",
+    "musicDashboard": "Panel muzyczny",
+    "nowPlaying": "Teraz gra",
+    "upNext": "Za chwilę",
+    "mostPlayed": "Najczęściej odtwarzane",
+    "recentlyFavorited": "Ostatnio polubione",
+    "recentlyPlayed": "Ostatnio odtwarzane",
+    "settingsPlayerCrossfadeDurationDesc": "Czas trwania przejścia między utworami",
+    "playMusic": "Odtwórz muzykę"
 }
