@@ -1066,7 +1066,7 @@
             }
         }
     },
-    "settingsLocalUrlSetDesc": "Indiquez l'adresse du serveur local. Fladder utilisera automatiquement cette URL quand votre appareil est sur le même réseau.",
+    "settingsLocalUrlSetDesc": "Précisez l'adresse locale Jellyfin. Fladder utilisera automatiquement cette URL lorsque votre appareil est sur le même réseau.",
     "openImeKeyboard": "Ouvrir le clavier IME",
     "screensaverDvd": "DVD",
     "screensaverLogo": "Logo",
