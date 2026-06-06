@@ -2014,5 +2014,10 @@
     },
     "musicDashboard": "Обзор музыки",
     "quiet": "Тихо",
-    "loud": "Громко"
+    "loud": "Громко",
+    "audioPlayerPlaybackOptionsTitle": "Параметры воспроизведения",
+    "audioPlayerRepeatAll": "Повторить все",
+    "syncPlaylistDeleteTitle": "Удалить синхронизированный плейлист",
+    "playerSettingsReplayGainLevelTitle": "Уровень ReplayGain",
+    "removeFromQueue": "Удалить из очереди"
 }
