@@ -2037,5 +2037,34 @@
     "removeFromQueue": "从队列中移除",
     "musicDashboard": "音乐控制台",
     "quiet": "静音",
-    "loud": "响亮"
+    "loud": "响亮",
+    "pictureInPictureTitle": "画中画",
+    "@pictureInPictureTitle": {
+        "description": "Tooltip on the in-player PiP button"
+    },
+    "pictureInPictureAutoTitle": "自动画中画",
+    "@pictureInPictureAutoTitle": {
+        "description": "Title of the auto-enter Picture-in-Picture setting toggle"
+    },
+    "pictureInPictureSubtitle": "离开播放器时自动进入画中画模式。无论此设置如何，控制面板中的画中画按钮始终有效。",
+    "@pictureInPictureSubtitle": {
+        "description": "Subtitle of the auto-enter Picture-in-Picture setting toggle"
+    },
+    "pictureInPictureNotSupported": "此设备不支持画中画功能",
+    "@pictureInPictureNotSupported": {
+        "description": "Snackbar shown when the user taps the PiP button and the OS reports it unsupported"
+    },
+    "quitMultipleWindowsDesc": "您目前打开了 {count} 个窗口。退出 Fladder 将关闭所有窗口。是否继续？",
+    "@quitMultipleWindowsDesc": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
+    "closeWindow": "关闭窗口",
+    "openJellyfinQuickConnect": "打开 Jellyfin 快速连接器",
+    "toggleSubtitles": "切换字幕",
+    "share": "分享"
 }
