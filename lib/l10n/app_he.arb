@@ -612,5 +612,6 @@
     "start": "התחל",
     "subtitles": "כתוביות",
     "switchUser": "החלף משתמש",
-    "sync": "סנכרן"
+    "sync": "סנכרן",
+    "hideEmpty": "הסתר ריק"
 }
