@@ -2018,5 +2018,6 @@
     "removeFromQueue": "Retirer de la file d'attente",
     "musicDashboard": "Tableau de bord musical",
     "quiet": "Faible",
-    "loud": "Fort"
+    "loud": "Fort",
+    "toggleSubtitles": "Afficher/Masquer les sous-titres"
 }
