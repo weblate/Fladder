@@ -7,11 +7,11 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 
 import 'package:fladder/models/collection_types.dart';
 import 'package:fladder/models/settings/client_settings_model.dart';
+import 'package:fladder/providers/dashboard_mode_provider.dart';
 import 'package:fladder/providers/settings/client_settings_provider.dart';
 import 'package:fladder/providers/views_provider.dart';
 import 'package:fladder/routes/auto_router.dart';
 import 'package:fladder/routes/auto_router.gr.dart';
-import 'package:fladder/screens/metadata/refresh_metadata.dart';
 import 'package:fladder/screens/shared/animated_fade_size.dart';
 import 'package:fladder/theme.dart';
 import 'package:fladder/util/adaptive_layout/adaptive_layout.dart';
@@ -21,12 +21,11 @@ import 'package:fladder/widgets/navigation_scaffold/components/adaptive_fab.dart
 import 'package:fladder/widgets/navigation_scaffold/components/background_image.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/collapse_button.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/destination_model.dart';
+import 'package:fladder/widgets/navigation_scaffold/components/music_dashboard_nav_items.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/navigation_body.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/navigation_button.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/settings_user_icon.dart';
 import 'package:fladder/widgets/shared/custom_tooltip.dart';
-import 'package:fladder/widgets/shared/item_actions.dart';
-import 'package:fladder/widgets/shared/modal_bottom_sheet.dart';
 import 'package:fladder/widgets/shared/simple_overflow_widget.dart';
 
 final navBarNode = FocusNode();
@@ -98,6 +97,8 @@ class _SideNavigationRail extends ConsumerState<SideNavigationRail> {
     final blurWidth = (shouldExpand ? expandedWidth : collapsedWidth) + 25;
 
     final surfaceColor = Theme.of(context).colorScheme.surface;
+
+    final musicDashboard = ref.watch(musicDashboardModeProvider);
 
     return Stack(
       children: [
@@ -226,7 +227,7 @@ class _SideNavigationRail extends ConsumerState<SideNavigationRail> {
                                     ),
                                   ),
                                 ),
-                                if (views.isNotEmpty && largeBar) ...[
+                                if (largeBar) ...[
                                   const Divider(
                                     indent: 32,
                                     endIndent: 32,
@@ -234,78 +235,23 @@ class _SideNavigationRail extends ConsumerState<SideNavigationRail> {
                                   Flexible(
                                     child: SimpleOverflowWidget(
                                       axis: Axis.vertical,
-                                      children: views.map(
-                                        (view) {
-                                          final selected = context.router.currentUrl.contains(view.id);
-                                          final actions = [
-                                            ItemActionButton(
-                                              label: Text(context.localized.scanLibrary),
-                                              icon: const Icon(IconsaxPlusLinear.refresh),
-                                              action: () => showRefreshPopup(context, view.id, view.name),
-                                            )
-                                          ];
-                                          return CustomTooltip(
-                                            tooltipContent: expandedSideBar
-                                                ? null
-                                                : Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius: FladderTheme.smallShape.borderRadius,
-                                                      color: Theme.of(context).colorScheme.surface,
-                                                    ),
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.all(12),
-                                                      child: Text(
-                                                        view.name,
-                                                        style: Theme.of(context).textTheme.titleSmall,
-                                                      ),
-                                                    ),
-                                                  ),
-                                            position: tooltipPosition,
-                                            child: view.toNavigationButton(
-                                              selected,
-                                              true,
+                                      children: musicDashboard
+                                          ? buildMusicDashboardNavItems(
+                                              context,
+                                              views,
                                               shouldExpand,
-                                              () => view.navigateToView(context),
-                                              onSecondaryTapDown: (details) => _showContextMenu(
-                                                context,
-                                                ref,
-                                                details.globalPosition,
-                                                actions,
-                                              ),
-                                              onLongPress: () => showBottomSheetPill(
-                                                context: context,
-                                                content: (context, scrollController) => ListView(
-                                                  shrinkWrap: true,
-                                                  controller: scrollController,
-                                                  children: actions.listTileItems(context, useIcons: true),
+                                            )
+                                          : views
+                                              .map(
+                                                (view) => ViewNavigationItem(
+                                                  view: view,
+                                                  expandedSideBar: expandedSideBar,
+                                                  usePostersForLibrary: usePostersForLibrary,
+                                                  shouldExpand: shouldExpand,
+                                                  toolTipPosition: tooltipPosition,
                                                 ),
-                                              ),
-                                              customIcon: usePostersForLibrary
-                                                  ? Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: FladderTheme.smallShape.borderRadius,
-                                                      ),
-                                                      clipBehavior: Clip.hardEdge,
-                                                      child: SizedBox.square(
-                                                        dimension: 45,
-                                                        child: FladderImage(
-                                                          image: view.imageData?.primary,
-                                                          placeHolder: Card(
-                                                            child: Icon(
-                                                              selected
-                                                                  ? view.collectionType.icon
-                                                                  : view.collectionType.iconOutlined,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : null,
-                                              trailing: actions,
-                                            ),
-                                          );
-                                        },
-                                      ).toList(),
+                                              )
+                                              .toList(),
                                       overflowBuilder: (remainingCount) => CustomTooltip(
                                         tooltipContent: expandedSideBar
                                             ? null
@@ -384,7 +330,12 @@ class _SideNavigationRail extends ConsumerState<SideNavigationRail> {
                                       ),
                                     ),
                                   ),
-                                ],
+                                ] else ...[
+                                  const Divider(
+                                    indent: 32,
+                                    endIndent: 32,
+                                  ),
+                                ]
                               ],
                             ),
                           ),
@@ -415,15 +366,6 @@ class _SideNavigationRail extends ConsumerState<SideNavigationRail> {
           ),
         ),
       ],
-    );
-  }
-
-  Future<void> _showContextMenu(BuildContext context, WidgetRef ref, Offset globalPos, List<ItemAction> actions) async {
-    final position = RelativeRect.fromLTRB(globalPos.dx, globalPos.dy, globalPos.dx, globalPos.dy);
-    await showMenu(
-      context: context,
-      position: position,
-      items: actions.popupMenuItems(useIcons: true),
     );
   }
 

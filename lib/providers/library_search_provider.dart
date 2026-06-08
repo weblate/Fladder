@@ -68,15 +68,18 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
   ) async {
     loading = true;
     state = state.resetLazyLoad();
+
+    List<String> viewModelIds = viewModelId?.split(",") ?? [];
+
     if (state.views.isEmpty && state.folderOverwrite.isEmpty) {
       if (folderId != null) {
         await loadFolders(folderId: folderId);
       } else {
-        await loadViews(viewModelId, filters);
+        await loadViews(viewModelIds, filters);
       }
     }
 
-    await loadFilters();
+    await loadFilters(filters);
 
     if (!wasInitialized) {
       wasInitialized = true;
@@ -178,19 +181,18 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
   }
 
   Future<void> loadViews(
-    String? viewModelId,
+    List<String>? viewModelId,
     LibraryFilterModel filters,
   ) async {
     final response = await api.usersUserIdViewsGet(includeHidden: false);
     final createdViews = response.body?.items?.map((e) => ViewModel.fromBodyDto(e, ref));
+
     Map<ViewModel, bool> mappedModels =
         createdViews?.isNotEmpty ?? false ? {for (var element in createdViews!) element: false} : {};
 
-    final selectedModel = mappedModels.keys.firstWhereOrNull((element) => element.id == viewModelId);
+    final selectedModels = mappedModels.keys.where((element) => viewModelId?.contains(element.id) ?? false).toList();
 
-    final views = selectedModel != null
-        ? mappedModels.setKey(mappedModels.keys.firstWhere((element) => element.id == viewModelId), true)
-        : mappedModels;
+    final views = mappedModels.setKeys(selectedModels, true);
 
     state = state.copyWith(
       views: views,
@@ -220,9 +222,10 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
     state = state.copyWith(folderOverwrite: response.body?.items.toList() ?? []);
   }
 
-  Future<void> loadFilters() async {
+  Future<void> loadFilters(LibraryFilterModel filters) async {
     if (loadedFilters == true) return;
     loadedFilters = true;
+
     final enabledCollections = state.views.included.map((e) => e.collectionType.itemKinds).expand((element) => element);
     final mappedList = await Future.wait(state.views.included.map((viewModel) => _loadFilters(viewModel)));
     final studios = (await Future.wait(state.views.included.map((viewModel) => _loadStudios(viewModel))))
@@ -240,7 +243,9 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
     var tempFilters = tempState.filters;
     tempState = tempState.copyWith(
       filters: tempFilters.copyWith(
-        types: tempFilters.types.setAll(false).setKeys(enabledCollections, true),
+        types: filters.types.isEmpty
+            ? tempFilters.types.setAll(false).setKeys(enabledCollections, true)
+            : tempFilters.types,
         genres: {for (var element in genres) element.name: false}.replaceMap(tempFilters.genres),
         studios: {for (var element in studios) element: false}.replaceMap(tempFilters.studios),
         tags: {for (var element in tags) element: false}.replaceMap(tempFilters.tags),
@@ -304,7 +309,7 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
         ...state.filters.itemFilters.included,
         if (state.filters.favourites == true) ItemFilter.isfavorite,
       ],
-      includeItemTypes: state.filters.types.included.map((e) => e.dtoKind).toList(),
+      includeItemTypes: state.filters.types.included.map((e) => e.dtoKind).expand((e) => e).toList(),
     );
     return response.body;
   }

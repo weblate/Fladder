@@ -18,8 +18,8 @@ import 'package:fladder/models/items/album_model.dart';
 import 'package:fladder/models/items/artist_model.dart';
 import 'package:fladder/models/items/audio_model.dart';
 import 'package:fladder/models/items/channel_model.dart';
-import 'package:fladder/models/items/playlist_model.dart';
 import 'package:fladder/models/items/photos_model.dart';
+import 'package:fladder/models/items/playlist_model.dart';
 import 'package:fladder/models/playback/playback_model.dart';
 import 'package:fladder/models/playback/tv_playback_model.dart';
 import 'package:fladder/models/video_stream_model.dart';
@@ -90,7 +90,7 @@ extension PhotoAlbumExtension on PhotoAlbumModel? {
     final api = ref.read(jellyApiProvider);
     final op = CancelableOperation.fromFuture(api.itemsGet(
         parentId: albumModel.id,
-        includeItemTypes: FladderItemType.galleryItem.map((e) => e.dtoKind).toList(),
+        includeItemTypes: FladderItemType.galleryItem.map((e) => e.dtoKind).expand((e) => e).toList(),
         recursive: true));
 
     _showLoadingIndicator(context, albumModel, op);

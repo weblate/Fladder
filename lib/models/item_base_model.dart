@@ -318,8 +318,8 @@ enum FladderItemType {
     selectedicon: IconsaxPlusBold.music,
   ),
   musicAlbum(
-    icon: IconsaxPlusLinear.music,
-    selectedicon: IconsaxPlusBold.music,
+    icon: IconsaxPlusLinear.music_dashboard,
+    selectedicon: IconsaxPlusBold.music_dashboard,
   ),
   musicArtist(
     icon: IconsaxPlusLinear.music,
@@ -443,26 +443,29 @@ enum FladderItemType {
         FladderItemType.tvchannel => l10n.mediaTypeTV(count),
       };
 
-  BaseItemKind get dtoKind => switch (this) {
-        FladderItemType.baseType => BaseItemKind.userrootfolder,
-        FladderItemType.audio => BaseItemKind.audio,
-        FladderItemType.collectionFolder => BaseItemKind.collectionfolder,
-        FladderItemType.musicAlbum => BaseItemKind.musicalbum,
-        FladderItemType.musicArtist => BaseItemKind.musicartist,
-        FladderItemType.musicVideo => BaseItemKind.video,
-        FladderItemType.video => BaseItemKind.video,
-        FladderItemType.movie => BaseItemKind.movie,
-        FladderItemType.series => BaseItemKind.series,
-        FladderItemType.season => BaseItemKind.season,
-        FladderItemType.episode => BaseItemKind.episode,
-        FladderItemType.photo => BaseItemKind.photo,
-        FladderItemType.person => BaseItemKind.person,
-        FladderItemType.photoAlbum => BaseItemKind.photoalbum,
-        FladderItemType.folder => BaseItemKind.folder,
-        FladderItemType.boxset => BaseItemKind.boxset,
-        FladderItemType.playlist => BaseItemKind.playlist,
-        FladderItemType.book => BaseItemKind.book,
-        FladderItemType.tvchannel => BaseItemKind.tvchannel,
+  Set<BaseItemKind> get dtoKind => switch (this) {
+        FladderItemType.baseType => {BaseItemKind.userrootfolder},
+        FladderItemType.audio => {BaseItemKind.audio},
+        FladderItemType.collectionFolder => {BaseItemKind.collectionfolder},
+        FladderItemType.musicAlbum => {BaseItemKind.musicalbum},
+        FladderItemType.musicArtist => {BaseItemKind.musicartist},
+        FladderItemType.musicVideo => {BaseItemKind.video},
+        FladderItemType.video => {BaseItemKind.video},
+        FladderItemType.movie => {BaseItemKind.movie},
+        FladderItemType.series => {BaseItemKind.series},
+        FladderItemType.season => {BaseItemKind.season},
+        FladderItemType.episode => {BaseItemKind.episode},
+        FladderItemType.photo => {BaseItemKind.photo},
+        FladderItemType.person => {
+            BaseItemKind.person,
+            BaseItemKind.musicartist,
+          },
+        FladderItemType.photoAlbum => {BaseItemKind.photoalbum},
+        FladderItemType.folder => {BaseItemKind.folder},
+        FladderItemType.boxset => {BaseItemKind.boxset},
+        FladderItemType.playlist => {BaseItemKind.playlist},
+        FladderItemType.book => {BaseItemKind.book},
+        FladderItemType.tvchannel => {BaseItemKind.tvchannel},
       };
 
   final IconData icon;
