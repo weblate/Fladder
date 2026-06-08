@@ -2040,5 +2040,34 @@
     "removeFromQueue": "إزالة من قائمة الانتظار",
     "musicDashboard": "لوحة الموسيقى",
     "quiet": "منخفض",
-    "loud": "مرتفع"
+    "loud": "مرتفع",
+    "pictureInPictureTitle": "صورة داخل صورة",
+    "@pictureInPictureTitle": {
+        "description": "Tooltip on the in-player PiP button"
+    },
+    "pictureInPictureAutoTitle": "صورة داخل صورة تلقائياً",
+    "@pictureInPictureAutoTitle": {
+        "description": "Title of the auto-enter Picture-in-Picture setting toggle"
+    },
+    "pictureInPictureSubtitle": "الدخول تلقائياً في وضع \"صورة داخل صورة\" عند مغادرة المشغّل. زر PiP في عناصر التحكم يعمل دائماً بغض النظر عن هذا الإعداد.",
+    "@pictureInPictureSubtitle": {
+        "description": "Subtitle of the auto-enter Picture-in-Picture setting toggle"
+    },
+    "pictureInPictureNotSupported": "وضع \"صورة داخل صورة\" غير متاح على هذا الجهاز",
+    "@pictureInPictureNotSupported": {
+        "description": "Snackbar shown when the user taps the PiP button and the OS reports it unsupported"
+    },
+    "quitMultipleWindowsDesc": "لديك {count} نوافذ مفتوحة. إغلاق Fladder سيغلقها جميعاً. هل تريد المتابعة؟",
+    "@quitMultipleWindowsDesc": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
+    "closeWindow": "إغلاق النافذة",
+    "openJellyfinQuickConnect": "فتح Jellyfin QuickConnect",
+    "toggleSubtitles": "تبديل الترجمة",
+    "share": "مشاركة"
 }
