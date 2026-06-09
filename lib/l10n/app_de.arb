@@ -1957,5 +1957,6 @@
     "stepBack": "Schritt zurück",
     "stepForward": "Schritt vorwärts",
     "seekForwardInstant": "Vorspulen (sofort)",
-    "seekBackInstant": "Zurückspulen (sofort)"
+    "seekBackInstant": "Zurückspulen (sofort)",
+    "toggleSubtitles": "Untertitel umschalten"
 }
