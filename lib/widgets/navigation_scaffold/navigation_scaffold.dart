@@ -26,6 +26,7 @@ import 'package:fladder/widgets/navigation_scaffold/components/navigation_drawer
 import 'package:fladder/widgets/shared/animated_visibility.dart';
 import 'package:fladder/widgets/shared/hide_on_scroll.dart';
 import 'package:fladder/widgets/shared/offline_banner.dart';
+import 'package:fladder/widgets/split_area/split_area.dart';
 
 class NavigationScaffold extends ConsumerStatefulWidget {
   final String? currentRouteName;
@@ -205,29 +206,27 @@ class _NavigationScaffoldState extends ConsumerState<NavigationScaffold> {
                   bottom: calculatedBottomViewPadding,
                 ),
               ),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final panelWidth = constraints.maxWidth / 3;
-                  return Row(
-                    children: [
-                      Expanded(
-                        child: buildMainScaffold(context),
-                      ),
-                      AnimatedSize(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        child: SizedBox(
-                          width: showAudioSidePanel ? panelWidth : 0,
-                          height: double.infinity,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 6.0),
-                            child: audioOverlay,
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
+              child: SplitArea(
+                axis: Axis.horizontal,
+                areas: [
+                  Area(
+                    initialArea: 0.7,
+                  ),
+                  Area(
+                    initialArea: 0.3,
+                    minArea: 0.2,
+                    maxArea: 0.5,
+                    constraints: const BoxConstraints(minWidth: 200, maxWidth: 500),
+                  ),
+                ],
+                children: [
+                  buildMainScaffold(context),
+                  if (showAudioSidePanel)
+                    SizedBox(
+                      width: double.infinity,
+                      child: audioOverlay,
+                    ),
+                ],
               ),
             ),
           ),
