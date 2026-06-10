@@ -18,7 +18,7 @@
     "addToPlaylist": "Tilføj til spilleliste",
     "advanced": "Avanceret",
     "all": "Alle",
-    "amoledBlack": "AMOLED sort",
+    "amoledBlack": "AMOLED-sort",
     "appLockAutoLogin": "Auto login",
     "appLockBiometrics": "Biometri",
     "appLockPasscode": "Pinkode",
@@ -446,7 +446,7 @@
     "musicAlbum": "{count, plural, one{Album} other{Albummer}}",
     "navigation": "Navigation",
     "normal": "Normal",
-    "quickConnectTitle": "Hurtig tilkobling",
+    "quickConnectTitle": "Hurtigtilslutning",
     "saved": "Gemt",
     "scanBiometricHint": "Verificer identitet",
     "scanLibrary": "Skan bibliotek",
@@ -544,13 +544,13 @@
     "settingsPlayerBufferSizeDesc": "Konfigurer bufferstørrelsen for videoafspilning, som bestemmer, hvor meget data der indlæses i cachen.",
     "settingsPlayerTitle": "Afspiller",
     "settingsPlayerVideoHWAccelDesc": "Brug GPU'en til videorendering (anbefalet)",
-    "settingsPlayerVideoHWAccelTitle": "Hardware acceleration",
+    "settingsPlayerVideoHWAccelTitle": "Hardwareacceleration",
     "settingsPosterPinch": "Knip-zoom for at skalere plakater",
     "settingsPosterSize": "Plakatstørrelse",
     "settingsPosterSlider": "Vis skaleringsslider",
     "settingsProfileDesc": "Låseskærm, Lokal URL, Seerr",
     "settingsProfileTitle": "Profil",
-    "settingsQuickConnectTitle": "Hurtig tilkobling",
+    "settingsQuickConnectTitle": "Hurtigtilslutning",
     "settingsSecurity": "Sikkerhed",
     "settingsShowScaleSlider": "Vis plakatstørrelsesslider",
     "settingsVisual": "Visuelt",
@@ -771,7 +771,7 @@
             }
         }
     },
-    "aboutBuild": "Build: {buildNumber}",
+    "aboutBuild": "Byg: {buildNumber}",
     "@aboutBuild": {
         "placeholders": {
             "buildNumber": {
@@ -879,7 +879,7 @@
     "phone": "Telefon",
     "tablet": "Tablet",
     "desktop": "Stationær computer",
-    "television": "TV",
+    "television": "Fjernsyn",
     "layoutModeSingle": "Enkel",
     "layoutModeDual": "Dobbelt",
     "copiedToClipboard": "Kopieret til udklipsholder",
@@ -1683,7 +1683,7 @@
             }
         }
     },
-    "seerrAnimeSeriesNote": "* Dette er en anime-serie",
+    "seerrAnimeSeriesNote": "* Dette er en anime-serie.",
     "seerrAutoApproveNotice": "Forespørgsler du laver bliver automatisk godkendt.",
     "seerrPermissionDenied": "Du har ikke tilladelse til at forespørge denne medietype.",
     "seerrRequestStatusPending": "Venter",
@@ -1839,5 +1839,214 @@
     "authLinkButtonToolTip": "Åbn autentifikationslink",
     "connectWithAuthLink": "Forbind med autentifikationslink",
     "pasteFladderAuthLink": "Indsæt Fladder autentifikationslink fladder:///login?authLink=...",
-    "connect": "Forbind"
+    "connect": "Forbind",
+    "authLinkDesc": "Spørg serveradministratoren om et autentifikationslink. Linket indeholder autentifikationsinformation, så hold det hemmeligt.",
+    "deletedItem": "Slettede {itemName}",
+    "@deletedItem": {
+        "description": "Message shown when a item is deleted",
+        "placeholders": {
+            "itemName": {
+                "type": "String"
+            }
+        }
+    },
+    "libraryOrderTitle": "Hovedskærm Rækkefølge",
+    "libraryOrderDescription": "Træk for at ændre rækkefølgen af biblioteker på hovedskærmen. Fravalgte biblioteker viser ikke nyligt tilføjede genstande.",
+    "hidePlayedInLatestTitle": "Skjul vist indhold",
+    "hidePlayedInLatestDescription": "Skjul vist indhold fra 'Nyligt Tilføjede Medier'",
+    "groupedFoldersTitle": "Grupperede Biblioteker",
+    "groupedFoldersDescription": "Grupper indhold automatisk fra de følgende biblioteker i visninger, så som 'Film', 'Musik' og 'TV'.",
+    "downloadTranscoded": "Hent transcoded",
+    "downloadOriginal": "Hent original",
+    "personBirthday": "Fødselsdag: {date}",
+    "@personBirthday": {
+        "description": "Birthday label with formatted date",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "personAge": "Alder: {age}",
+    "@personAge": {
+        "description": "Age label with age number",
+        "placeholders": {
+            "age": {
+                "type": "int",
+                "example": "30"
+            }
+        }
+    },
+    "personBirthPlace": "Født i {place}",
+    "@personBirthPlace": {
+        "placeholders": {
+            "place": {
+                "type": "String"
+            }
+        }
+    },
+    "seerrMovies": "Opdag Film",
+    "seerrSeries": "Opdag Serier",
+    "today": "Idag",
+    "musicDashboard": "Musik Dashboard",
+    "quiet": "Stille",
+    "loud": "Højt",
+    "share": "Del",
+    "pendingRequests": "{count, plural, other{Ingen afventende forespørgsler} one{{count} afventende forespørgsel} two{{count} afventende forespørgsler}}",
+    "@pendingRequests": {
+        "description": "pendingRequests",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "processing": "Bearbejder",
+    "seerrDetails": "Seerr detaljer",
+    "viewTrailer": "Se trailer",
+    "watch": "Se",
+    "watchChannel": "Se {channel}",
+    "@watchChannel": {
+        "placeholders": {
+            "channel": {
+                "type": "String"
+            }
+        }
+    },
+    "now": "Nu",
+    "nowPlaying": "Spiller nu",
+    "upNext": "Næste",
+    "queue": "Kø",
+    "queueIsEmpty": "Køen er tom",
+    "queueItemCount": "{count} genstande",
+    "@queueItemCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "removeFromQueue": "Fjern fra kø",
+    "noPrograms": "Ingen tilgængelige programmer",
+    "switchChannel": "Skift kanal",
+    "switchChannelDesc": "Vil de se \"{programName}\" på {channelName}?",
+    "@switchChannelDesc": {
+        "placeholders": {
+            "programName": {
+                "type": "String"
+            },
+            "channelName": {
+                "type": "String"
+            }
+        }
+    },
+    "specialFeature": "{count, plural, other{Special Udgaver} one{Special Udgave} }",
+    "@specialFeature": {
+        "description": "special feature",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "activeTvChannels": "Aktive TV-kanaler",
+    "enableNewTVLayout": "Aktiver nyt TV-udseende",
+    "liveTV": "Live TV",
+    "liveTvManageTunersEpg": "Håndter tuner enheder og EPG leverandører",
+    "tunerDevices": "Tuner Enheder",
+    "epgGuideProviders": "EPG Guide Leverandører",
+    "noTunerDevicesConfigured": "Ingen tuner enhed konfigureret",
+    "noEpgProvidersConfigured": "Ingen EPG leverandør konfigureret",
+    "addTunerDevice": "Tilføj Tuner Enhed",
+    "addProvider": "Tilføj Leverandør",
+    "tunerHostAddedSuccessfully": "Tuner enhed tilføjet",
+    "failedToAddTunerHost": "Kunne ikke tilføje tuner enhed: {error}",
+    "@failedToAddTunerHost": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "tunerHostUpdatedSuccessfully": "Tuner enhed opdateret",
+    "failedToUpdateTunerHost": "Kunne ikke opdatere tuner enhed: {error}",
+    "@failedToUpdateTunerHost": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "deleteTunerHost": "Slet Tuner Enhed",
+    "deleteTunerHostConfirm": "Er du sikker på at du vil slette \"{name}\"?",
+    "@deleteTunerHostConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "tunerHostDeletedSuccessfully": "Tuner enhed slettet",
+    "failedToDeleteTunerHost": "Kunne ikke slette tuner enhed: {error}",
+    "@failedToDeleteTunerHost": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "epgProviderAddedSuccessfully": "EPG leverandør tilføjet",
+    "failedToAddEpgProvider": "Kunne ikke tilføje EPG leverandør: {error}",
+    "@failedToAddEpgProvider": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "epgProviderUpdatedSuccessfully": "EPG leverandør opdateret",
+    "failedToUpdateEpgProvider": "Kunne ikke opdatere EPG leverandør: {error}",
+    "@failedToUpdateEpgProvider": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "deleteEpgProvider": "Slet EPG Leverandør",
+    "deleteEpgProviderConfirm": "Er du sikker på at du vil slette denne leverandør?",
+    "epgProviderDeletedSuccessfully": "EPG leverandør slettet",
+    "failedToDeleteEpgProvider": "Kunne ikke slette EPG leverandør: {error}",
+    "@failedToDeleteEpgProvider": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "editTunerDevice": "Rediger Tuner Enhed",
+    "friendlyName": "Kaldenavn",
+    "url": "URL",
+    "userAgent": "Brugeragent",
+    "userAgentOptional": "Brugeragent (valgfri)",
+    "maxConcurrentStreams": "Maksimalt Samtidige Streams",
+    "addEpgProvider": "Tilføj EPG Leverandør",
+    "editEpgProvider": "Rediger EPG Leverandør",
+    "xmltvPathUrl": "XMLTV Sti/URL",
+    "enableAllTuners": "Aktiver for alle tunere",
+    "enabledTuners": "Aktiverede tunere",
+    "selectTuners": "Vælg tunere",
+    "moviePrefix": "Filmpræfiks",
+    "movieCategories": "Filmkatagorier",
+    "newsCategories": "Nyhedskatagorier",
+    "sportsCategories": "Sportskatagorier",
+    "kidsCategories": "Børnekatagorier",
+    "fileOrUrl": "Fil eller URL",
+    "tunerIpAddress": "Tuner IP-adresse",
+    "fallbackMaxBitrate": "Maksimal Fallback Bitrate (Mbps)",
+    "concurrentStreams": "Maks Samtidige Streams",
+    "concurrentStreamsHint": "0 = Ubegrænset",
+    "allowFmp4Container": "Tillad fMP4 transcoding container"
 }
