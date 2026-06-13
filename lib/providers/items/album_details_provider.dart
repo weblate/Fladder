@@ -36,6 +36,10 @@ class AlbumDetailsNotifier extends StateNotifier<AlbumModel?> {
 
     final newState = response.bodyOrThrow as AlbumModel;
     state = newState.copyWith(
+      images: newState.images ?? state?.images,
+      artistIds: newState.artistIds.isNotEmpty ? newState.artistIds : state?.artistIds ?? [],
+      albumArtist: newState.albumArtist.isNotEmpty ? newState.albumArtist : state?.albumArtist ?? '',
+      albumArtistIds: newState.albumArtistIds.isNotEmpty ? newState.albumArtistIds : state?.albumArtistIds ?? [],
       tracks: state?.tracks ?? const [],
       relatedAlbums: state?.relatedAlbums ?? const [],
       relatedTracks: state?.relatedTracks ?? const [],

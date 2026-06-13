@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 
@@ -11,6 +12,7 @@ import 'package:fladder/screens/shared/media/components/poster_placeholder.dart'
 import 'package:fladder/screens/syncing/sync_button.dart';
 import 'package:fladder/theme.dart';
 import 'package:fladder/util/adaptive_layout/adaptive_layout.dart';
+import 'package:fladder/util/color_extensions.dart';
 import 'package:fladder/util/fladder_image.dart';
 import 'package:fladder/util/focus_provider.dart';
 import 'package:fladder/util/item_base_model/item_base_model_extensions.dart';
@@ -80,7 +82,7 @@ class PosterImage extends ConsumerWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: radius,
-            color: Theme.of(context).colorScheme.surfaceContainer,
+            color: poster.title.toColor.harmonizeWith(Theme.of(context).colorScheme.surface),
           ),
           foregroundDecoration: BoxDecoration(
             borderRadius: radius,

@@ -27,7 +27,8 @@ class _PlaylistProviderModel {
 }
 
 final playlistProvider = StateNotifierProvider.autoDispose<BoxSetNotifier, _PlaylistProviderModel>((ref) {
-  return BoxSetNotifier(ref);
+  final notifier = BoxSetNotifier(ref)..setItems([]);
+  return notifier;
 });
 
 class BoxSetNotifier extends StateNotifier<_PlaylistProviderModel> {

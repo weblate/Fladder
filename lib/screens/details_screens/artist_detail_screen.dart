@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 
@@ -10,6 +11,7 @@ import 'package:fladder/screens/shared/detail_scaffold.dart';
 import 'package:fladder/screens/shared/fladder_notification_overlay.dart';
 import 'package:fladder/screens/shared/media/poster_row.dart';
 import 'package:fladder/screens/shared/media/track_list.dart';
+import 'package:fladder/util/color_extensions.dart';
 import 'package:fladder/util/fladder_image.dart';
 import 'package:fladder/util/item_base_model/item_base_model_extensions.dart';
 import 'package:fladder/util/item_base_model/play_item_helpers.dart';
@@ -39,6 +41,7 @@ class _ArtistDetailScreenState extends ConsumerState<ArtistDetailScreen> {
     return DetailScaffold(
       label: current.name,
       item: current,
+      backgroundColor: current.name.toColor.harmonizeWith(Theme.of(context).colorScheme.surface).withAlpha(80),
       backDrops: artist?.images,
       onRefresh: () async {
         await provider.fetchDetails(widget.item);
@@ -67,6 +70,7 @@ class _ArtistDetailScreenState extends ConsumerState<ArtistDetailScreen> {
                   child: FladderImage(
                     image: artist?.getPosters?.logo,
                     placeHolder: placeHolder,
+                    disableBlur: true,
                     imageErrorBuilder: (context, error, stackTrace) => placeHolder,
                     alignment: Alignment.bottomCenter,
                     fit: BoxFit.contain,

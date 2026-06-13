@@ -49,7 +49,6 @@ class _MusicDashboardScreenState extends ConsumerState<MusicDashboardScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(musicDashboardProvider.notifier).fetchMusicHome());
     _timer = Timer.periodic(const Duration(seconds: 120), (timer) {
       _refreshIndicatorKey.currentState?.show();
     });

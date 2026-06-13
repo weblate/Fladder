@@ -8,6 +8,7 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:fladder/models/collection_types.dart';
 import 'package:fladder/models/settings/client_settings_model.dart';
 import 'package:fladder/providers/dashboard_mode_provider.dart';
+import 'package:fladder/providers/playlist_provider.dart';
 import 'package:fladder/providers/settings/client_settings_provider.dart';
 import 'package:fladder/providers/views_provider.dart';
 import 'package:fladder/routes/auto_router.dart';
@@ -99,6 +100,8 @@ class _SideNavigationRail extends ConsumerState<SideNavigationRail> {
     final surfaceColor = Theme.of(context).colorScheme.surface;
 
     final musicDashboard = ref.watch(musicDashboardModeProvider);
+
+    final playLists = ref.watch(playlistProvider.select((value) => value.collections));
 
     return Stack(
       children: [
@@ -236,11 +239,7 @@ class _SideNavigationRail extends ConsumerState<SideNavigationRail> {
                                     child: SimpleOverflowWidget(
                                       axis: Axis.vertical,
                                       children: musicDashboard
-                                          ? buildMusicDashboardNavItems(
-                                              context,
-                                              views,
-                                              shouldExpand,
-                                            )
+                                          ? buildMusicDashboardNavItems(context, views, playLists, shouldExpand, ref)
                                           : views
                                               .map(
                                                 (view) => ViewNavigationItem(
@@ -329,11 +328,6 @@ class _SideNavigationRail extends ConsumerState<SideNavigationRail> {
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ] else ...[
-                                  const Divider(
-                                    indent: 32,
-                                    endIndent: 32,
                                   ),
                                 ]
                               ],

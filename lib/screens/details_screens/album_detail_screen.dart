@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 
@@ -8,10 +9,12 @@ import 'package:fladder/providers/items/album_details_provider.dart';
 import 'package:fladder/providers/video_player_provider.dart';
 import 'package:fladder/screens/shared/detail_scaffold.dart';
 import 'package:fladder/screens/shared/fladder_notification_overlay.dart';
+import 'package:fladder/screens/shared/media/components/poster_placeholder.dart';
 import 'package:fladder/screens/shared/media/poster_row.dart';
 import 'package:fladder/screens/shared/media/track_list.dart';
 import 'package:fladder/theme.dart';
 import 'package:fladder/util/adaptive_layout/adaptive_layout.dart';
+import 'package:fladder/util/color_extensions.dart';
 import 'package:fladder/util/duration_extensions.dart';
 import 'package:fladder/util/fladder_image.dart';
 import 'package:fladder/util/item_base_model/item_base_model_extensions.dart';
@@ -54,6 +57,8 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
 
     final smallScreen = AdaptiveLayout.viewSizeOf(context) <= ViewSize.phone;
 
+    final albumPoster = current.images?.primary ?? current.images?.backDrop?.firstOrNull;
+
     return DetailScaffold(
       label: current.name,
       item: current,
@@ -68,6 +73,10 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
         exclude: {ItemActions.details},
       ),
       content: (detailsContext, padding) {
+        final topGradientColor = albumPoster == null
+            ? current.title.toColor.harmonizeWith(Theme.of(detailsContext).colorScheme.surface)
+            : Theme.of(detailsContext).colorScheme.primaryContainer;
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -79,8 +88,8 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Theme.of(detailsContext).colorScheme.primaryContainer,
-                      Theme.of(detailsContext).colorScheme.surfaceContainer,
+                      topGradientColor,
+                      Theme.of(detailsContext).colorScheme.surfaceContainerLow,
                     ],
                   ),
                   border: BoxBorder.fromLTRB(
@@ -107,24 +116,24 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         SizedBox(
-                          width: 275,
-                          height: 275,
+                          width: 230,
+                          height: 230,
                           child: AspectRatio(
                             aspectRatio: 1,
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: radius,
-                                color: Theme.of(context).colorScheme.surfaceContainer,
+                                color: current.title.toColor.harmonizeWith(Theme.of(context).colorScheme.surface),
                               ),
                               foregroundDecoration: BoxDecoration(
                                 borderRadius: radius,
                                 border: Border.all(width: 1, color: Colors.white.withAlpha(45)),
                               ),
                               clipBehavior: Clip.hardEdge,
-                              margin: EdgeInsets.zero,
                               child: FladderImage(
-                                image: current.images?.primary ?? current.images?.backDrop?.firstOrNull,
+                                image: albumPoster,
                                 fit: BoxFit.cover,
+                                placeHolder: PosterPlaceholder(item: current),
                               ),
                             ),
                           ),

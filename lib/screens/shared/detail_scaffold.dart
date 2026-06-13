@@ -32,7 +32,7 @@ Future<Color?> getDominantColor(ImageProvider imageProvider) async {
   final paletteGenerator = await PaletteGeneratorMaster.fromImageProvider(
     imageProvider,
     size: const Size(16, 16),
-    maximumColorCount: 2,
+    maximumColorCount: 3,
   );
 
   return paletteGenerator.vibrantColor?.color ?? paletteGenerator.dominantColor?.color;

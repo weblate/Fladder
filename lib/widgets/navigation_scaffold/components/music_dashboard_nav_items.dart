@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 
 import 'package:fladder/jellyfin/jellyfin_open_api.enums.swagger.dart';
 import 'package:fladder/models/collection_types.dart';
 import 'package:fladder/models/item_base_model.dart';
+import 'package:fladder/models/items/playlist_model.dart';
 import 'package:fladder/models/library_filter_model.dart';
 import 'package:fladder/models/view_model.dart';
 import 'package:fladder/routes/auto_router.gr.dart';
+import 'package:fladder/screens/library_search/widgets/library_views.dart';
 import 'package:fladder/screens/metadata/refresh_metadata.dart';
 import 'package:fladder/theme.dart';
+import 'package:fladder/util/color_extensions.dart';
 import 'package:fladder/util/fladder_image.dart';
 import 'package:fladder/util/localization_helper.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/navigation_button.dart';
@@ -22,7 +26,9 @@ import 'package:fladder/widgets/shared/modal_bottom_sheet.dart';
 List<Widget> buildMusicDashboardNavItems(
   BuildContext context,
   List<ViewModel> views,
+  Map<PlaylistModel, bool?> playLists,
   bool expanded,
+  WidgetRef ref,
 ) {
   final musicViews = views.where((view) => view.collectionType == CollectionType.music).map((e) => e.id).toList();
 
@@ -36,6 +42,7 @@ List<Widget> buildMusicDashboardNavItems(
       selectedIcon: Icon(FladderItemType.musicAlbum.selectedicon),
       icon: Icon(FladderItemType.musicAlbum.icon),
       onTap: () {
+        ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.grid;
         context.pushRoute(
           LibrarySearchRoute(
             viewModelId: "${musicViews.join(",")},albums",
@@ -59,6 +66,7 @@ List<Widget> buildMusicDashboardNavItems(
       selectedIcon: Icon(FladderItemType.audio.selectedicon),
       icon: Icon(FladderItemType.audio.icon),
       onTap: () {
+        ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.list;
         context.pushRoute(
           LibrarySearchRoute(
             viewModelId: "${musicViews.join(",")},tracks",
@@ -82,6 +90,7 @@ List<Widget> buildMusicDashboardNavItems(
       selectedIcon: Icon(FladderItemType.person.selectedicon),
       icon: Icon(FladderItemType.person.icon),
       onTap: () {
+        ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.grid;
         context.pushRoute(
           LibrarySearchRoute(
             viewModelId: "${musicViews.join(",")},artists",
@@ -96,6 +105,50 @@ List<Widget> buildMusicDashboardNavItems(
         );
       },
     ),
+    const Divider(
+      indent: 32,
+      endIndent: 32,
+    ),
+    ...playLists.entries.map(
+      (entry) => CombinedViewNavigationItem(
+        label: entry.key.name,
+        expandedSideBar: expanded,
+        usePostersForLibrary: false,
+        shouldExpand: expanded,
+        pathKey: entry.key.id,
+        selectedIcon: Icon(FladderItemType.playlist.selectedicon),
+        icon: Icon(FladderItemType.playlist.icon),
+        customIcon: SizedBox.square(
+          dimension: 45,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: FladderTheme.smallShape.borderRadius,
+              color: entry.key.name.toColor.harmonizeWith(Theme.of(context).colorScheme.surface),
+            ),
+            clipBehavior: Clip.hardEdge,
+            padding: const EdgeInsets.all(2),
+            child: ClipRRect(
+              borderRadius: FladderTheme.smallShape.borderRadius,
+              child: FladderImage(
+                image: entry.key.images?.primary,
+                placeHolder: Container(
+                  color: entry.key.name.toColor.harmonizeWith(Theme.of(context).colorScheme.surface),
+                  child: Icon(
+                    FladderItemType.playlist.icon,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+        onTap: () {
+          ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.list;
+          entry.key.navigateTo(context);
+        },
+      ),
+    )
   ];
 }
 
@@ -107,6 +160,7 @@ class CombinedViewNavigationItem extends ConsumerWidget {
   final bool shouldExpand;
   final Icon selectedIcon;
   final Icon icon;
+  final Widget? customIcon;
   final VoidCallback? onTap;
   const CombinedViewNavigationItem({
     super.key,
@@ -117,6 +171,7 @@ class CombinedViewNavigationItem extends ConsumerWidget {
     required this.shouldExpand,
     required this.selectedIcon,
     required this.icon,
+    this.customIcon,
     this.onTap,
   });
 
@@ -148,6 +203,7 @@ class CombinedViewNavigationItem extends ConsumerWidget {
         expanded: shouldExpand,
         selectedIcon: selectedIcon,
         icon: icon,
+        customIcon: customIcon,
       ),
     );
   }
