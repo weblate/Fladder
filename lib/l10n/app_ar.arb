@@ -2069,5 +2069,16 @@
     "closeWindow": "إغلاق النافذة",
     "openJellyfinQuickConnect": "فتح Jellyfin QuickConnect",
     "toggleSubtitles": "تبديل الترجمة",
-    "share": "مشاركة"
+    "share": "مشاركة",
+    "authenticateWithBiometrics": "استخدم البيانات الحيوية لمصادقة {user}",
+    "@authenticateWithBiometrics": {
+        "description": "Prompt shown to the user when biometric authentication is requested",
+        "placeholders": {
+            "user": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
+    "setAs": "تعيين كـ"
 }
