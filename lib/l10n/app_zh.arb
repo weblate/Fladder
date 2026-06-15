@@ -2066,5 +2066,16 @@
     "closeWindow": "关闭窗口",
     "openJellyfinQuickConnect": "打开 Jellyfin 快速连接器",
     "toggleSubtitles": "切换字幕",
-    "share": "分享"
+    "share": "分享",
+    "authenticateWithBiometrics": "使用生物识别技术进行身份验证 {user}",
+    "@authenticateWithBiometrics": {
+        "description": "Prompt shown to the user when biometric authentication is requested",
+        "placeholders": {
+            "user": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
+    "setAs": "设置为"
 }
