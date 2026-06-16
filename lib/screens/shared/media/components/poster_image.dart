@@ -6,6 +6,7 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 
 import 'package:fladder/models/item_base_model.dart';
 import 'package:fladder/models/items/item_shared_models.dart';
+import 'package:fladder/providers/settings/client_settings_provider.dart';
 import 'package:fladder/providers/sync/sync_provider_helpers.dart';
 import 'package:fladder/screens/shared/media/components/poster_overlays.dart';
 import 'package:fladder/screens/shared/media/components/poster_placeholder.dart';
@@ -61,6 +62,11 @@ class PosterImage extends ConsumerWidget {
     final padding = const EdgeInsets.all(5);
     final myKey = key ?? UniqueKey();
 
+    final derivePosterColor = ref.watch(clientSettingsProvider.select((value) => value.dynamicPosterColors));
+    final backgroundColor = derivePosterColor
+        ? poster.title.toColor.harmonizeWith(Theme.of(context).colorScheme.surface)
+        : Theme.of(context).colorScheme.surface;
+
     return Hero(
       tag: myKey,
       child: FocusButton(
@@ -82,7 +88,7 @@ class PosterImage extends ConsumerWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: radius,
-            color: poster.title.toColor.harmonizeWith(Theme.of(context).colorScheme.surface),
+            color: backgroundColor,
           ),
           foregroundDecoration: BoxDecoration(
             borderRadius: radius,

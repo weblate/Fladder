@@ -9,11 +9,12 @@ import 'package:fladder/models/item_base_model.dart';
 import 'package:fladder/models/media_playback_model.dart';
 import 'package:fladder/models/playback/playback_queue_state.dart';
 import 'package:fladder/providers/video_player_provider.dart';
-import 'package:fladder/wrappers/media_control_wrapper.dart';
+import 'package:fladder/theme.dart';
 import 'package:fladder/util/fladder_image.dart';
 import 'package:fladder/util/item_base_model/item_base_model_extensions.dart';
 import 'package:fladder/util/localization_helper.dart';
 import 'package:fladder/widgets/shared/item_actions.dart';
+import 'package:fladder/wrappers/media_control_wrapper.dart';
 
 typedef QueueSectionReorderCallback = Future<void> Function(
   AudioQueueSection section,
@@ -404,17 +405,19 @@ class _QueueTile extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
         minLeadingWidth: 0,
-        leading: ClipOval(
-          child: SizedBox(
-            width: 40,
-            height: 40,
-            child: FladderImage(
-              image: item.images?.primary,
-              fit: BoxFit.cover,
-              placeHolder: const Center(child: Icon(Icons.music_note_rounded, size: 20)),
-              imageErrorBuilder: (context, error, stack) =>
-                  const Center(child: Icon(Icons.music_note_rounded, size: 20)),
-            ),
+        leading: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            borderRadius: FladderTheme.smallShape.borderRadius,
+            color: Theme.of(context).colorScheme.surfaceContainer,
+          ),
+          clipBehavior: Clip.hardEdge,
+          child: FladderImage(
+            image: item.images?.primary,
+            fit: BoxFit.cover,
+            placeHolder: const Center(child: Icon(Icons.music_note_rounded, size: 20)),
+            imageErrorBuilder: (context, error, stack) => const Center(child: Icon(Icons.music_note_rounded, size: 20)),
           ),
         ),
         title: Text(

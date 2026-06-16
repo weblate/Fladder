@@ -22,6 +22,7 @@ import 'package:fladder/providers/video_player_provider.dart';
 import 'package:fladder/screens/shared/detail_scaffold.dart';
 import 'package:fladder/screens/video_player/components/audio_player_queue_dialog.dart';
 import 'package:fladder/screens/video_player/components/video_volume_slider.dart';
+import 'package:fladder/theme.dart';
 import 'package:fladder/util/adaptive_layout/adaptive_layout.dart';
 import 'package:fladder/util/duration_extensions.dart';
 import 'package:fladder/util/fladder_image.dart';
@@ -366,17 +367,20 @@ class _AudioPlayerFullScreenState extends ConsumerState<AudioPlayerFullScreen> {
           child: ListTile(
             contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
             minLeadingWidth: 0,
-            leading: ClipOval(
-              child: SizedBox(
-                width: 40,
-                height: 40,
-                child: FladderImage(
-                  image: item.images?.primary,
-                  fit: BoxFit.cover,
-                  placeHolder: const Center(child: Icon(Icons.music_note_rounded, size: 20)),
-                  imageErrorBuilder: (context, error, stack) =>
-                      const Center(child: Icon(Icons.music_note_rounded, size: 20)),
-                ),
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: FladderTheme.smallShape.borderRadius,
+                color: Theme.of(context).colorScheme.surfaceContainer,
+              ),
+              clipBehavior: Clip.hardEdge,
+              child: FladderImage(
+                image: item.images?.primary,
+                fit: BoxFit.cover,
+                placeHolder: const Center(child: Icon(Icons.music_note_rounded, size: 20)),
+                imageErrorBuilder: (context, error, stack) =>
+                    const Center(child: Icon(Icons.music_note_rounded, size: 20)),
               ),
             ),
             title: Text(
@@ -720,7 +724,7 @@ class _AudioPlayerFullScreenState extends ConsumerState<AudioPlayerFullScreen> {
                               ),
                             ),
                             ...queuePreview(context),
-                            SliverPadding(padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.5))
+                            const SliverPadding(padding: EdgeInsets.only(bottom: 350 * 1.5))
                           ],
                         ),
                       ),

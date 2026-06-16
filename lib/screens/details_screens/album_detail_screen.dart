@@ -6,6 +6,7 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 
 import 'package:fladder/models/items/album_model.dart';
 import 'package:fladder/providers/items/album_details_provider.dart';
+import 'package:fladder/providers/settings/client_settings_provider.dart';
 import 'package:fladder/providers/video_player_provider.dart';
 import 'package:fladder/screens/shared/detail_scaffold.dart';
 import 'package:fladder/screens/shared/fladder_notification_overlay.dart';
@@ -59,6 +60,11 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
 
     final albumPoster = current.images?.primary ?? current.images?.backDrop?.firstOrNull;
 
+    final derivePosterColor = ref.watch(clientSettingsProvider.select((value) => value.dynamicPosterColors));
+    final backgroundColor = derivePosterColor
+        ? current.name.toColor.harmonizeWith(Theme.of(context).colorScheme.surface)
+        : Theme.of(context).colorScheme.surface;
+
     return DetailScaffold(
       label: current.name,
       item: current,
@@ -67,15 +73,15 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
       onRefresh: () async {
         await provider.fetchDetails(widget.item);
       },
+      dominantColor: derivePosterColor ? backgroundColor : null,
       actions: (context) => current.generateActions(
         context,
         ref,
         exclude: {ItemActions.details},
       ),
       content: (detailsContext, padding) {
-        final topGradientColor = albumPoster == null
-            ? current.title.toColor.harmonizeWith(Theme.of(detailsContext).colorScheme.surface)
-            : Theme.of(detailsContext).colorScheme.primaryContainer;
+        final topGradientColor =
+            albumPoster == null ? backgroundColor : Theme.of(detailsContext).colorScheme.primaryContainer;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -96,7 +102,7 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
                     top: BorderSide.none,
                     left: BorderSide.none,
                     right: BorderSide.none,
-                    bottom: BorderSide(width: 1.5, color: Theme.of(context).colorScheme.onSurface.withAlpha(30)),
+                    bottom: BorderSide(width: 1.5, color: backgroundColor.withAlpha(30)),
                   ),
                 ),
                 child: Padding(
@@ -123,7 +129,7 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: radius,
-                                color: current.title.toColor.harmonizeWith(Theme.of(context).colorScheme.surface),
+                                color: backgroundColor,
                               ),
                               foregroundDecoration: BoxDecoration(
                                 borderRadius: radius,

@@ -11,6 +11,7 @@ import 'package:fladder/models/item_base_model.dart';
 import 'package:fladder/models/items/playlist_model.dart';
 import 'package:fladder/models/library_filter_model.dart';
 import 'package:fladder/models/view_model.dart';
+import 'package:fladder/providers/settings/client_settings_provider.dart';
 import 'package:fladder/routes/auto_router.gr.dart';
 import 'package:fladder/screens/library_search/widgets/library_views.dart';
 import 'package:fladder/screens/metadata/refresh_metadata.dart';
@@ -110,44 +111,51 @@ List<Widget> buildMusicDashboardNavItems(
       endIndent: 32,
     ),
     ...playLists.entries.map(
-      (entry) => CombinedViewNavigationItem(
-        label: entry.key.name,
-        expandedSideBar: expanded,
-        usePostersForLibrary: false,
-        shouldExpand: expanded,
-        pathKey: entry.key.id,
-        selectedIcon: Icon(FladderItemType.playlist.selectedicon),
-        icon: Icon(FladderItemType.playlist.icon),
-        customIcon: SizedBox.square(
-          dimension: 45,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: FladderTheme.smallShape.borderRadius,
-              color: entry.key.name.toColor.harmonizeWith(Theme.of(context).colorScheme.surface),
-            ),
-            clipBehavior: Clip.hardEdge,
-            padding: const EdgeInsets.all(2),
-            child: ClipRRect(
-              borderRadius: FladderTheme.smallShape.borderRadius,
-              child: FladderImage(
-                image: entry.key.images?.primary,
-                placeHolder: Container(
-                  color: entry.key.name.toColor.harmonizeWith(Theme.of(context).colorScheme.surface),
-                  child: Icon(
-                    FladderItemType.playlist.icon,
-                    color: Theme.of(context).colorScheme.onSurface,
+      (entry) {
+        final derivePosterColor = ref.watch(clientSettingsProvider.select((value) => value.dynamicPosterColors));
+        final backgroundColor = derivePosterColor
+            ? entry.key.name.toColor.harmonizeWith(Theme.of(context).colorScheme.surface)
+            : Theme.of(context).colorScheme.surface;
+
+        return CombinedViewNavigationItem(
+          label: entry.key.name,
+          expandedSideBar: expanded,
+          usePostersForLibrary: false,
+          shouldExpand: expanded,
+          pathKey: entry.key.id,
+          selectedIcon: Icon(FladderItemType.playlist.selectedicon),
+          icon: Icon(FladderItemType.playlist.icon),
+          customIcon: SizedBox.square(
+            dimension: 45,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: FladderTheme.smallShape.borderRadius,
+                color: backgroundColor,
+              ),
+              clipBehavior: Clip.hardEdge,
+              padding: const EdgeInsets.all(2),
+              child: ClipRRect(
+                borderRadius: FladderTheme.smallShape.borderRadius,
+                child: FladderImage(
+                  image: entry.key.images?.primary,
+                  placeHolder: Container(
+                    color: backgroundColor,
+                    child: Icon(
+                      FladderItemType.playlist.icon,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
+                  fit: BoxFit.cover,
                 ),
-                fit: BoxFit.cover,
               ),
             ),
           ),
-        ),
-        onTap: () {
-          ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.list;
-          entry.key.navigateTo(context);
-        },
-      ),
+          onTap: () {
+            ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.list;
+            entry.key.navigateTo(context);
+          },
+        );
+      },
     )
   ];
 }
