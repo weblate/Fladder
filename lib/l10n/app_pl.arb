@@ -1977,10 +1977,10 @@
     "settingsPlayerCrossfadeDurationTitle": "Czas trwania zanikania",
     "settingsPlayerCrossfadeDesc": "Zanikanie między utworami, które nie występują jeden po drugim na tym samym albumie",
     "settingsPlayerCrossfadeTitle": "Zanikanie",
-    "playerSettingsReplayGainLevelDesc": "Ustaw docelowy poziom głośności dla normalizacji ReplayGain. Typowym standardem jest -14 dB, ale możesz go dostosować do swoich preferencji.",
-    "playerSettingsReplayGainLevelTitle": "Poziom ReplayGain",
-    "playerSettingsReplayGainDesc": "Normalizuj głośność muzyki korzystając z tagów ReplayGain.",
-    "playerSettingsReplayGainTitle": "ReplayGain",
+    "playerSettingsReplayGainLevelDesc": "Ustaw docelowy poziom głośności dla normalizacji wyrównywania głośności. Typowym standardem jest -14 dB, ale możesz go dostosować do swoich preferencji.",
+    "playerSettingsReplayGainLevelTitle": "Poziom wyrównywania głośności",
+    "playerSettingsReplayGainDesc": "Normalizuj głośność muzyki korzystając z tagów zdefiniowanych w utworze.",
+    "playerSettingsReplayGainTitle": "Wyrównywanie głośności",
     "removedFromPlaylist": "Usunięto z playlisty {playlistName}",
     "@removedFromPlaylist": {
         "placeholders": {
