@@ -1946,5 +1946,9 @@
     "audioPlayerPlaybackOptionsTitle": "Opciones de reproducción",
     "audioPlayerRepeatAll": "Repita todo",
     "showArtist": "Mostrar artista",
-    "playerSettingsReplayGainLevelDesc": "Establecer el nivel de ruido objetivo para la normalización ReplayGain. Un estándar común es -14 dB, pero puede ajustarlo a su preferencia."
+    "playerSettingsReplayGainLevelDesc": "Establecer el nivel de ruido objetivo para la normalización ReplayGain. Un estándar común es -14 dB, pero puede ajustarlo a su preferencia.",
+    "pictureInPictureSubtitle": "Introduzca automáticamente Picture-in-Picture cuando deje al jugador. El botón PiP en los controles siempre funciona independientemente de este ajuste.",
+    "@pictureInPictureSubtitle": {
+        "description": "Subtitle of the auto-enter Picture-in-Picture setting toggle"
+    }
 }
