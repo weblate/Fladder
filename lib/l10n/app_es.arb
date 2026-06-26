@@ -1940,5 +1940,7 @@
         }
     },
     "seekForwardInstant": "Busca hacia adelante (Instant)",
-    "seekBackInstant": "Busca de nuevo (Instant)"
+    "seekBackInstant": "Busca de nuevo (Instant)",
+    "share": "Compartir",
+    "setAs": "Establecer como"
 }
