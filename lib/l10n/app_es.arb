@@ -1950,5 +1950,13 @@
     "pictureInPictureSubtitle": "Introduzca automáticamente Picture-in-Picture cuando deje al jugador. El botón PiP en los controles siempre funciona independientemente de este ajuste.",
     "@pictureInPictureSubtitle": {
         "description": "Subtitle of the auto-enter Picture-in-Picture setting toggle"
+    },
+    "removedFromPlaylist": "Eliminado de la lista de reproducción {playlistName}",
+    "@removedFromPlaylist": {
+        "placeholders": {
+            "playlistName": {
+                "type": "String"
+            }
+        }
     }
 }
