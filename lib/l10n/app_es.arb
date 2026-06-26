@@ -1925,5 +1925,20 @@
     "seerrMovies": "Descubrir Películas",
     "seerrSeries": "Descubrir Series",
     "today": "Hoy",
-    "linkData": "Ligar datos"
+    "linkData": "Ligar datos",
+    "addToQueue": "Añadir a la cola",
+    "instantMix": "Mezcla instantánea",
+    "audioPlayerRepeatOne": "Repita uno",
+    "authenticateWithBiometrics": "Utilizar biometría para autenticar {user}",
+    "@authenticateWithBiometrics": {
+        "description": "Prompt shown to the user when biometric authentication is requested",
+        "placeholders": {
+            "user": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
+    "seekForwardInstant": "Busca hacia adelante (Instant)",
+    "seekBackInstant": "Busca de nuevo (Instant)"
 }
