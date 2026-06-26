@@ -1944,5 +1944,7 @@
     "share": "Compartir",
     "setAs": "Establecer como",
     "audioPlayerPlaybackOptionsTitle": "Opciones de reproducción",
-    "audioPlayerRepeatAll": "Repita todo"
+    "audioPlayerRepeatAll": "Repita todo",
+    "showArtist": "Mostrar artista",
+    "playerSettingsReplayGainLevelDesc": "Establecer el nivel de ruido objetivo para la normalización ReplayGain. Un estándar común es -14 dB, pero puede ajustarlo a su preferencia."
 }
