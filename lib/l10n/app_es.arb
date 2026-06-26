@@ -833,7 +833,7 @@
     "closeVideo": "Cerrar vídeo",
     "playNextVideo": "Reproducir el siguiente vídeo",
     "stop": "Detener",
-    "playerSettingsBackendTitle": "Backend del reproductor de vídeo",
+    "playerSettingsBackendTitle": "Reproductor de medios en segundo plano",
     "playerSettingsBackendDesc": "Elija su reproductor multimedia preferido para una experiencia de reproducción óptima",
     "mdkExperimental": "MDK todavía está en una etapa experimental",
     "defaultLabel": "Por defecto",
@@ -1121,9 +1121,9 @@
     "screensaverBlack": "Negro",
     "playerSettingsScreensaverTitle": "Salvapantallas",
     "playerSettingsScreensaverDesc": "Selecciona el salvapantallas que se mostrará cuando no haya actividad del reproductor",
-    "settingsLocalUrlTitle": "URL del servidor local",
-    "settingsLocalUrlSetTitle": "Configurar URL local",
-    "settingsLocalUrlSetDesc": "Especifica la dirección del servidor local. Fladder utilizará automáticamente esta URL cuando tu dispositivo esté en la misma red.",
+    "settingsLocalUrlTitle": "URL Jellyfin local",
+    "settingsLocalUrlSetTitle": "Configurar URL local Jellyfin",
+    "settingsLocalUrlSetDesc": "Especifica la dirección Jellyfin local. Fladder utilizará automáticamente esta URL cuando tu dispositivo esté en la misma red.",
     "regenerateTrickplayImages": "Regenerar imágenes trickplay",
     "controlPanel": "Panel de control",
     "controlPanelDesc": "Servidor, Actividad, Usuarios, Biblioteca",
@@ -1939,24 +1939,120 @@
             }
         }
     },
-    "seekForwardInstant": "Busca hacia adelante (Instant)",
-    "seekBackInstant": "Busca de nuevo (Instant)",
+    "seekForwardInstant": "Busca adelante (Instante)",
+    "seekBackInstant": "Busca atrás (Instante)",
     "share": "Compartir",
-    "setAs": "Establecer como",
+    "setAs": "Poner como",
     "audioPlayerPlaybackOptionsTitle": "Opciones de reproducción",
-    "audioPlayerRepeatAll": "Repita todo",
+    "audioPlayerRepeatAll": "Repetir todo",
     "showArtist": "Mostrar artista",
-    "playerSettingsReplayGainLevelDesc": "Establecer el nivel de ruido objetivo para la normalización ReplayGain. Un estándar común es -14 dB, pero puede ajustarlo a su preferencia.",
-    "pictureInPictureSubtitle": "Introduzca automáticamente Picture-in-Picture cuando deje al jugador. El botón PiP en los controles siempre funciona independientemente de este ajuste.",
+    "playerSettingsReplayGainLevelDesc": "Establecer el nivel de ruido destino para la normalización ReplayGain. Un estándar común es -14 dB, pero puede ajustarlo a su preferencia.",
+    "pictureInPictureSubtitle": "Introduzca automáticamente Imagen dentro de Imagen cuando abandone el reproductor. El botón PiP en los controles siempre funciona independientemente de este ajuste.",
     "@pictureInPictureSubtitle": {
         "description": "Subtitle of the auto-enter Picture-in-Picture setting toggle"
     },
-    "removedFromPlaylist": "Eliminado de la lista de reproducción {playlistName}",
+    "removedFromPlaylist": "Retirado del listado de reproducción {playlistName}",
     "@removedFromPlaylist": {
         "placeholders": {
             "playlistName": {
                 "type": "String"
             }
         }
+    },
+    "track": "{count, plural, one{Pista} other{Pistas}}",
+    "@track": {
+        "description": "track",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "dashboardRecentlyAddedItems": "{name} recientemente añadido",
+    "@dashboardRecentlyAddedItems": {
+        "description": "Recently added items on home screen",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "mediaTypeArtists": "{count, plural, one{Artista} other{Artistas}}",
+    "@mediaTypeArtists": {
+        "description": "Artist (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "playMusic": "Reproducir música",
+    "settingsPlayerPlayPauseFadeTitle": "Reproducir/pausar atenuación del volumen",
+    "settingsPlayerPlayPauseFadeDesc": "Entrada y salida de volumen atenuado cuando reproduzca o pause",
+    "syncPlaylistDeleteTitle": "Elimina listado de reproducción sincronizado",
+    "syncPlaylistDeleteContent": "¿Le gustaría retirar las pistas sincronizadas desde este listado de reproducción?",
+    "syncPlaylistKeepTracks": "Conservar las pistar",
+    "syncPlaylistRemoveTracks": "Retirar las pistas",
+    "settingsPlayerCrossfadeTitle": "Fundido cruzado",
+    "settingsPlayerCrossfadeDesc": "Fundido entre pistas que no son consecutivas en el mismo álbum",
+    "settingsPlayerCrossfadeDurationTitle": "Duración de fundido",
+    "settingsPlayerCrossfadeDurationDesc": "Duración del fundido cruzado",
+    "quitMultipleWindowsDesc": "Tienes {count} ventanas abiertas. Salir de Fladder cerrará todas ellas. ¿Quieres continuar?",
+    "@quitMultipleWindowsDesc": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
+    "closeWindow": "Cerrar ventana",
+    "openJellyfinQuickConnect": "Abrir Conexión Rápida de Jellyfin",
+    "toggleSubtitles": "Conmutar subtítulos",
+    "recentlyPlayed": "Reproducido recientemente",
+    "recentlyFavorited": "Favoritos recientemente",
+    "mostPlayed": "Más reproducidos",
+    "nowPlaying": "Reproduciendo ahora",
+    "upNext": "Hasta siguiente",
+    "queue": "Cola",
+    "queueIsEmpty": "La cola está vacía",
+    "queueItemCount": "{count} elementos",
+    "@queueItemCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "removeFromQueue": "Retirar de la cola",
+    "musicDashboard": "Pizarra de música",
+    "quiet": "Silencio",
+    "loud": "Estridencia",
+    "addedToQueue": "{count, plural, one{Añadida {count} pista a la cola} other{Añadidas {count} pistas en la cola}}",
+    "@addedToQueue": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "audioPlayerRepeatOff": "Repetición apagada",
+    "audioPlayerShuffle": "Barajar",
+    "playerSettingsReplayGainTitle": "Ganancia de reproducción",
+    "playerSettingsReplayGainDesc": "Normaliza el volumen de la música usando etiquetas ReplayGain.",
+    "playerSettingsReplayGainLevelTitle": "Nivel ReplayGain",
+    "pictureInPictureTitle": "Imagen dentro de imagen",
+    "@pictureInPictureTitle": {
+        "description": "Tooltip on the in-player PiP button"
+    },
+    "pictureInPictureAutoTitle": "Imagen dentro de imagen automática",
+    "@pictureInPictureAutoTitle": {
+        "description": "Title of the auto-enter Picture-in-Picture setting toggle"
+    },
+    "pictureInPictureNotSupported": "Imagen dentro de imagen no está disponible en este dispositivo",
+    "@pictureInPictureNotSupported": {
+        "description": "Snackbar shown when the user taps the PiP button and the OS reports it unsupported"
     }
 }
