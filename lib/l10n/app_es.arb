@@ -898,7 +898,7 @@
     "loading": "Cargando",
     "exitFladderTitle": "Salir de Fladder",
     "maxConcurrentDownloadsTitle": "Max. descargas simultáneas",
-    "maxConcurrentDownloadsDesc": "Establece el número máximo de descargas que pueden ejecutarse al mismo tiempo. Establecer en 0 para desactivar el límite.",
+    "maxConcurrentDownloadsDesc": "Establece el número máximo de descargas que pueden ejecutarse al mismo tiempo. Se establece a 0 para desactivar el límite.",
     "playbackTrackSelection": "Selección de pista de reproducción",
     "rememberSubtitleSelections": "Establecer pista de subtítulo basado en el item anterior",
     "rememberAudioSelections": "Establecer pista de audio basado en el item anterior",
