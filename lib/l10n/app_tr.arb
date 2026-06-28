@@ -91,7 +91,7 @@
     "clearSelection": "Seçimi temizle",
     "close": "Kapat",
     "code": "Kod",
-    "collectionFolder": "Koleksiyon klasörü",
+    "collectionFolder": "{count, plural, one{Koleksiyon Klasörü} other{Koleksiyon Klasörleri}}",
     "color": "Renk",
     "combined": "Birleşik",
     "dashboardContinueWatching": "İzlemeye Devam Et",
@@ -108,7 +108,7 @@
     "dateAdded": "Eklenme tarihi",
     "dateLastContentAdded": "Son içerik eklenme tarihi",
     "datePlayed": "Oynatılma tarihi",
-    "days": "Gün",
+    "days": "{count, plural, one{Gün} other{Günler}}",
     "deleteFileFromSystem": "Bu öğeyi ({item}) silmek, onu hem dosya sisteminden hem de medya arşivinizden silecektir. Devam etmek istediğinizden emin misiniz?",
     "@deleteFileFromSystem": {
         "description": "Delete file from system",
@@ -238,13 +238,13 @@
     "markAsUnwatched": "İzlenmedi olarak işaretle",
     "markAsWatched": "İzlendi olarak işaretle",
     "masonry": "Mozaik",
-    "mediaTypeFolder": "Klasör",
+    "mediaTypeFolder": "{count, plural, one{Klasör} other{Klasörler}}",
     "mediaTypeBase": "Temel Tür",
-    "mediaTypeBook": "Kitap",
-    "mediaTypeBoxset": "Koleksiyon",
-    "mediaTypeEpisode": "Bölüm",
-    "mediaTypeMovie": "Film",
-    "mediaTypePerson": "Kişi",
+    "mediaTypeBook": "{count, plural, one{Kitap} other{Kitaplar}}",
+    "mediaTypeBoxset": "{count, plural, one{Koleksiyon} other{Koleksiyonlar}}",
+    "mediaTypeEpisode": "{count, plural, one{Bölüm} other{Bölüm}}",
+    "mediaTypeMovie": "{count, plural, one{Film} other{Filmler}}",
+    "mediaTypePerson": "{count, plural, one{Kişi} other{Kişiler}}",
     "moreOptions": "Daha fazla seçenek",
     "mouseDragSupport": "Fare ile sürükle",
     "never": "Asla",
@@ -356,7 +356,7 @@
     "settingsPlayerVideoHWAccelTitle": "Donanım hızlandırma",
     "settingsPosterPinch": "Afişleri ölçeklendirmek için kıstırıp-yakınlaştırın",
     "settingsPosterSize": "Afiş boyutu",
-    "settingsProfileDesc": "Kilit ekranı",
+    "settingsProfileDesc": "Kilit ekranı, Lokal URL, Seerr",
     "settingsProfileTitle": "Profil",
     "settingsQuickConnectTitle": "Hızlı bağlantı",
     "settingsSecurity": "Güvenlik",
@@ -454,7 +454,7 @@
     "useDefaults": "Varsayılanları kullan",
     "videoScalingContain": "Sığdır",
     "userName": "Kullanıcı adı",
-    "video": "Video",
+    "video": "{count, plural, one{Video} other{Videolar}}",
     "videoScaling": "Video ölçeklendirme",
     "videoScalingCover": "Kapla",
     "videoScalingFillScreenDesc": "Gezinme ve durum çubuğunu doldur",
@@ -576,7 +576,7 @@
     "screenBrightness": "Ekran parlaklığı",
     "playBackSettings": "Oynatma Ayarları",
     "settingsAutoNextTitle": "Sıradaki önizlemesi",
-    "autoNextOffSmartDesc": "Jenerik başladıktan sonra 10 saniyeden az süre kalmışsa sıradaki ekranını gösterir. Aksi takdirde, 30 saniye oynatma süresi kaldığında sıradaki ekranını gösterir.",
+    "autoNextOffSmartDesc": "Jenerik başladıktan sonra 10 saniyeden az süre kalmışsa, sıradaki ekranını gösterir. Aksi takdirde, 30 saniye oynatma süresi kaldığında sıradaki ekranını gösterir.",
     "autoNextOffStaticTitle": "Statik",
     "autoNextOffStaticDesc": "30 saniye oynatma süresi kaldığında sıradaki ekranını göster",
     "playbackRate": "Oynatma hızı",
@@ -610,7 +610,7 @@
     "resumeVideo": "Videoya devam et",
     "closeVideo": "Videoyu kapat",
     "playNextVideo": "Sıradaki videoyu oynat",
-    "playerSettingsBackendTitle": "Video Oynatıcı Motoru",
+    "playerSettingsBackendTitle": "Video oynatıcı Motoru",
     "playerSettingsBackendDesc": "Optimum oynatma deneyimi için tercih ettiğiniz medya oynatıcıyı seçin",
     "defaultLabel": "Varsayılan",
     "@defaultLabel": {
@@ -728,7 +728,7 @@
         }
     },
     "ascending": "Artan",
-    "audio": "Ses",
+    "audio": "{count, plural, one{Ses} other{Ses}}",
     "autoPlay": "Otomatik oynat",
     "clear": "Temizle",
     "clearAllSettings": "Tüm ayarları temizle",
@@ -777,11 +777,11 @@
             }
         }
     },
-    "mediaTypePhoto": "Fotoğraf",
-    "mediaTypePhotoAlbum": "Fotoğraf Albümü",
-    "mediaTypePlaylist": "Oynatma Listesi",
-    "mediaTypeSeason": "Sezon",
-    "mediaTypeSeries": "Dizi",
+    "mediaTypePhoto": "{count, plural, one{Fotoğraf} other{Fotoğraflar}}",
+    "mediaTypePhotoAlbum": "{count, plural, one{Fotoğraf Albümü} other{Fotoğraf Albümleri}}",
+    "mediaTypePlaylist": "{count, plural, one{Oynatma Listesi} other{Oynatma Listeleri}}",
+    "mediaTypeSeason": "{count, plural, one{Sezon} other{Sezonlar}}",
+    "mediaTypeSeries": "{count, plural, one{Diziler} other{Diziler}}",
     "metaDataSavedFor": "{item} için üst veri kaydedildi",
     "@metaDataSavedFor": {
         "description": "metaDataSavedFor",
@@ -814,7 +814,7 @@
             }
         }
     },
-    "musicAlbum": "Albüm",
+    "musicAlbum": "{count, plural, one{Albüm} other{Albümler}}",
     "name": "Ad",
     "navigation": "Gezinme",
     "navigationDashboard": "Anasayfa",
@@ -1037,12 +1037,216 @@
     "showMore": "Daha fazla göster",
     "speedUp": "Hızlandır",
     "speedDown": "Yavaşla",
-    "nextUpInCount": "Sıradaki",
+    "nextUpInCount": "Sıradaki {seconds}",
     "@nextUpInCount": {
         "placeholders": {
             "seconds": {
                 "type": "int"
             }
         }
-    }
+    },
+    "addToQueue": "Sıraya Ekle",
+    "instantMix": "Anında miks",
+    "addedToQueue": "{count, plural, one{ {count} parça sıraya eklendi} other{{count} parçalar sıraya eklendi}}",
+    "@addedToQueue": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "audioPlayerPlaybackOptionsTitle": "Oynatma seçenekleri",
+    "audioPlayerRepeatAll": "Hepsini tekrar et",
+    "audioPlayerRepeatOff": "Tekrarı kapat",
+    "audioPlayerRepeatOne": "Bir tanesini tekrarla",
+    "audioPlayerShuffle": "Karıştır",
+    "showArtist": "Sanatçıyı görüntüle",
+    "track": "{count, plural, one{Parça} other{Parçalar}}",
+    "@track": {
+        "description": "track",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "generateLoginLink": "{userName} için kod",
+    "@generateLoginLink": {
+        "description": "Code for a user to share",
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "shareLoginLink": "Giriş linkini paylaş",
+    "shareQRCode": "QR kod paylaş",
+    "copyLoginLink": "Linki kopyala",
+    "includePassword": "Şifreyi dahil et",
+    "invalidAuthLink": "Geçersiz giriş linki",
+    "gestures": "Hareketler",
+    "dashboardRecentlyAddedItems": "{name} yakın zamanda eklendi",
+    "@dashboardRecentlyAddedItems": {
+        "description": "Recently added items on home screen",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "homeBannerDetailed": "Detaylı",
+    "homeBannerTV": "TV",
+    "mediaTypeArtists": "{count, plural, one{Sanatçı} other{Sanatçılar}}",
+    "@mediaTypeArtists": {
+        "description": "Artist (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "mediaTypeTV": "{count, plural, one{Televizyon Kanalı} other{Televizyon Kanalları}}",
+    "@mediaTypeTV": {
+        "description": "TV Channel (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "playMusic": "Müzik çal",
+    "popularity": "Popülerlik",
+    "contentRating": "İçerik derecelendirmesi",
+    "runtimeMinutesTitle": "Oynatma süresi (dakikalar)",
+    "runtimeRangeMinutes": "{min} - {max} dakikalar",
+    "@runtimeRangeMinutes": {
+        "placeholders": {
+            "min": {
+                "type": "int"
+            },
+            "max": {
+                "type": "int"
+            }
+        }
+    },
+    "minutesShort": "{count} dk",
+    "@minutesShort": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "5"
+            }
+        }
+    },
+    "streamingServices": "Sağlayıcılar ({count})",
+    "@streamingServices": {
+        "description": "Streaming providers (Netflix,HBO, etc.)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
+    "authenticateWithBiometrics": "{user} kimliğini doğrulamak için biyometri kullanın",
+    "@authenticateWithBiometrics": {
+        "description": "Prompt shown to the user when biometric authentication is requested",
+        "placeholders": {
+            "user": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
+    "settingsPlayerPlayPauseFadeTitle": "Oynat/Duraklat ses geçişi",
+    "settingsPlayerPlayPauseFadeDesc": "Oynatırken veya duraklatırken sesi kademeli olarak artır ve azalt",
+    "settingsProfileSubtitleLanguage": "Tercih edilen altyazı dili",
+    "anyLanguage": "Herhangi bir dil",
+    "settingsProfileSubtitleMode": "Altyazı modu",
+    "subtitlePlaybackModeDefault": "Varsayılan",
+    "subtitlePlaybackModeAlways": "Her zaman oynat",
+    "subtitlePlaybackModeOnlyForced": "Sadece zorunlu",
+    "subtitlePlaybackModeNone": "Yok",
+    "subtitlePlaybackModeSmart": "Akıllı",
+    "backgroundColor": "Arkaplan rengi",
+    "syncPlaylistDeleteTitle": "Senkronize oynatma listesini sil",
+    "syncPlaylistDeleteContent": "Bu çalma listesinden senkronize edilen şarkıları da kaldırmak istiyor musunuz?",
+    "syncPlaylistKeepTracks": "Parçaları sakla",
+    "syncPlaylistRemoveTracks": "Parçaları sil",
+    "pictureInPictureTitle": "Picture-in-Picture",
+    "@pictureInPictureTitle": {
+        "description": "Tooltip on the in-player PiP button"
+    },
+    "pictureInPictureAutoTitle": "Automatik Picture-in-Picture",
+    "@pictureInPictureAutoTitle": {
+        "description": "Title of the auto-enter Picture-in-Picture setting toggle"
+    },
+    "removedFromPlaylist": "{playlistName} adlı oynatma listesinden kaldırıldı",
+    "@removedFromPlaylist": {
+        "placeholders": {
+            "playlistName": {
+                "type": "String"
+            }
+        }
+    },
+    "pictureInPictureNotSupported": "Picture-in-Picture bu cihazda kullanılabilir değil",
+    "@pictureInPictureNotSupported": {
+        "description": "Snackbar shown when the user taps the PiP button and the OS reports it unsupported"
+    },
+    "pictureInPictureSubtitle": "Oynatıcıdan çıkınca otomatik olarak Picture-in-Picture moduna girin. PiP butonu bu ayar dışında da kontrollerde çalışır.",
+    "@pictureInPictureSubtitle": {
+        "description": "Subtitle of the auto-enter Picture-in-Picture setting toggle"
+    },
+    "deleteRequestConfirmation": "Bu isteği silmek istediğinize emin misiniz?",
+    "enableEdgeGesturesTitle": "Kenar hareketlerini aktive et",
+    "enableEdgeGesturesDesc": "Parlaklık ve sesi ekranın kenarlarını yukarı ve aşağı kaydırarak kontrol et",
+    "reverseEdgeGesturesTitle": "Kenar hareketlerini çevir",
+    "reverseEdgeGesturesDesc": "Parlaklık ve ses kontrolü için kenarları değiştir",
+    "playerSettingsReplayGainTitle": "ReplayGain",
+    "playerSettingsReplayGainDesc": "Müzik ses seviyesini ReplayGain etiketlerini kullanarak normalleştirin.",
+    "playerSettingsReplayGainLevelTitle": "ReplayGain seviyesi",
+    "playerSettingsReplayGainLevelDesc": "ReplayGain normalleştirmesi için hedef ses seviyesini belirleyin. Genel standart -14 dB'dir, ancak bunu tercihinize göre ayarlayabilirsiniz.",
+    "settingsPlayerCrossfadeTitle": "Şarkı Geçişi",
+    "settingsPlayerCrossfadeDesc": "Aynı albümde ardışık olmayan şarkılar arasında geçiş yap",
+    "settingsPlayerCrossfadeDurationTitle": "Şarkı Geçişi süresi",
+    "settingsPlayerCrossfadeDurationDesc": "Şarkı geçişinin ne kadar süreceği",
+    "advancedVideoOptionsTitle": "Gelişmiş video seçenekleri",
+    "advancedVideoOptionsDesc": "HDR'ı etkinleştir, ton eşleme ve gelişmiş renk yönetimi (bazı cihazlar için kararsız olabilir)",
+    "segmentActionSkipOnce": "Bir kere atla",
+    "quitMultipleWindowsDesc": "{count} tane pencereniz açık. Fladder'dan çıkmak hepsini kapatacak. Devam etmek istiyor musunuz?",
+    "@quitMultipleWindowsDesc": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
+    "closeWindow": "Pencereyi kapat",
+    "playbackTypeTV": "TV",
+    "seekForwardInstant": "Anlık İleri Sar",
+    "seekBackInstant": "Anlık Geri Sar",
+    "stepForward": "İleri Adımla",
+    "stepBack": "Geri Adımla",
+    "brightnessIndicator": "Parlaklık: {brightness}",
+    "@brightnessIndicator": {
+        "placeholders": {
+            "brightness": {
+                "type": "int"
+            }
+        }
+    },
+    "speedIndicator": "Oynatma hızı: {speed}",
+    "@speedIndicator": {
+        "placeholders": {
+            "speed": {
+                "type": "double"
+            }
+        }
+    },
+    "enableSpeedBoostTitle": "Hızlanmayı aktive et",
+    "enableSpeedBoostDesc": "Oynatma hızını geçici olarak artırmak için ekrana basılı tutun (mobil) veya boşluk tuşuna basın (masaüstü)"
 }
