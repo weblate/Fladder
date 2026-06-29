@@ -1488,5 +1488,7 @@
     "enableAllLibraries": "Bütün kütüphanelere erişim ver",
     "enableAllDevices": "Bütün cihazlara erişim ver",
     "parentalControl": "Ebeveyn Denetimi",
-    "blockedItemsNoRating": "Engellenmiş derecelendirilmemiş veya bilinmeyen ögeler"
+    "blockedItemsNoRating": "Engellenmiş derecelendirilmemiş veya bilinmeyen ögeler",
+    "newTrigger": "Yeni tetikleyici",
+    "newTaskTrigger": "Yeni görev tetikleyicisi"
 }
