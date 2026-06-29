@@ -1248,5 +1248,245 @@
         }
     },
     "enableSpeedBoostTitle": "Hızlanmayı aktive et",
-    "enableSpeedBoostDesc": "Oynatma hızını geçici olarak artırmak için ekrana basılı tutun (mobil) veya boşluk tuşuna basın (masaüstü)"
+    "enableSpeedBoostDesc": "Oynatma hızını geçici olarak artırmak için ekrana basılı tutun (mobil) veya boşluk tuşuna basın (masaüstü)",
+    "speedBoostRateTitle": "Hız artırımı oranı",
+    "speedBoostRateDesc": "Hızlandırma açıkken çalma hızı",
+    "enableDoubleTapSeekTitle": "Sarmak/oynatmak/duraklatmak için çift dokunun",
+    "enableDoubleTapSeekDesc": "Geri/ileri sarmak için ekranın sol/sağ tarafına çift dokunun. Oynatmak/duraklatmak için ortaya çift dokunun",
+    "quickConnectPostFailed": "Hızlı bağlanma kodunu almakta başarısız olundu",
+    "quickConnectLoginUsingCode": "Hızlı bağlanma kullanılıyor",
+    "openJellyfinQuickConnect": "Jellyfin Hızlı Bağlanma'yı aç",
+    "showLess": "Daha az göster",
+    "itemColorsTitle": "Öğe renkleri",
+    "itemColorsDesc": "Detaylar sayfasının temasını öğenin ana rengine göre belirleyin",
+    "mediaTunnelingTitle": "Medya tünelleme",
+    "mediaTunnelingDesc": "Yerel oynatıcı için medya tünellemeyi etkinleştir",
+    "clientSettingsUseSystemIMETitle": "Sistem klavyesini kullan",
+    "clientSettingsUseSystemIMEDesc": "Sistemle beraber gelen yerel klavyeyi kullan",
+    "formattedTime": "{time}",
+    "@formattedTime": {
+        "description": "Formatted time",
+        "placeholders": {
+            "time": {
+                "type": "DateTime",
+                "format": "jm"
+            }
+        }
+    },
+    "takeScreenshot": "Ekran görüntüsü al",
+    "takeScreenshotClean": "Ekran görüntüsü al (altyazılar olmadan)",
+    "toggleSubtitles": "Altyazıları aç/kapa",
+    "screenshotTaken": "Ekran görüntüsü kaydedildi!",
+    "screenshotCleanTaken": "Altyazısız ekran görüntüsü kaydedildi!",
+    "errorTakingScreenshot": "Ekran görüntüsü alınırken bir hata oluştu",
+    "openImeKeyboard": "IME klavyeyi aç",
+    "screensaverDvd": "DVD",
+    "screensaverLogo": "Logo",
+    "screensaverTime": "Zaman",
+    "screensaverBlack": "Siyah",
+    "playerSettingsScreensaverTitle": "Ekran Koruyucu",
+    "playerSettingsScreensaverDesc": "Oynatıcıda etkinlik olmadığında gösterilecek ekran koruyucuyu seçin",
+    "settingsLocalUrlTitle": "Lokal Jellyfin URLsi",
+    "settingsLocalUrlSetTitle": "Lokal Jellyfin URLsi'ni değiştir",
+    "settingsLocalUrlSetDesc": "Yerel Jellyfin adresini belirtin. Cihazınız aynı ağa bağlı olduğunda Fladder bu bağlantıyı otomatik olarak kullanır.",
+    "regenerateTrickplayImages": "Trickplay fotoğraflarını yeniden oluşturun",
+    "controlPanel": "Kontrol Paneli",
+    "controlPanelDesc": "Sunucu, Aktivite, Kullanıcılar, Kütüphane",
+    "controlDashboard": "Kontrol Panosu",
+    "serverName": "Sunucu adı",
+    "serverVersion": "Sunucu sürümü",
+    "webVersion": "Web sürümü",
+    "devices": "Cihazlar",
+    "used": "Kullanılan",
+    "storagePaths": "Depolama Yolları",
+    "programData": "Program Verileri",
+    "web": "Web",
+    "cache": "Önbellek",
+    "logs": "Kayıtlar",
+    "transcodingTemp": "Geçici Kod Dönüştürme",
+    "count": "Sayı",
+    "scanAllLibraries": "Bütün kütüphaneleri tara",
+    "restartServer": "Sunucuyu yeniden başlat",
+    "shutDownServer": "Sunucuyu kapat",
+    "dashboardDesc": "Sunucu, Sayı, Cihazlar, Depolama",
+    "lastActivity": "Son aktivite",
+    "activeTasks": "Aktif görevler",
+    "hours": "{count, plural, one{Saat} other{Saatler}}",
+    "@hours": {
+        "description": "Pluralization for hours",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "3"
+            }
+        }
+    },
+    "weeks": "{count, plural, one{Hafta} other{Haftalar}}",
+    "@weeks": {
+        "description": "Pluralization for weeks",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
+    "months": "{count, plural, one{Ay} other{Aylar}}",
+    "@months": {
+        "description": "Pluralization for months",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "5"
+            }
+        }
+    },
+    "years": "{count, plural, one{Yıllar} other{Yıllar}}",
+    "@years": {
+        "description": "Pluralization for years",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "timeAgo": "{time} önce",
+    "@timeAgo": {
+        "description": "timeAgo",
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "airsIn": "{count} {duration} içinde yayınlanıyor",
+    "@airsIn": {
+        "description": "airsIn",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "3"
+            },
+            "duration": {
+                "type": "String",
+                "example": "days"
+            }
+        }
+    },
+    "lastRunTaking": "En son {date} tarihinde çalıştırıldı, {time} sürdü",
+    "@lastRunTaking": {
+        "description": "lastRunTaking",
+        "placeholders": {
+            "date": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "lessThenAMinute": "Bir dakikadan az",
+    "plannedTasks": "Planlanmış görevler",
+    "taskTriggerTypeInterval": "Aralık",
+    "taskTriggerTypeDaily": "Günlük",
+    "taskTriggerTypeWeekly": "Haftalık",
+    "taskTriggerTypeStartup": "Başlatıldığında",
+    "create": "Oluştur",
+    "taskTriggerTypeName": "Tetiklenme şekli",
+    "dayOfTheWeek": "Haftanın günü",
+    "time": "Zaman",
+    "interval": "Aralık",
+    "taskTimeLimitInHours": "Zaman sınırı (saatler)",
+    "taskTriggerIntervalDesc": "Her {time}",
+    "@taskTriggerIntervalDesc": {
+        "description": "Task trigger interval desc",
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "taskTriggerDailyDesc": "Her gün {time}'de",
+    "@taskTriggerDailyDesc": {
+        "description": "taskTriggerDailyDesc",
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "taskTriggerWeeklyDesc": "Her hafta {day} günü {time}'de",
+    "@taskTriggerWeeklyDesc": {
+        "description": "taskTriggerWeeklyDesc",
+        "placeholders": {
+            "day": {
+                "type": "String"
+            },
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "taskTriggerTimeLimitSub": "Zaman sınırı: {time}",
+    "@taskTriggerTimeLimitSub": {
+        "description": "taskTriggerTimeLimit",
+        "placeholders": {
+            "time": {
+                "type": "String"
+            }
+        }
+    },
+    "performance": "Performans",
+    "serverNameLabel": "Sunucu ismi",
+    "cachePath": "Önbellek yolu",
+    "metadataPath": "Metadata yolu",
+    "maxConcurrentLibraryScanLabel": "Aynı anda yapılabilecek en fazla kütüphane taraması",
+    "maxConcurrentLibraryScanDesc": "Kütüphane taramaları sırasında yürütülecek maksimum paralel görev sayısı. Bu alanı boş bırakırsanız, sisteminizin çekirdek sayısına göre bir sınır belirlenir. UYARI: Bu sayıyı çok yüksek ayarlamak ağ dosya sistemlerinde sorunlara yol açabilir; sorunla karşılaşırsanız bu sayıyı düşürün.",
+    "maxImageDecodingThreadsLabel": "Maksimum resim çözme iş parçacığı",
+    "maxImageDecodingThreadsDesc": "Paralel olarak çalışmasına izin verilen maksimum görüntü kodlama işlemi sayısı. Bu alanı boş bırakırsanız, sisteminizin çekirdek sayısına göre bir sınır belirlenir.",
+    "controlPanelServerDesc": "Sunucu ismi, Hızlı Bağlanma, Performans",
+    "deleteUserTitle": "Kullanıcı {user}'yı silmek istediğinize emin misiniz?",
+    "@deleteUserTitle": {
+        "description": "deleteUserTitle",
+        "placeholders": {
+            "user": {
+                "type": "String"
+            }
+        }
+    },
+    "deleteUserDesc": "{user} kullanıcısı ve ilişkili tüm ayarlar kalıcı olarak silinecektir.",
+    "@deleteUserDesc": {
+        "description": "deleteUserDesc",
+        "placeholders": {
+            "user": {
+                "type": "String"
+            }
+        }
+    },
+    "userInformation": "Kullanıcı Bilgileri",
+    "allowManageServer": "Bu kullanıcıyı sunucuyu yönetmesi için izin ver",
+    "allowCollections": "Bu kullanıcının koleksiyonları değiştirmesine izin ver",
+    "allowEditSubtitles": "Bu kullanıcının altyazıları düzenlemesine izin ver",
+    "featureAccess": "Özellik erişimi",
+    "allowLiveTVAccess": "Canlı TV erişimine izin ver",
+    "allowLiveTVRecording": "Canlı TV kayıt yönetimine izin ver",
+    "mediaPlayback": "Medya oynatımı",
+    "allowMediaPlayback": "Medya oynatımına izin ver",
+    "allowVideoTranscoding": "Kod dönüştürme gereken video oynatımına izin ver",
+    "allowAudioTranscoding": "Kod dönüştürme gereken ses oynatımına izin ver",
+    "allowMediaConversion": "Medya dönüştürme gerektiren video oynatımına izin ver",
+    "forceRemoteTranscoding": "Uzak kaynaklı kod dönüştürmeyi zorla",
+    "syncplay": "Eşzamanlı Oynatma",
+    "syncplayAccess": "Syncplay erişimi",
+    "syncplayAccessCreateAndJoinGroups": "Grup Oluştur ve Katıl",
+    "syncplayAccessJoinGroups": "Gruplara Katıl",
+    "syncplayAccessNone": "Hiç",
+    "allowMediaDeletion": "Medya silmeye izin ver",
+    "allLibraries": "Bütün kütüphaneler",
+    "libraryAccess": "Kütüphane Erişimi",
+    "enableAllLibraries": "Bütün kütüphanelere erişim ver",
+    "enableAllDevices": "Bütün cihazlara erişim ver",
+    "parentalControl": "Ebeveyn Denetimi",
+    "blockedItemsNoRating": "Engellenmiş derecelendirilmemiş veya bilinmeyen ögeler"
 }
