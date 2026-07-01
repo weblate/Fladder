@@ -1490,5 +1490,254 @@
     "parentalControl": "Ebeveyn Denetimi",
     "blockedItemsNoRating": "Engellenmiş derecelendirilmemiş veya bilinmeyen ögeler",
     "newTrigger": "Yeni tetikleyici",
-    "newTaskTrigger": "Yeni görev tetikleyicisi"
+    "newTaskTrigger": "Yeni görev tetikleyicisi",
+    "maxParentalRating": "Maksimum ebeveyn derecelendirmesi",
+    "allowItemsTags": "Etiketli öğelere izin ver",
+    "blockItemsTags": "Etiketli öğeleri engelle",
+    "accessSchedules": "Erişim saatleri",
+    "addAccessSchedule": "Erişim saati ekle",
+    "dayOfWeek": "Haftanın günü",
+    "startTime": "Başlangıç zamanı",
+    "endTime": "Bitiş zamanı",
+    "addTag": "Etiket ekle",
+    "createNewUser": "Yeni kullanıcı oluştur",
+    "createUser": "Kullanıcı oluştur",
+    "users": "Kullanıcılar",
+    "editUser": "Kullanıcıyı Düzenle",
+    "general": "Genel",
+    "access": "Erişim",
+    "endTimeMustBeAfter": "Bitiş zamanı başlangıç zamanından sonra olmalıdır",
+    "assignLibraries": "Kütüphaneleri Ata",
+    "enableAccessAllLibraries": "Bütün kütüphanelere erişim izni ver",
+    "currentPassword": "Mevcut şifre",
+    "newPassword": "Yeni şifre",
+    "confirmPassword": "Şifreyi onayla",
+    "resetPassword": "Şifreyi sıfırla",
+    "passwordResetSuccess": "Şifre başarıyla sıfırlandı",
+    "passwordResetFailed": "Şifre sıfırlanmasında bir hata oluştu",
+    "passwordMismatch": "Yeni şifre ve şifreyi onayla alanları uyuşmuyor",
+    "passwordChangeSuccess": "Başarıyla şifre değiştirildi",
+    "savePassword": "Şifreyi kaydet",
+    "deleteLibraryConfirmTitle": "Kütüphaneyi sil?",
+    "deleteLibraryConfirmMessage": "{libraryName} kütüphanesini silmek istediğinizden emin misiniz?\nBu işlem geri alınamaz.",
+    "@deleteLibraryConfirmMessage": {
+        "placeholders": {
+            "libraryName": {
+                "type": "String"
+            }
+        }
+    },
+    "noLibrarySelected": "Kütüphane seçilmedi",
+    "enabledPhotos": "Fotoğraflar etkin",
+    "enabledLUFSScan": "LUFS Taraması Etkin",
+    "enabledRealtimeMonitoring": "Gerçek zamanlı izleme etkin",
+    "automaticallyAddToCollection": "Otomatik olarak koleksiyona ekle",
+    "enabledEmbeddedTitles": "Gömülü başlıklar etkin",
+    "enabledEmbeddedExtrasTitles": "Ekstra gömülü başlıkları etkin",
+    "automaticRefreshInterval": "Otomatik yenileme aralığı",
+    "autoRefreshIntervalNote": "Bunu etkinleştirmek daha uzun kütüphane yenileme sürelerine yol açabilir.",
+    "preferredDownloadLanguage": "Tercih edilen indirme dili",
+    "countryRegion": "Ülke/Bölge",
+    "saveMetadata": "Metaveri'yi kaydet",
+    "metadataFetchers": "Metaveri sağlayıcıları {type}",
+    "@metadataFetchers": {
+        "placeholders": {
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "enableAndRankMetadataFetchers": "Tercih ettiğiniz metaveri sağlayıcılarını etkinleştirin ve öncelik sırasına göre sıralayın.",
+    "enableAndRankImagesFetchers": "Tercih ettiğiniz fotoğraf sağlayıcılarını etkinleştirin ve öncelik sırasına göre sıralayın.",
+    "imageFetchers": "Fotoğraf sağlayıcıları {type}",
+    "@imageFetchers": {
+        "placeholders": {
+            "type": {
+                "type": "String"
+            }
+        }
+    },
+    "mediaSegmentProviders": "Medya segmenti sağlayıcıları",
+    "enableAndRankMediaSegmentProviders": "Tercih ettiğiniz medya segment sağlayıcılarını etkinleştirin ve öncelik sırasına göre sıralayın.",
+    "trickplay": "Trickplay",
+    "enableTrickplayImageExtraction": "Trickplay fotoğraf çıkartımını etkinleştir",
+    "extractTrickplayImagesDuringLibraryScan": "Trickplay fotoğraflarını kütüphane taramalarında çıkar",
+    "saveTrickplayImagesNextToMedia": "Trickplay fotoğraflarını medyanın yanına kaydet",
+    "chapterImages": "Bölüm Fotoğrafları",
+    "enableChapterImageExtraction": "Bölüm görüntüsü çıkarmayı etkinleştir",
+    "extractChapterImagesDuringLibraryScan": "Bölüm görüntülerini kütüphane taramalarında çıkar",
+    "subtitleDownloads": "Altyazı İndirmeleri",
+    "downloadLanguages": "İndirme dilleri",
+    "subtitleDownloaders": "Altyazı sağlayıcıları",
+    "onlyPerfectSubtitleMatch": "Sadece medyayla mükemmel bir şekilde uyuşan altyazıları indir",
+    "perfectSubtitleMatchDescription": "Tam eşleşme zorunluluğu, altyazıları yalnızca kullandığınız video dosyasıyla birebir test edilmiş ve doğrulanmış olanlarla sınırlar. Bu seçeneği kapatmak altyazı indirme ihtimalini artırır ancak zamanlaması kaymış (senkronizasyonu bozuk) veya hatalı altyazı metinleriyle karşılaşma riskini de yükseltir.",
+    "skipSubtitlesIfAudioMatches": "Varsayılan ses dili indirme diliyle aynıysa atla",
+    "skipSubtitlesIfEmbedded": "Video gömülü altyazı barındırıyorsa atla",
+    "saveSubtitlesNextToMedia": "Altyazıları medyanın yanına kaydet",
+    "saveArtWorkNextToMedia": "Görselleri medyanın yanına kaydet",
+    "saveArtWorkNextToMediaDesc": "Görselleri medya klasörlerine kaydetmek, onların kolayca düzenlenebileceği bir konumda yer almalarını sağlar.",
+    "select": "Seç",
+    "newLibrary": "Yeni Kütüphane",
+    "contentType": "İçerik Türü",
+    "metadataImageLongPressTouch": "Resmi silmek için uzun basın",
+    "metadataImageLongPressClick": "Resmi silmek için sağ tıklayın",
+    "primary": "Birincil",
+    "logo": "{count, plural, other{Logolar} one{Logo}}",
+    "@logo": {
+        "description": "logo",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "backdrop": "{count, plural, other{Arka Planlar} one{Arka Plan}}",
+    "@backdrop": {
+        "description": "backdrop",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "selectFolderToAdd": "Eklenecek klasörü seçin",
+    "systemRootFolder": "Sistem kök klasörü",
+    "selectedPath": "Seçilen yol: {path}",
+    "@selectedPath": {
+        "placeholders": {
+            "path": {
+                "type": "String"
+            }
+        }
+    },
+    "recentlyAdded": "Son eklenenler",
+    "recentlyPlayed": "Son oynatılanlar",
+    "recentlyFavorited": "Son favorilenenler",
+    "mostPlayed": "En çok oynatılanlar",
+    "recentRequests": "Son istekler",
+    "trending": "Trendler",
+    "popularMovies": "Popüler filmler",
+    "popularSeries": "Popüler diziler",
+    "expectedMovies": "Beklenen filmler",
+    "expectedSeries": "Beklenen diziler",
+    "requestConfiguration": "İstek yapılandırması",
+    "qualityProfile": "Kalite profili",
+    "selectProfile": "Profil seçin",
+    "rootFolder": "Kök klasör",
+    "selectFolder": "Klasör seçin",
+    "tags": "Etiketler",
+    "noTags": "Etiket yok",
+    "requestAs": "Olarak iste",
+    "requestQuotaStatus": "{limit} istekten {remaining} kaldı (her {days} günde bir sıfırlanır)",
+    "@requestQuotaStatus": {
+        "placeholders": {
+            "remaining": {
+                "type": "int"
+            },
+            "limit": {
+                "type": "int"
+            },
+            "days": {
+                "type": "int"
+            }
+        }
+    },
+    "requestQuotaLimitReached": "{mediaType} için istek sınırına ulaşıldı.",
+    "@requestQuotaLimitReached": {
+        "placeholders": {
+            "mediaType": {
+                "type": "String"
+            }
+        }
+    },
+    "submitRequest": "İstek gönder",
+    "noOverviewAvailable": "Özet bulunmuyor.",
+    "downloading": "indiriliyor",
+    "request": "İstek",
+    "requestMore": "Daha fazla iste",
+    "viewRequest": "İsteği görüntüle",
+    "email": "E-posta",
+    "username": "Kullanıcı adı",
+    "ok": "Tamam",
+    "transcodeInfoTitle": "Kod dönüştürme bilgisi",
+    "transcodeInfoNoMetadata": "Kod dönüştürme meta verisi bulunmuyor.",
+    "transcodeDetailsTitle": "Kod dönüştürme detayları",
+    "containerLabel": "Dosya Formatı",
+    "videoCodecLabel": "Video kodeği",
+    "audioCodecLabel": "Ses kodeği",
+    "bitrateLabel": "Bit hızı",
+    "kbps": "kbps",
+    "resolutionLabel": "Çözünürlük",
+    "seerr": "Seerr",
+    "seerrNotConfigured": "Ayarlanmadı",
+    "seerrLoadingUser": "Kullanıcı yükleniyor",
+    "seerrUnknownUser": "Bilinmeyen kullanıcı",
+    "loggedInAs": "{displayName} olarak giriş yapıldı",
+    "@loggedInAs": {
+        "placeholders": {
+            "displayName": {
+                "type": "String"
+            }
+        }
+    },
+    "seerrServer": "Seerr sunucusu",
+    "seerrAuthenticateLocal": "Seerr kimlik doğrulaması (yerel)",
+    "rootFolderDefaultLabel": "{folder} (Varsayılan)",
+    "@rootFolderDefaultLabel": {
+        "placeholders": {
+            "folder": {
+                "type": "String"
+            }
+        }
+    },
+    "seerrAnimeSeriesNote": "* Bu dizi bir animedir.",
+    "seerrAutoApproveNotice": "Gönderdiğiniz istekler otomatik olarak onaylanır.",
+    "seerrPermissionDenied": "Bu medya türü için istekte bulunma izniniz yok.",
+    "seerrRequestStatusPending": "Bekliyor",
+    "seerrRequestStatusApproved": "Onaylandı",
+    "seerrRequestStatusDeclined": "Reddedildi",
+    "seerrRequestStatusFailed": "Başarısız",
+    "seerrRequestStatusCompleted": "Tamamlandı",
+    "seerrMediaStatusProcessing": "İşleniyor",
+    "seerrMediaStatusPartiallyAvailable": "Kısmen mevcut",
+    "seerrMediaStatusAvailable": "Mevcut",
+    "seerrMediaStatusBlacklisted": "Kara listede",
+    "seerrMediaStatusDeleted": "Silindi",
+    "seerrAuthApiKey": "API anahtarı",
+    "seerrAuthLocal": "Yerel",
+    "seerrAuthJellyfin": "Jellyfin",
+    "seerrUserFetchFailed": "Seerr'den kullanıcı alınamadı",
+    "seerrEnterServerUrlFirst": "Önce bir Seerr sunucu URL'si girin",
+    "seerrUrlSchemeWarning": "URL şeması otomatik olarak algılanamadı. Varsayılan olarak https:// kullanılıyor. Sunucunuz HTTPS kullanmıyorsa http:// önekini ekleyin.",
+    "seerrApiKeySaved": "API anahtarı kaydedildi",
+    "seerrLoggedIn": "Seerr'e giriş yapıldı",
+    "seerrConnectedToServer": "Seerr sunucusuna bağlanıldı: {serverUrl}",
+    "@seerrConnectedToServer": {
+        "placeholders": {
+            "serverUrl": {
+                "type": "String"
+            }
+        }
+    },
+    "seerrCustomHeaders": "Özel başlıklar",
+    "seerrHeader": "Başlık",
+    "seerrHeaderValue": "Değer",
+    "emailUsername": "E-posta/Kullanıcı Adı",
+    "discover": "Keşfet",
+    "sponsor": "Sponsor",
+    "sponsorMessage": "Fladder'ı kullanmaktan keyif alıyorsanız, devam eden geliştirmeleri ve iyileştirmeleri desteklemek için projeye sponsor olmayı düşünebilirsiniz. Desteğiniz için teşekkürler!",
+    "min": "min",
+    "max": "max",
+    "manageRequest": "İsteği yönet",
+    "requestAll": "Tümünü iste",
+    "openInSeerr": "Seerr'de aç",
+    "openInSonarr": "Sonarr'da aç",
+    "openInRadarr": "Radarr'da aç",
+    "removeFromSonarr": "Sonarr'dan kaldır",
+    "removeFromRadarr": "Radarr'dan kaldır",
+    "markAllSeasonsAsAvailable": "Tüm sezonları mevcut olarak işaretle",
+    "markAsAvailable": "Mevcut olarak işaretle",
+    "deleteData": "Verileri sil"
 }
