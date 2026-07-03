@@ -2769,5 +2769,17 @@
   "quiet": "Quiet",
   "loud": "Loud",
   "share": "Share",
-  "setAs": "Set as"
+  "setAs": "Set as",
+  "selectRandom": "Select random",
+  "stopSelection": "Stop selecting {count}",
+  "@stopSelection": {
+    "description": "stopSelection",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "playItems": "Play items",
+  "shuffleItems": "Shuffle items"
 }

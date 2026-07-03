@@ -92,7 +92,6 @@ final List<AutoRoute> detailsRoutes = [
     page: LibrarySearchRoute.page,
     path: 'library',
     usesPathAsKey: true,
-    maintainState: false,
   ),
   AutoRoute(page: LiveTvRoute.page, path: 'live-tv'),
   AutoRoute(page: SeerrSearchRoute.page, path: 'seerr-search'),

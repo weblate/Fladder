@@ -55,12 +55,11 @@ class _SearchBarState extends ConsumerState<SuggestionSearchBar> {
         });
       }
     });
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
         borderRadius: FladderTheme.smallShape.borderRadius,
       ),
-      shadowColor: Colors.transparent,
       child: TypeAheadField<ItemBaseModel>(
         focusNode: focusNode,
         hideOnEmpty: isEmpty,

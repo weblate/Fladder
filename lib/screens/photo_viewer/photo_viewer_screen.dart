@@ -81,26 +81,6 @@ class _PhotoViewerScreenState extends ConsumerState<PhotoViewerScreen> with Widg
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
         cacheNeighbors(currentPage, 2);
-        if (widget.loadingItems != null) {
-          setState(() {
-            loadingItems = true;
-          });
-
-          final newItems = await Future.value(widget.loadingItems);
-
-          if (context.mounted) {
-            setState(() {
-              if (photos.length == 1 && newItems.contains(photos.first)) {
-                photos = newItems;
-                currentPage = photos.indexWhere((value) => value.id == widget.selected).clamp(0, photos.length - 1);
-                controller.jumpToPage(currentPage);
-              } else {
-                photos = {...photos, ...newItems}.toList();
-              }
-              loadingItems = false;
-            });
-          }
-        }
       },
     );
   }

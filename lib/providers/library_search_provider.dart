@@ -801,14 +801,15 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
   }
 
   Future<void> viewGallery(BuildContext context, {PhotoModel? selected, bool shuffle = false}) async {
-    List<PhotoModel> allItems = [];
-    allItems = await showLoadingOverlay(context, callBack: fetchGallery(shuffle: shuffle));
+    List<PhotoModel> allItems = state.activePosters.whereType<PhotoModel>().toList();
     if (allItems.isNotEmpty) {
       final newItemList = shuffle ? allItems.shuffled() : allItems;
-      await context.pushRoute(PhotoViewerRoute(
-        items: newItemList,
-        selected: selected?.id,
-      ));
+      await context.pushRoute(
+        PhotoViewerRoute(
+          items: newItemList,
+          selected: selected?.id,
+        ),
+      );
     } else {
       FladderSnack.show(context.localized.libraryFetchNoItemsFound, context: context);
     }
