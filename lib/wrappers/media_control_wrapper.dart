@@ -490,6 +490,7 @@ class MediaControlsWrapper extends BaseAudioHandler implements VideoPlayerContro
   Future<void> playOrPause() async {
     await _player?.playOrPause();
     final playing = _player?.lastState.playing ?? false;
+
     final position = _player?.lastState.position ?? Duration.zero;
     playbackState.add(playbackState.value.copyWith(
       playing: playing,
