@@ -35,7 +35,7 @@ Future<Color?> getDominantColor(ImageProvider imageProvider) async {
     maximumColorCount: 3,
   );
 
-  return paletteGenerator.vibrantColor?.color ?? paletteGenerator.dominantColor?.color;
+  return paletteGenerator.dominantColor?.color ?? paletteGenerator.vibrantColor?.color;
 }
 
 class DetailScaffold extends ConsumerStatefulWidget {

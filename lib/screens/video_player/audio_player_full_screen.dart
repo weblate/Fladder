@@ -133,8 +133,9 @@ class _AudioPlayerFullScreenState extends ConsumerState<AudioPlayerFullScreen> {
 
     final isFavourite = currentItem.userData.isFavourite;
 
+    final isSingleLayout = AdaptiveLayout.layoutModeOf(context) == LayoutMode.single;
+
     void closeFullScreen({bool force = false}) {
-      final isSingleLayout = AdaptiveLayout.layoutModeOf(context) == LayoutMode.single;
       if (isSingleLayout || force) {
         ref.read(mediaPlaybackProvider.notifier).update((state) => state.copyWith(state: VideoPlayerState.minimized));
       } else {
@@ -616,8 +617,8 @@ class _AudioPlayerFullScreenState extends ConsumerState<AudioPlayerFullScreen> {
         },
         child: ThemeOverwrite(
           color: dominantColor,
-          child: (context) => Scaffold(
-            body: Stack(
+          child: (context) => Material(
+            child: Stack(
               children: [
                 Container(
                   width: double.infinity,
@@ -637,7 +638,8 @@ class _AudioPlayerFullScreenState extends ConsumerState<AudioPlayerFullScreen> {
                     ),
                   ),
                 ),
-                SafeArea(
+                Padding(
+                  padding: isSingleLayout ? MediaQuery.paddingOf(context) : const EdgeInsets.symmetric(vertical: 16),
                   child: Column(
                     children: [
                       Padding(

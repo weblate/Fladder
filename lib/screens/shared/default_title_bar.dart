@@ -48,6 +48,7 @@ class _DefaultTitleBarState extends ConsumerState<DefaultTitleBar> with WindowLi
       TargetPlatform.android || TargetPlatform.iOS => MediaQuery.paddingOf(context).top,
       _ => widget.height ?? defaultTitleBarHeight,
     };
+
     return ExcludeFocus(
       child: MouseRegion(
         onEnter: (event) => setState(() => hovering = true),
@@ -206,7 +207,7 @@ class _DefaultTitleBarState extends ConsumerState<DefaultTitleBar> with WindowLi
                             ],
                           ),
                         ),
-                      TargetPlatform.macOS => const SizedBox.expand(),
+                      TargetPlatform.macOS => const SizedBox.shrink(),
                       _ => Text(widget.label ?? "Fladder"),
                     },
                     const OfflineBanner()

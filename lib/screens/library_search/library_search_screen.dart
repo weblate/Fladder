@@ -697,63 +697,61 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
                           ),
                           bottom: PreferredSize(
                             preferredSize:
-                                Size(0, AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad ? 105 : 50),
+                                Size(0, AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad ? 105 : 35),
                             child: Padding(
                               padding: sideBarPadding,
-                              child: Transform.translate(
-                                offset: Offset(0, AdaptiveLayout.of(context).isDesktop ? -20 : -15),
-                                child: IgnorePointer(
-                                  ignoring: librarySearchResults.loading,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      Row(
-                                        spacing: 6,
-                                        children: [
-                                          ScrollStatePosition(
-                                            controller: scrollController,
-                                            positionBuilder: (state) => AnimatedFadeSize(
-                                              child: state != ScrollState.top
-                                                  ? Padding(
-                                                      padding: const EdgeInsets.only(left: 8.0),
-                                                      child: Tooltip(
-                                                        message: context.localized.scrollToTop,
-                                                        child: IconButton.filled(
-                                                          onPressed: () => scrollController.animateTo(0,
-                                                              duration: const Duration(milliseconds: 500),
-                                                              curve: Curves.easeInOutCubic),
-                                                          icon: const Icon(
-                                                            IconsaxPlusLinear.arrow_up,
-                                                          ),
+                              child: IgnorePointer(
+                                ignoring: librarySearchResults.loading,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Row(
+                                      spacing: 6,
+                                      children: [
+                                        ScrollStatePosition(
+                                          controller: scrollController,
+                                          positionBuilder: (state) => AnimatedFadeSize(
+                                            child: state != ScrollState.top
+                                                ? Padding(
+                                                    padding: const EdgeInsets.only(left: 8.0),
+                                                    child: Tooltip(
+                                                      message: context.localized.scrollToTop,
+                                                      child: IconButton.filled(
+                                                        onPressed: () => scrollController.animateTo(0,
+                                                            duration: const Duration(milliseconds: 500),
+                                                            curve: Curves.easeInOutCubic),
+                                                        icon: const Icon(
+                                                          IconsaxPlusLinear.arrow_up,
                                                         ),
                                                       ),
-                                                    )
-                                                  : const SizedBox(),
+                                                    ),
+                                                  )
+                                                : const SizedBox(),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: SingleChildScrollView(
+                                            padding: const EdgeInsets.all(8),
+                                            scrollDirection: Axis.horizontal,
+                                            child: LibraryFilterChips(
+                                              key: uniqueKey,
                                             ),
                                           ),
-                                          Flexible(
-                                            child: SingleChildScrollView(
-                                              padding: const EdgeInsets.all(8),
-                                              scrollDirection: Axis.horizontal,
-                                              child: LibraryFilterChips(
-                                                key: uniqueKey,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      if (AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad)
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                                          height: 50,
-                                          child: Row(
-                                            spacing: 4,
-                                            children: generateQuickActions(true).map((e) => e.toButton()).toList(),
-                                          ),
-                                        )
-                                    ],
-                                  ),
+                                        ),
+                                      ],
+                                    ),
+                                    if (AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad)
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                                        height: 50,
+                                        child: Row(
+                                          spacing: 4,
+                                          children: generateQuickActions(true).map((e) => e.toButton()).toList(),
+                                        ),
+                                      )
+                                  ],
                                 ),
                               ),
                             ),

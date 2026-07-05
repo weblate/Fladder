@@ -31,7 +31,7 @@ import 'package:fladder/widgets/shared/simple_overflow_widget.dart';
 
 final navBarNode = FocusNode();
 
-class SideNavigationRail extends ConsumerStatefulWidget {
+class SideNavigationRail extends ConsumerWidget {
   final int currentIndex;
   final List<DestinationModel> destinations;
   final String currentLocation;
@@ -47,12 +47,7 @@ class SideNavigationRail extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _SideNavigationRail();
-}
-
-class _SideNavigationRail extends ConsumerState<SideNavigationRail> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final textDirection = Directionality.of(context);
     final isRtl = textDirection == TextDirection.rtl;
     final views = ref.watch(viewsProvider.select((value) => value.views));
@@ -110,7 +105,7 @@ class _SideNavigationRail extends ConsumerState<SideNavigationRail> {
             // -0.1 offset to fix single visible pixel line
             sideBarWidth: (fullyExpanded ? expandedWidth : collapsedWidth) - 0.1,
           ),
-          child: widget.child,
+          child: child,
         ),
         Positioned.fill(
           child: Align(
@@ -188,7 +183,7 @@ class _SideNavigationRail extends ConsumerState<SideNavigationRail> {
                                     ),
                               ),
                               onPressed: !largeBar
-                                  ? () => widget.scaffoldKey.currentState?.openDrawer()
+                                  ? () => scaffoldKey.currentState?.openDrawer()
                                   : () => ref
                                       .read(clientSettingsProvider.notifier)
                                       .update((state) => state.copyWith(expandSideBar: !state.expandSideBar)),
@@ -208,7 +203,7 @@ class _SideNavigationRail extends ConsumerState<SideNavigationRail> {
                             child: Column(
                               mainAxisAlignment: !largeBar ? MainAxisAlignment.center : MainAxisAlignment.start,
                               children: [
-                                ...widget.destinations.mapIndexed(
+                                ...destinations.mapIndexed(
                                   (index, destination) => CustomTooltip(
                                     tooltipContent: expandedSideBar
                                         ? null
@@ -223,7 +218,7 @@ class _SideNavigationRail extends ConsumerState<SideNavigationRail> {
                                           ),
                                     position: tooltipPosition,
                                     child: destination.toNavigationButton(
-                                      widget.currentIndex == index,
+                                      currentIndex == index,
                                       true,
                                       navFocusNode: index == 0,
                                       shouldExpand,
@@ -335,7 +330,7 @@ class _SideNavigationRail extends ConsumerState<SideNavigationRail> {
                           ),
                           NavigationButton(
                             label: context.localized.settings,
-                            selected: widget.currentLocation.contains(const SettingsRoute().routeName),
+                            selected: currentLocation.contains(const SettingsRoute().routeName),
                             selectedIcon: const Icon(IconsaxPlusBold.setting_3),
                             horizontal: true,
                             expanded: shouldExpand,
@@ -364,8 +359,8 @@ class _SideNavigationRail extends ConsumerState<SideNavigationRail> {
   }
 
   AdaptiveFab actionButton(BuildContext context) {
-    return ((widget.currentIndex >= 0 && widget.currentIndex < widget.destinations.length)
-            ? widget.destinations[widget.currentIndex].floatingActionButton
+    return ((currentIndex >= 0 && currentIndex < destinations.length)
+            ? destinations[currentIndex].floatingActionButton
             : null) ??
         AdaptiveFab(
           context: context,
