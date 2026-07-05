@@ -2077,5 +2077,19 @@
             }
         }
     },
-    "setAs": "设置为"
+    "setAs": "设置为",
+    "posterColorsTitle": "生成的海报颜色",
+    "posterColorsDesc": "使用生成的颜色作为海报颜色，以替代默认颜色",
+    "selectRandom": "随机选择",
+    "stopSelection": "停止选择 {count} 个项目",
+    "@stopSelection": {
+        "description": "stopSelection",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "playItems": "播放项目",
+    "shuffleItems": "随机排列项目"
 }
