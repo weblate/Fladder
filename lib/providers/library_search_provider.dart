@@ -14,6 +14,7 @@ import 'package:fladder/models/collection_types.dart';
 import 'package:fladder/models/item_base_model.dart';
 import 'package:fladder/models/items/folder_model.dart';
 import 'package:fladder/models/items/item_shared_models.dart';
+import 'package:fladder/models/items/photo_queue_source.dart';
 import 'package:fladder/models/items/photos_model.dart';
 import 'package:fladder/models/items/playlist_model.dart';
 import 'package:fladder/models/library_filter_model.dart';
@@ -42,6 +43,7 @@ final librarySearchProvider =
 
 const _libraryMusicInitialQueueLimit = 5;
 const _libraryMusicRefillLimit = 100;
+const _libraryPhotoFetchLimit = 100;
 
 class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
   LibrarySearchNotifier(this.ref) : super(const LibrarySearchModel());
@@ -692,6 +694,51 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
     );
   }
 
+  PhotoQueueSource? createPhotoQueueSource({required bool shuffle}) {
+    final recursive = state.searchQuery.isNotEmpty ? true : state.filters.recursive;
+
+    if (state.folderOverwrite.isNotEmpty) {
+      return _buildPhotoQueueSource(
+        parentId: state.folderOverwrite.last.id,
+        recursive: recursive,
+        shuffle: shuffle,
+      );
+    }
+
+    if (state.views.hasEnabled) {
+      if (state.views.included.length != 1) return null;
+      return _buildPhotoQueueSource(
+        parentId: state.views.included.first.id,
+        recursive: recursive,
+        shuffle: shuffle,
+      );
+    }
+
+    if (state.searchQuery.isEmpty && state.filters.favourites == false) {
+      return null;
+    }
+
+    return _buildPhotoQueueSource(
+      parentId: null,
+      recursive: true,
+      shuffle: shuffle,
+    );
+  }
+
+  PhotoQueueSource _buildPhotoQueueSource({
+    required String? parentId,
+    required bool? recursive,
+    required bool shuffle,
+  }) {
+    return PhotoQueueSource(
+      libraryState: state,
+      parentId: parentId,
+      recursive: recursive,
+      shuffle: shuffle,
+      limit: _libraryPhotoFetchLimit,
+    );
+  }
+
   Future<bool> _playMusicFromQueueSource(
     BuildContext context,
     WidgetRef ref,
@@ -804,10 +851,12 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
     List<PhotoModel> allItems = state.activePosters.whereType<PhotoModel>().toList();
     if (allItems.isNotEmpty) {
       final newItemList = shuffle ? allItems.shuffled() : allItems;
+      final photoSource = state.selectedPosters.isEmpty ? createPhotoQueueSource(shuffle: shuffle) : null;
       await context.pushRoute(
         PhotoViewerRoute(
           items: newItemList,
           selected: selected?.id,
+          photoQueueSource: photoSource,
         ),
       );
     } else {

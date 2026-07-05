@@ -35,7 +35,7 @@ class ItemActionDivider extends ItemAction {
   Widget toListItem(BuildContext context, {bool useIcons = false, bool shouldPop = true}) => const Divider();
 
   @override
-  Widget toButton() => Container();
+  Widget toButton() => const VerticalDivider();
 
   @override
   Widget toGroupButton(BuildContext context, {required bool useIcons, required bool shouldPop}) => const Divider();

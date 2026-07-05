@@ -397,6 +397,7 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
             label: Text(context.localized.select),
             icon: const Icon(IconsaxPlusLinear.category_2),
           ),
+          ItemActionDivider(),
           ItemActionButton(
             action: () async {
               final newOptions = await openSortByDialogue(
@@ -462,17 +463,14 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
             bottomNavigationBar: AdaptiveLayout.inputDeviceOf(context) != InputDevice.dPad
                 ? HideOnScroll(
                     controller: scrollController,
-                    visibleBuilder: (visible) => AnimatedSlide(
-                      offset: Offset(0, visible ? 0 : 1),
-                      duration: const Duration(milliseconds: 250),
-                      child: BottomMenuBar(
-                        actions: generateQuickActions(false),
-                        combined: true,
-                        fabAction: FloatingActionButton(
-                          onPressed: () => playLibrary(false),
-                          tooltip: context.localized.libraryPlayItems,
-                          child: const Icon(IconsaxPlusBold.play),
-                        ),
+                    visibleBuilder: (visible) => BottomMenuBar(
+                      actions: generateQuickActions(false),
+                      combined: true,
+                      extended: visible,
+                      fabAction: FloatingActionButton(
+                        onPressed: () => playLibrary(false),
+                        tooltip: context.localized.libraryPlayItems,
+                        child: const Icon(IconsaxPlusBold.play),
                       ),
                     ),
                   )
