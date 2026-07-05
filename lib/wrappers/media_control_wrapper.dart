@@ -317,7 +317,7 @@ class MediaControlsWrapper extends BaseAudioHandler implements VideoPlayerContro
       updatePosition: position,
       controls: [MediaControl.play],
     ));
-    await WakelockPlus.disable();
+    unawaited(WakelockPlus.disable());
     final playerState = _player;
     if (playerState != null) {
       final model = ref.read(playBackModel);
@@ -334,7 +334,7 @@ class MediaControlsWrapper extends BaseAudioHandler implements VideoPlayerContro
     // Only enable wakelock for video; audio can continue with screen off
     final playBackItem = ref.read(playBackModel.select((value) => value?.item));
     if (playBackItem is! AudioModel) {
-      await WakelockPlus.enable();
+      unawaited(WakelockPlus.enable());
     }
 
     await _player?.play();
@@ -446,7 +446,7 @@ class MediaControlsWrapper extends BaseAudioHandler implements VideoPlayerContro
     if (playbackModel == null) return;
 
     ref.read(mediaPlaybackProvider.notifier).update((state) => state.copyWith(state: VideoPlayerState.disposed));
-    WakelockPlus.disable();
+    unawaited(WakelockPlus.disable());
     _player?.stop();
     ref.read(windowTitleProvider.notifier).setPlayTitle(null);
 
@@ -501,10 +501,10 @@ class MediaControlsWrapper extends BaseAudioHandler implements VideoPlayerContro
       // Only enable wakelock for video; audio can continue with screen off
       final playBackItem = ref.read(playBackModel.select((value) => value?.item));
       if (playBackItem is! AudioModel) {
-        await WakelockPlus.enable();
+        unawaited(WakelockPlus.enable());
       }
     } else {
-      await WakelockPlus.disable();
+      unawaited(WakelockPlus.disable());
     }
 
     final playerState = _player;
