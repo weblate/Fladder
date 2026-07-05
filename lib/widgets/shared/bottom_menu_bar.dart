@@ -10,12 +10,14 @@ class BottomMenuBar extends StatelessWidget {
   final FloatingActionButton? fabAction;
   final bool combined;
   final bool extended;
+  final bool sticky;
   const BottomMenuBar({
     super.key,
     required this.actions,
     this.fabAction,
     this.combined = false,
     this.extended = true,
+    this.sticky = false,
   });
 
   @override
@@ -34,8 +36,12 @@ class BottomMenuBar extends StatelessWidget {
               duration: const Duration(milliseconds: 250),
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primaryContainer,
+                color: sticky ? theme.colorScheme.primaryContainer : theme.colorScheme.surface,
                 borderRadius: FladderTheme.largeShape.borderRadius,
+                border: Border.all(
+                  color: theme.colorScheme.primary.withAlpha(sticky ? 255 : 0),
+                  width: 2,
+                ),
               ),
               child: Row(
                 spacing: 0,
@@ -43,7 +49,7 @@ class BottomMenuBar extends StatelessWidget {
                   AnimatedFadeSize(
                     duration: const Duration(milliseconds: 250),
                     alignment: Alignment.centerRight,
-                    child: extended
+                    child: extended || sticky
                         ? Row(
                             children: [const SizedBox(width: 8), ...actions.reversed.map((e) => e.toButton())],
                           )

@@ -119,9 +119,11 @@ class PosterImage extends ConsumerWidget {
                   ),
             ),
           if (selected == true)
-            SelectedPosterOverlay(
-              poster: poster,
-              radius: radius as BorderRadius,
+            IgnorePointer(
+              child: SelectedPosterOverlay(
+                poster: poster,
+                radius: radius as BorderRadius,
+              ),
             ),
           BottomOverlaysContainer(
             showFavourite: poster.userData.isFavourite,

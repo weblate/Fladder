@@ -297,6 +297,8 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
         icon: const Icon(IconsaxPlusBold.shuffle),
       );
 
+      final hasSelection = librarySearchResults.selectedPosters.isNotEmpty;
+
       if (isSelectMode) {
         return [
           if (inlinedPlayButtons) playButton,
@@ -307,46 +309,80 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
               libraryProvider.toggleSelectMode();
             },
             label: Text(context.localized.stopSelection(selectedCount)),
-            icon: const Icon(IconsaxPlusLinear.category_2),
+            icon: selectedCount != 0
+                ? Badge(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    label: Text(
+                      selectedCount.toString(),
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelMedium
+                          ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                    ),
+                    child: const Icon(IconsaxPlusLinear.category_2),
+                  )
+                : const Icon(IconsaxPlusLinear.category_2),
+          ),
+          ItemActionDivider(),
+          ItemActionButton(
+            action: () => libraryProvider.selectAll(true),
+            label: Text(context.localized.selectAll),
+            icon: const Icon(IconsaxPlusLinear.tick_square),
           ),
           ItemActionButton(
-            action: () async {
-              await libraryProvider.setSelectedAsFavorite(true);
-              if (context.mounted) context.refreshData();
-            },
+            action: () => libraryProvider.selectAll(false),
+            label: Text(context.localized.clearSelection),
+            icon: const Icon(IconsaxPlusLinear.minus_square),
+          ),
+          ItemActionDivider(),
+          ItemActionButton(
+            action: hasSelection
+                ? () async {
+                    await libraryProvider.setSelectedAsFavorite(true);
+                    if (context.mounted) context.refreshData();
+                  }
+                : null,
             label: Text(context.localized.addAsFavorite),
             icon: const Icon(IconsaxPlusLinear.heart_add),
           ),
           ItemActionButton(
-            action: () async {
-              await libraryProvider.setSelectedAsFavorite(false);
-              if (context.mounted) context.refreshData();
-            },
+            action: hasSelection
+                ? () async {
+                    await libraryProvider.setSelectedAsFavorite(false);
+                    if (context.mounted) context.refreshData();
+                  }
+                : null,
             label: Text(context.localized.removeAsFavorite),
             icon: const Icon(IconsaxPlusLinear.heart_remove),
           ),
           ItemActionButton(
-            action: () async {
-              await libraryProvider.setSelectedAsWatched(true);
-              if (context.mounted) context.refreshData();
-            },
+            action: hasSelection
+                ? () async {
+                    await libraryProvider.setSelectedAsWatched(true);
+                    if (context.mounted) context.refreshData();
+                  }
+                : null,
             label: Text(context.localized.markAsWatched),
             icon: const Icon(IconsaxPlusLinear.eye),
           ),
           ItemActionButton(
-            action: () async {
-              await libraryProvider.setSelectedAsWatched(false);
-              if (context.mounted) context.refreshData();
-            },
+            action: hasSelection
+                ? () async {
+                    await libraryProvider.setSelectedAsWatched(false);
+                    if (context.mounted) context.refreshData();
+                  }
+                : null,
             label: Text(context.localized.markAsUnwatched),
             icon: const Icon(IconsaxPlusLinear.eye_slash),
           ),
           if (librarySearchResults.nestedCurrentItem is BoxSetModel)
             ItemActionButton(
-                action: () async {
-                  await libraryProvider.removeSelectedFromCollection();
-                  if (context.mounted) context.refreshData();
-                },
+                action: hasSelection
+                    ? () async {
+                        await libraryProvider.removeSelectedFromCollection();
+                        if (context.mounted) context.refreshData();
+                      }
+                    : null,
                 label: Text(context.localized.removeFromCollection),
                 icon: Container(
                   decoration: BoxDecoration(
@@ -358,18 +394,22 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
                 )),
           if (librarySearchResults.nestedCurrentItem is PlaylistModel)
             ItemActionButton(
-              action: () async {
-                await libraryProvider.removeSelectedFromPlaylist();
-                if (context.mounted) context.refreshData();
-              },
+              action: hasSelection
+                  ? () async {
+                      await libraryProvider.removeSelectedFromPlaylist();
+                      if (context.mounted) context.refreshData();
+                    }
+                  : null,
               label: Text(context.localized.removeFromPlaylist),
               icon: const Icon(IconsaxPlusLinear.save_remove),
             ),
           ItemActionButton(
-            action: () async {
-              await addItemToCollection(context, librarySearchResults.selectedPosters);
-              if (context.mounted) context.refreshData();
-            },
+            action: hasSelection
+                ? () async {
+                    await addItemToCollection(context, librarySearchResults.selectedPosters);
+                    if (context.mounted) context.refreshData();
+                  }
+                : null,
             label: Text(context.localized.addToCollection),
             icon: const Icon(
               IconsaxPlusLinear.save_add,
@@ -377,10 +417,12 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
             ),
           ),
           ItemActionButton(
-            action: () async {
-              await addItemToPlaylist(context, librarySearchResults.selectedPosters);
-              if (context.mounted) context.refreshData();
-            },
+            action: hasSelection
+                ? () async {
+                    await addItemToPlaylist(context, librarySearchResults.selectedPosters);
+                    if (context.mounted) context.refreshData();
+                  }
+                : null,
             label: Text(context.localized.addToPlaylist),
             icon: const Icon(IconsaxPlusLinear.save_add),
           ),
@@ -467,6 +509,7 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
                       actions: generateQuickActions(false),
                       combined: true,
                       extended: visible,
+                      sticky: librarySearchResults.selecteMode,
                       fabAction: FloatingActionButton(
                         onPressed: () => playLibrary(false),
                         tooltip: context.localized.libraryPlayItems,
