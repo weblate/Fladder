@@ -88,7 +88,7 @@ class TopNavigationBar extends ConsumerWidget {
           top: 0,
           start: 0,
           end: 0,
-          height: height,
+          height: height / 1.3,
           child: RepaintBoundary(
             child: IgnorePointer(
               child: useBlurredBackground
@@ -133,93 +133,98 @@ class TopNavigationBar extends ConsumerWidget {
               policy: _TopBarTraversalPolicy(),
               child: Align(
                 alignment: Alignment.topCenter,
-                child: SizedBox(
+                child: Container(
                   height: height,
+                  alignment: Alignment.topCenter,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        SizedBox(
-                          height: 45,
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: actionButton(context).normal,
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          SizedBox(
+                            height: 45,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: actionButton(context).normal,
+                            ),
                           ),
-                        ),
-                        Flexible(
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                ...destinations.mapIndexed(
-                                  (index, destination) {
-                                    final isActive = currentIndex == index;
-                                    final icon = isActive ? destination.selectedIcon : destination.icon;
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                      child: FocusButton(
-                                        onTap: () {
-                                          _lastContentFocus = null;
-                                          destination.action?.call();
-                                        },
-                                        darkOverlay: false,
-                                        borderRadius: buttonShape.borderRadius,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context).colorScheme.primary.withAlpha(isActive ? 50 : 0),
-                                            borderRadius: buttonShape.borderRadius,
-                                          ),
-                                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                          child: IconTheme(
-                                            data: Theme.of(context).iconTheme.copyWith(
-                                                  color: isActive
-                                                      ? Theme.of(context).colorScheme.primary
-                                                      : Theme.of(context).iconTheme.color,
-                                                ),
-                                            child: Row(
-                                              spacing: 8,
-                                              children: [
-                                                if (icon != null) icon,
-                                                Text(
-                                                  destination.label,
-                                                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                                                        color: isActive
-                                                            ? Theme.of(context).colorScheme.primary
-                                                            : Theme.of(context).textTheme.titleMedium!.color,
-                                                      ),
-                                                ),
-                                              ],
+                          Flexible(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  ...destinations.mapIndexed(
+                                    (index, destination) {
+                                      final isActive = currentIndex == index;
+                                      final icon = isActive ? destination.selectedIcon : destination.icon;
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                        child: FocusButton(
+                                          onTap: () {
+                                            _lastContentFocus = null;
+                                            destination.action?.call();
+                                          },
+                                          darkOverlay: false,
+                                          borderRadius: buttonShape.borderRadius,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context).colorScheme.primary.withAlpha(isActive ? 50 : 0),
+                                              borderRadius: buttonShape.borderRadius,
+                                            ),
+                                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                            child: IconTheme(
+                                              data: Theme.of(context).iconTheme.copyWith(
+                                                    color: isActive
+                                                        ? Theme.of(context).colorScheme.primary
+                                                        : Theme.of(context).iconTheme.color,
+                                                  ),
+                                              child: Row(
+                                                spacing: 8,
+                                                children: [
+                                                  if (icon != null) icon,
+                                                  Text(
+                                                    destination.label,
+                                                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                                                          color: isActive
+                                                              ? Theme.of(context).colorScheme.primary
+                                                              : Theme.of(context).textTheme.titleMedium!.color,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        NavigationButton(
-                          label: context.localized.settings,
-                          selected: currentLocation.contains(const SettingsRoute().routeName),
-                          selectedIcon: const Icon(IconsaxPlusBold.setting_3),
-                          horizontal: true,
-                          expanded: false,
-                          icon: const ExcludeFocusTraversal(child: SettingsUserIcon()),
-                          onPressed: () {
-                            if (AdaptiveLayout.layoutModeOf(context) == LayoutMode.single) {
-                              context.router.push(const SettingsRoute());
-                            } else {
-                              context.router.push(const ClientSettingsRoute());
-                            }
-                          },
-                        ),
-                      ],
+                          NavigationButton(
+                            label: context.localized.settings,
+                            selected: currentLocation.contains(const SettingsRoute().routeName),
+                            selectedIcon: const Icon(IconsaxPlusBold.setting_3),
+                            horizontal: true,
+                            expanded: false,
+                            icon: const ExcludeFocusTraversal(child: SettingsUserIcon()),
+                            onPressed: () {
+                              if (AdaptiveLayout.layoutModeOf(context) == LayoutMode.single) {
+                                context.router.push(const SettingsRoute());
+                              } else {
+                                context.router.push(const ClientSettingsRoute());
+                              }
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
