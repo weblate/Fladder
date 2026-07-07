@@ -340,6 +340,8 @@ class MediaControlsWrapper extends BaseAudioHandler implements VideoPlayerContro
     final playBackItem = ref.read(playBackModel.select((value) => value?.item));
     if (playBackItem is! AudioModel) {
       unawaited(WakelockPlus.enable());
+    } else {
+      _isStopped = false;
     }
 
     await _player?.play();

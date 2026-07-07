@@ -40,6 +40,18 @@ class BottomMenuBar extends ConsumerWidget {
     final calculatedBottomViewPadding =
         showPlayerBar ? floatingPlayerHeight(context) + bottomViewPadding : bottomViewPadding;
 
+    final actionButton = Theme(
+      data: theme.copyWith(
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: theme.colorScheme.primary,
+          foregroundColor: theme.colorScheme.onPrimary,
+          elevation: 0,
+          shape: FladderTheme.largeShape,
+        ),
+      ),
+      child: fabAction!,
+    );
+
     return Padding(
       padding: const EdgeInsets.all(16).add(AdaptiveLayout.adaptivePadding(context)).add(
             EdgeInsets.only(bottom: calculatedBottomViewPadding),
@@ -49,53 +61,54 @@ class BottomMenuBar extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: alignment,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: 4,
+          spacing: 6,
           children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: sticky ? theme.colorScheme.primaryContainer : theme.colorScheme.surface,
-                borderRadius: FladderTheme.largeShape.borderRadius,
-                border: Border.all(
-                  color: theme.colorScheme.primary.withAlpha(sticky ? 255 : 0),
-                  width: 2,
-                ),
-              ),
-              child: Row(
-                spacing: 0,
-                children: [
-                  AnimatedFadeSize(
-                    duration: const Duration(milliseconds: 250),
-                    alignment: Alignment.centerRight,
-                    child: extended || sticky
-                        ? Row(
-                            children: [const SizedBox(width: 8), ...actions.reversed.map((e) => e.toButton())],
-                          )
-                        : const SizedBox.shrink(key: ValueKey('empty')),
+            Flexible(
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 300),
+                opacity: !combined && !(extended || sticky) ? 0.0 : 1.0,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: sticky ? theme.colorScheme.primaryContainer : theme.colorScheme.surface,
+                    borderRadius: FladderTheme.largeShape.borderRadius,
+                    border: Border.all(
+                      color: theme.colorScheme.primary.withAlpha(sticky ? 255 : 0),
+                      width: 2,
+                    ),
                   ),
-                  if (fabAction != null && combined)
-                    SizedBox.square(
-                      dimension: 48,
-                      child: Theme(
-                        data: theme.copyWith(
-                          floatingActionButtonTheme: FloatingActionButtonThemeData(
-                            backgroundColor: theme.colorScheme.primary,
-                            foregroundColor: theme.colorScheme.onPrimary,
-                            elevation: 0,
-                            shape: FladderTheme.largeShape,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: AnimatedFadeSize(
+                            duration: const Duration(milliseconds: 250),
+                            alignment: Alignment.centerRight,
+                            child: extended || sticky
+                                ? Row(
+                                    children: [const SizedBox(width: 8), ...actions.reversed.map((e) => e.toButton())],
+                                  )
+                                : const SizedBox.shrink(key: ValueKey('empty')),
                           ),
                         ),
-                        child: fabAction!,
                       ),
-                    ),
-                ],
+                      if (fabAction != null && combined)
+                        SizedBox.square(
+                          dimension: 48,
+                          child: actionButton,
+                        ),
+                    ],
+                  ),
+                ),
               ),
             ),
             if (fabAction != null && !combined)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: fabAction!,
+                child: actionButton,
               ),
           ],
         ),

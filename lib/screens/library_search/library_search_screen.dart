@@ -247,7 +247,7 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
       if (librarySearchResults.showGalleryButtons &&
           !librarySearchResults.showPlayButtons &&
           !librarySearchResults.showMusicButtons) {
-        libraryProvider.viewGallery(context, shuffle: shuffle);
+        libraryProvider.viewGallery(context, ref, shuffle: shuffle);
         return;
       } else if (!librarySearchResults.showGalleryButtons &&
           librarySearchResults.showPlayButtons &&
@@ -271,7 +271,7 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
             ? () => libraryProvider.playMusicItems(context, ref, shuffle: shuffle)
             : null,
         viewGallery: librarySearchResults.showGalleryButtons
-            ? () => libraryProvider.viewGallery(context, shuffle: shuffle)
+            ? () => libraryProvider.viewGallery(context, ref, shuffle: shuffle)
             : null,
       );
     }

@@ -591,6 +591,7 @@ extension ItemBaseModelExtensions on ItemBaseModel? {
         PhotoAlbumModel album => album.play(context, ref),
         AlbumModel album => album.play(context, ref),
         AudioModel audio => audio.play(context, ref),
+        ArtistModel artist => artist.playLatestTracks(context, ref),
         PlaylistModel playlist => playlist.play(
             context,
             ref,

@@ -620,24 +620,26 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
         final started = await _playMusicFromQueueSource(context, ref, queueSource);
         if (started) {
           return;
+        } else {
+          FladderSnack.show(context.localized.libraryFetchNoItemsFound, context: context);
         }
       }
-    }
-
-    List<ItemBaseModel> itemsToPlay = [];
-
-    if (state.selectedPosters.isNotEmpty) {
-      itemsToPlay = shuffle ? state.selectedPosters.random() : state.selectedPosters;
     } else {
-      itemsToPlay = await showLoadingOverlay(context, callBack: _loadAllItems(shuffle: shuffle));
-    }
+      List<ItemBaseModel> itemsToPlay = [];
 
-    itemsToPlay = itemsToPlay.where((element) => FladderItemType.musicPlayable.contains(element.type)).toList();
+      if (state.selectedPosters.isNotEmpty) {
+        itemsToPlay = shuffle ? state.selectedPosters.random() : state.selectedPosters;
+      } else {
+        itemsToPlay = await showLoadingOverlay(context, callBack: _loadAllItems(shuffle: shuffle));
+      }
 
-    if (itemsToPlay.isNotEmpty) {
-      await itemsToPlay.playMusicItems(context, ref, shuffle: shuffle);
-    } else {
-      FladderSnack.show(context.localized.libraryFetchNoItemsFound, context: context);
+      itemsToPlay = itemsToPlay.where((element) => FladderItemType.musicPlayable.contains(element.type)).toList();
+
+      if (itemsToPlay.isNotEmpty) {
+        await itemsToPlay.playMusicItems(context, ref, shuffle: shuffle);
+      } else {
+        FladderSnack.show(context.localized.libraryFetchNoItemsFound, context: context);
+      }
     }
   }
 
@@ -654,34 +656,29 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
       }
 
       return _buildLibraryMusicQueueSource(
-        parentId: currentItem.id,
+        parentId: [currentItem.id],
         recursive: recursive,
         shuffle: shuffle,
       );
     }
 
     if (state.views.hasEnabled) {
-      if (state.views.included.length != 1) return null;
       return _buildLibraryMusicQueueSource(
-        parentId: state.views.included.first.id,
+        parentId: state.views.included.map((e) => e.id).toList(),
         recursive: recursive,
         shuffle: shuffle,
       );
     }
 
-    if (state.searchQuery.isEmpty && state.filters.favourites == false) {
-      return null;
-    }
-
     return _buildLibraryMusicQueueSource(
-      parentId: null,
+      parentId: [],
       recursive: true,
       shuffle: shuffle,
     );
   }
 
   LibraryMusicQueueSource _buildLibraryMusicQueueSource({
-    required String? parentId,
+    required List<String> parentId,
     required bool? recursive,
     required bool shuffle,
   }) {
@@ -847,14 +844,15 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
     return [];
   }
 
-  Future<void> viewGallery(BuildContext context, {PhotoModel? selected, bool shuffle = false}) async {
+  Future<void> viewGallery(BuildContext context, WidgetRef ref, {PhotoModel? selected, bool shuffle = false}) async {
     List<PhotoModel> allItems = state.activePosters.whereType<PhotoModel>().toList();
     if (allItems.isNotEmpty) {
       final newItemList = shuffle ? allItems.shuffled() : allItems;
       final photoSource = state.selectedPosters.isEmpty ? createPhotoQueueSource(shuffle: shuffle) : null;
+      final loadPhotos = shuffle ? (await photoSource?.fetchPhotos(ref.read))?.items : newItemList;
       await context.pushRoute(
         PhotoViewerRoute(
-          items: newItemList,
+          items: loadPhotos,
           selected: selected?.id,
           photoQueueSource: photoSource,
         ),
