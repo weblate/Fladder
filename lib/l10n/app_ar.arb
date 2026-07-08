@@ -627,7 +627,7 @@
     "schemeSettingsVibrant": "نابض بالحياة",
     "schemeSettingsRainbow": "قوس قزح",
     "clientSettingsRequireWifiDesc": "التنزيل فقط عند الاتصال بشبكة Wi-Fi",
-    "libraryShuffleAndPlayItems": "تشغيل العناصر عشوائياً",
+    "libraryShuffleAndPlayItems": "تشغيل العناصر عشوائياً والبدء في التشغيل",
     "clientSettingsRequireWifiTitle": "يتطلب اتصال Wi-Fi",
     "unknown": "مجهول",
     "libraryFiltersRemoveAllConfirm": "سيؤدي ذلك إلى حذف جميع الفلاتر المحفوظة لكل مكتبة",
@@ -2080,5 +2080,28 @@
             }
         }
     },
-    "setAs": "تعيين كـ"
+    "setAs": "تعيين كـ",
+    "posterColorsTitle": "الألوان المُولَّدة للملصقات",
+    "posterColorsDesc": "استخدام الألوان المُولَّدة للملصقات بدلاً من اللون الافتراضي",
+    "selectRandom": "اختيار عشوائي",
+    "stopSelection": "إيقاف تحديد {count}",
+    "@stopSelection": {
+        "description": "stopSelection",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "playItems": "تشغيل العناصر",
+    "shuffleItems": "تشغيل العناصر عشوائياً",
+    "disc": "القرص {number}",
+    "@disc": {
+        "description": "disc",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    }
 }
