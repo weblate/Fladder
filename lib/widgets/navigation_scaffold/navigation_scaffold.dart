@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide ConnectionState;
 
@@ -178,7 +176,7 @@ class _NavigationScaffoldState extends ConsumerState<NavigationScaffold> {
           )
         : const SizedBox.shrink();
 
-    final offlineMessagePadding = max((kToolbarHeight), MediaQuery.of(context).padding.top) + offlineMessageHeight;
+    final offlineMessagePadding = MediaQuery.of(context).padding.top + offlineMessageHeight;
 
     return PopScope(
       canPop: !showAudioOverlay && currentIndex == 0,
@@ -243,25 +241,27 @@ class _NavigationScaffoldState extends ConsumerState<NavigationScaffold> {
           if (!AdaptiveLayout.of(context).isDesktop)
             Align(
               alignment: Alignment.topCenter,
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 250),
-                opacity: isOffline ? 1 : 0,
-                child: Container(
-                  height: offlineMessagePadding,
-                  alignment: Alignment.bottomCenter,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        theme.colorScheme.errorContainer.withValues(alpha: 0.8),
-                        theme.colorScheme.errorContainer.withValues(alpha: 0.25),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
+              child: IgnorePointer(
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 250),
+                  opacity: isOffline ? 1 : 0,
+                  child: Container(
+                    height: offlineMessagePadding,
+                    alignment: Alignment.bottomCenter,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          theme.colorScheme.errorContainer.withValues(alpha: 0.8),
+                          theme.colorScheme.errorContainer.withValues(alpha: 0.25),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
                     ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: offlineMessageHeight / 2),
-                    child: const OfflineBanner(),
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: offlineMessageHeight / 2),
+                      child: const OfflineBanner(),
+                    ),
                   ),
                 ),
               ),

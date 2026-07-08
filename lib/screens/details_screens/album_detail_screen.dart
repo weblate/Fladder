@@ -11,6 +11,7 @@ import 'package:fladder/providers/video_player_provider.dart';
 import 'package:fladder/screens/shared/detail_scaffold.dart';
 import 'package:fladder/screens/shared/fladder_notification_overlay.dart';
 import 'package:fladder/screens/shared/media/components/poster_placeholder.dart';
+import 'package:fladder/screens/shared/media/components/small_detail_widgets.dart';
 import 'package:fladder/screens/shared/media/poster_row.dart';
 import 'package:fladder/screens/shared/media/track_list.dart';
 import 'package:fladder/theme.dart';
@@ -114,112 +115,124 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(top: 24, bottom: 16),
-                    child: Wrap(
-                      alignment: smallScreen ? WrapAlignment.center : WrapAlignment.start,
-                      runAlignment: smallScreen ? WrapAlignment.center : WrapAlignment.start,
-                      spacing: 24,
-                      runSpacing: 24,
-                      crossAxisAlignment: WrapCrossAlignment.center,
+                    child: Column(
+                      spacing: 16,
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: smallScreen ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          width: 230,
-                          height: 230,
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: radius,
-                                color: backgroundColor,
-                              ),
-                              foregroundDecoration: BoxDecoration(
-                                borderRadius: radius,
-                                border: Border.all(width: 1, color: Colors.white.withAlpha(45)),
-                              ),
-                              clipBehavior: Clip.hardEdge,
-                              child: FladderImage(
-                                image: albumPoster,
-                                fit: BoxFit.cover,
-                                placeHolder: PosterPlaceholder(item: current),
-                              ),
-                            ),
-                          ),
-                        ),
-                        IntrinsicWidth(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: smallScreen ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                context.localized.musicAlbum(1).toUpperCase(),
-                                style: Theme.of(context).textTheme.labelLarge?.copyWith(letterSpacing: 1.5),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                current.name,
-                                style: Theme.of(context).textTheme.displaySmall,
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 14),
-                              ClickableText(
-                                text: mainArtistLabel,
-                                style: Theme.of(context).textTheme.titleLarge,
-                                onTap: hasArtistNavigation
-                                    ? () => current.parentBaseModel.navigateTo(detailsContext)
-                                    : null,
-                              ),
-                              if (albumMeta.isNotEmpty) ...[
-                                const SizedBox(height: 12),
-                                Text(albumMeta, style: Theme.of(context).textTheme.bodyLarge),
-                              ],
-                              const SizedBox(height: 24),
-                              FittedBox(
-                                child: SizedBox(
-                                  height: 45,
-                                  child: Row(
-                                    spacing: 8,
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      IconButton.filled(
-                                        autofocus: AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad,
-                                        onPressed: tracks.isNotEmpty
-                                            ? () async {
-                                                await ref.read(videoPlayerProvider).setShuffleEnabled(false);
-                                                await album.play(detailsContext, ref);
-                                              }
-                                            : null,
-                                        icon: const Icon(
-                                          IconsaxPlusBold.play,
-                                        ),
-                                        tooltip: context.localized.playLabel,
-                                      ),
-                                      FilledButton.tonalIcon(
-                                        onPressed: tracks.isNotEmpty
-                                            ? () async {
-                                                await ref.read(videoPlayerProvider).setShuffleEnabled(true);
-                                                await album.play(detailsContext, ref);
-                                              }
-                                            : null,
-                                        label: Text(context.localized.audioPlayerShuffle),
-                                        icon: const Icon(
-                                          IconsaxPlusLinear.shuffle,
-                                        ),
-                                      ),
-                                      FilledButton.tonalIcon(
-                                        onPressed: tracks.isNotEmpty
-                                            ? () async {
-                                                await album.playInstantMix(detailsContext, ref);
-                                              }
-                                            : null,
-                                        icon: const Icon(IconsaxPlusLinear.blend_2),
-                                        label: Text(context.localized.instantMix),
-                                      ),
-                                    ],
+                        Wrap(
+                          alignment: smallScreen ? WrapAlignment.center : WrapAlignment.start,
+                          runAlignment: smallScreen ? WrapAlignment.center : WrapAlignment.start,
+                          spacing: 24,
+                          runSpacing: 24,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 230,
+                              height: 230,
+                              child: AspectRatio(
+                                aspectRatio: 1,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: radius,
+                                    color: backgroundColor,
+                                  ),
+                                  foregroundDecoration: BoxDecoration(
+                                    borderRadius: radius,
+                                    border: Border.all(width: 1, color: Colors.white.withAlpha(45)),
+                                  ),
+                                  clipBehavior: Clip.hardEdge,
+                                  child: FladderImage(
+                                    image: albumPoster,
+                                    fit: BoxFit.cover,
+                                    placeHolder: PosterPlaceholder(item: current),
                                   ),
                                 ),
-                              )
-                            ],
-                          ),
+                              ),
+                            ),
+                            IntrinsicWidth(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: smallScreen ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    context.localized.musicAlbum(1).toUpperCase(),
+                                    style: Theme.of(context).textTheme.labelLarge?.copyWith(letterSpacing: 1.5),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    current.name,
+                                    style: Theme.of(context).textTheme.displaySmall,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 14),
+                                  ClickableText(
+                                    text: mainArtistLabel,
+                                    style: Theme.of(context).textTheme.titleLarge,
+                                    onTap: hasArtistNavigation
+                                        ? () => current.parentBaseModel.navigateTo(detailsContext)
+                                        : null,
+                                  ),
+                                  if (albumMeta.isNotEmpty) ...[
+                                    const SizedBox(height: 12),
+                                    Text(albumMeta, style: Theme.of(context).textTheme.bodyLarge),
+                                  ],
+                                  const SizedBox(height: 24),
+                                  FittedBox(
+                                    child: SizedBox(
+                                      height: 45,
+                                      child: Row(
+                                        spacing: 8,
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          IconButton.filled(
+                                            autofocus: AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad,
+                                            onPressed: tracks.isNotEmpty
+                                                ? () async {
+                                                    await ref.read(videoPlayerProvider).setShuffleEnabled(false);
+                                                    await album.play(detailsContext, ref);
+                                                  }
+                                                : null,
+                                            icon: const Icon(
+                                              IconsaxPlusBold.play,
+                                            ),
+                                            tooltip: context.localized.playLabel,
+                                          ),
+                                          FilledButton.tonalIcon(
+                                            onPressed: tracks.isNotEmpty
+                                                ? () async {
+                                                    await ref.read(videoPlayerProvider).setShuffleEnabled(true);
+                                                    await album.play(detailsContext, ref);
+                                                  }
+                                                : null,
+                                            label: Text(context.localized.audioPlayerShuffle),
+                                            icon: const Icon(
+                                              IconsaxPlusLinear.shuffle,
+                                            ),
+                                          ),
+                                          FilledButton.tonalIcon(
+                                            onPressed: tracks.isNotEmpty
+                                                ? () async {
+                                                    await album.playInstantMix(detailsContext, ref);
+                                                  }
+                                                : null,
+                                            icon: const Icon(IconsaxPlusLinear.blend_2),
+                                            label: Text(context.localized.instantMix),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
+                        if (album?.overview.genreItems.isNotEmpty == true)
+                          Genres(
+                            genres: album?.overview.genreItems.take(10).toList() ?? [],
+                          ),
                       ],
                     ),
                   ),
@@ -242,6 +255,7 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
                       enableSorting: false,
                       tracks: tracks,
                       showSyncStatus: true,
+                      showDiscSplit: true,
                       padding: padding,
                       onTrackPlayTap: (track) => track.play(detailsContext, ref),
                       onTrackArtistTap: (_) => current.parentBaseModel.navigateTo(detailsContext),

@@ -67,8 +67,12 @@ class AlbumDetailsNotifier extends StateNotifier<AlbumModel?> {
         enableUserData: true,
         enableImages: true,
         imageTypeLimit: 1,
-        fields: [ItemFields.primaryimageaspectratio],
-        sortBy: [ItemSortBy.sortname],
+        fields: [
+          ItemFields.primaryimageaspectratio,
+          ItemFields.mediasourcecount,
+          ItemFields.childcount,
+        ],
+        sortBy: [ItemSortBy.sortname, ItemSortBy.parentindexnumber],
         sortOrder: [SortOrder.ascending],
         limit: 100,
       );

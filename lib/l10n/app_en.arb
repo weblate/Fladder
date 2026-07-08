@@ -2781,5 +2781,14 @@
     }
   },
   "playItems": "Play items",
-  "shuffleItems": "Shuffle items"
+  "shuffleItems": "Shuffle items",
+  "disc": "Disc {number}",
+  "@disc": {
+    "description": "disc",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  }
 }

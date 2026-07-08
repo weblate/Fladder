@@ -112,6 +112,10 @@ class _DetailScaffoldState extends ConsumerState<DetailScaffold> {
     _pushTitle();
     updateImage();
     _updateDominantColor();
+    if (widget.backDrops != oldWidget.backDrops) {
+      lastImages = widget.backDrops?.backDrop;
+      backgroundImage = widget.backDrops?.randomBackDrop;
+    }
     if (widget.item != null && widget.item?.id != item?.id) {
       item = widget.item;
     }

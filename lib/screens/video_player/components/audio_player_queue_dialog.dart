@@ -28,7 +28,7 @@ void showAudioQueueDialog(
   required Function(ItemBaseModel item) playSelected,
 }) {
   showDialog(
-    useSafeArea: false,
+    useSafeArea: true,
     useRootNavigator: true,
     context: context,
     builder: (context) {
@@ -153,116 +153,117 @@ class _AudioQueueDialogBodyState extends ConsumerState<_AudioQueueDialogBody> {
       }
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        context.localized.queue,
-                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      Opacity(
-                        opacity: 0.5,
-                        child: Text(
-                          context.localized.queueItemCount(items.length),
-                          style: Theme.of(context).textTheme.titleMedium,
+    return SizedBox(
+      height: MediaQuery.sizeOf(context).height * 0.85,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          context.localized.queue,
+                          style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
                         ),
-                      ),
-                    ],
+                        Opacity(
+                          opacity: 0.5,
+                          child: Text(
+                            context.localized.queueItemCount(items.length),
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
+                IconButton(
+                  onPressed: () => context.maybePop(),
+                  icon: const Icon(Icons.close_rounded),
+                ),
+              ],
+            ),
+            const Divider(),
+            if (nowPlaying != null) ...[
+              _QueueSectionHeader(
+                icon: IconsaxPlusBold.play,
+                title: context.localized.nowPlaying,
               ),
-              IconButton(
-                onPressed: () => context.maybePop(),
-                icon: const Icon(Icons.close_rounded),
+              _QueueTile(
+                item: nowPlaying,
+                onTap: () {
+                  widget.playSelected(nowPlaying);
+                  context.maybePop();
+                },
+                onShowActions: (globalPosition) => _showItemActionsMenu(
+                  nowPlaying,
+                  globalPosition,
+                  removeAction: () => ref.read(videoPlayerProvider.notifier).removeAudioQueueItem(nowPlaying),
+                ),
+                isCurrent: true,
+                dragIndex: null,
               ),
             ],
-          ),
-          const Divider(),
-          Flexible(
-            child: SizedBox(
-              height: MediaQuery.sizeOf(context).height * 0.85,
+            const Divider(),
+            Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 24),
+                padding: const EdgeInsets.only(bottom: 24),
                 children: [
-                  if (nowPlaying != null) ...[
-                    _QueueSectionHeader(
-                      icon: IconsaxPlusBold.play,
-                      title: context.localized.nowPlaying,
-                    ),
-                    _QueueTile(
-                      item: nowPlaying,
-                      onTap: () {
-                        widget.playSelected(nowPlaying);
-                        context.maybePop();
-                      },
-                      onShowActions: (globalPosition) => _showItemActionsMenu(
-                        nowPlaying,
-                        globalPosition,
-                        removeAction: () => ref.read(videoPlayerProvider.notifier).removeAudioQueueItem(nowPlaying),
-                      ),
-                      isCurrent: true,
-                      dragIndex: null,
-                    ),
-                    const SizedBox(height: 8),
-                  ],
                   if (nextUpItems.isNotEmpty) ...[
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surfaceContainerLow,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      child: Column(
-                        children: [
-                          _QueueSectionHeader(
-                            icon: IconsaxPlusBold.music_playlist,
-                            title: context.localized.upNext,
-                            trailing: IconButton(
-                              tooltip: context.localized.clear,
-                              onPressed: () async {
-                                await ref.read(videoPlayerProvider.notifier).clearTemporaryQueue();
+                    SliverToBoxAdapter(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surfaceContainerLow,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        child: Column(
+                          children: [
+                            _QueueSectionHeader(
+                              icon: IconsaxPlusBold.music_playlist,
+                              title: context.localized.upNext,
+                              trailing: IconButton(
+                                tooltip: context.localized.clear,
+                                onPressed: () async {
+                                  await ref.read(videoPlayerProvider.notifier).clearTemporaryQueue();
+                                },
+                                icon: const Icon(Icons.clear_all_rounded),
+                              ),
+                            ),
+                            _QueueSortList(
+                              items: nextUpItems,
+                              onReorder: (oldIndex, newIndex) {
+                                widget.onSectionReorder(
+                                  AudioQueueSection.nextUp,
+                                  oldIndex,
+                                  newIndex,
+                                );
                               },
-                              icon: const Icon(Icons.clear_all_rounded),
+                              onTapItem: (item) {
+                                widget.playSelected(item);
+                                context.maybePop();
+                              },
+                              onShowItemActions: (index, item, globalPosition) => _showItemActionsMenu(
+                                item,
+                                globalPosition,
+                                removeAction: () => ref.read(videoPlayerProvider.notifier).removeAudioQueueSectionItem(
+                                      AudioQueueSection.nextUp,
+                                      index,
+                                    ),
+                              ),
                             ),
-                          ),
-                          _QueueSortList(
-                            items: nextUpItems,
-                            onReorder: (oldIndex, newIndex) {
-                              widget.onSectionReorder(
-                                AudioQueueSection.nextUp,
-                                oldIndex,
-                                newIndex,
-                              );
-                            },
-                            onTapItem: (item) {
-                              widget.playSelected(item);
-                              context.maybePop();
-                            },
-                            onShowItemActions: (index, item, globalPosition) => _showItemActionsMenu(
-                              item,
-                              globalPosition,
-                              removeAction: () => ref.read(videoPlayerProvider.notifier).removeAudioQueueSectionItem(
-                                    AudioQueueSection.nextUp,
-                                    index,
-                                  ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                        ],
+                            const SizedBox(height: 8),
+                          ],
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 8),
                   ],
                   _QueueSectionHeader(
                     icon: IconsaxPlusBold.row_vertical,
@@ -280,33 +281,29 @@ class _AudioQueueDialogBodyState extends ConsumerState<_AudioQueueDialogBody> {
                       ),
                     )
                   else
-                    Column(
-                      children: existingItems
-                          .mapIndexed(
-                            (index, item) => _QueueTile(
-                              item: item,
-                              onTap: () {
-                                widget.playSelected(item);
-                                context.maybePop();
-                              },
-                              onShowActions: (globalPosition) => _showItemActionsMenu(
-                                item,
-                                globalPosition,
-                                removeAction: () => ref.read(videoPlayerProvider.notifier).removeAudioQueueSectionItem(
-                                      AudioQueueSection.existing,
-                                      index,
-                                    ),
+                    ...existingItems.mapIndexed(
+                      (index, item) => _QueueTile(
+                        item: item,
+                        onTap: () {
+                          widget.playSelected(item);
+                          context.maybePop();
+                        },
+                        onShowActions: (globalPosition) => _showItemActionsMenu(
+                          item,
+                          globalPosition,
+                          removeAction: () => ref.read(videoPlayerProvider.notifier).removeAudioQueueSectionItem(
+                                AudioQueueSection.existing,
+                                index,
                               ),
-                              dragIndex: null,
-                            ),
-                          )
-                          .toList(),
-                    ),
+                        ),
+                        dragIndex: null,
+                      ),
+                    )
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

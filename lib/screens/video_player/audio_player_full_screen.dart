@@ -32,6 +32,7 @@ import 'package:fladder/util/localization_helper.dart';
 import 'package:fladder/widgets/shared/clickable_text.dart';
 import 'package:fladder/widgets/shared/fladder_slider.dart';
 import 'package:fladder/widgets/shared/item_actions.dart';
+import 'package:fladder/widgets/shared/modal_bottom_sheet.dart';
 import 'package:fladder/widgets/shared/theme_overwrite.dart';
 import 'package:fladder/wrappers/media_control_wrapper.dart';
 
@@ -526,6 +527,24 @@ class _AudioPlayerFullScreenState extends ConsumerState<AudioPlayerFullScreen> {
 
     Widget albumArt(BuildContext context, {double size = 512}) {
       final audioType = FladderItemType.audio;
+      final itemActions = currentItem.generateActions(
+        context,
+        ref,
+        exclude: {
+          ItemActions.play,
+          ItemActions.showAlbum,
+          ItemActions.details,
+          ItemActions.openParent,
+          ItemActions.openShow,
+          ItemActions.refreshMetaData,
+        },
+        onUserDataChanged: (newData) {
+          if (newData == null) return;
+          ref.read(playBackModel.notifier).update(
+                (state) => state?.updateUserData(newData),
+              );
+        },
+      );
       return Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -540,36 +559,25 @@ class _AudioPlayerFullScreenState extends ConsumerState<AudioPlayerFullScreen> {
                     closeFullScreen();
                     currentItem.navigateTo(context, ref: ref, tag: 'album');
                   },
-                  onSecondaryTapDown: (details) {
-                    final itemActions = currentItem.generateActions(
-                      context,
-                      ref,
-                      exclude: {
-                        ItemActions.play,
-                        ItemActions.showAlbum,
-                        ItemActions.details,
-                        ItemActions.openParent,
-                        ItemActions.openShow,
-                        ItemActions.refreshMetaData,
-                      },
-                      onUserDataChanged: (newData) {
-                        if (newData == null) return;
-                        ref.read(playBackModel.notifier).update(
-                              (state) => state?.updateUserData(newData),
-                            );
-                      },
-                    );
-                    showMenu(
-                      context: context,
-                      position: RelativeRect.fromLTRB(
-                        details.globalPosition.dx,
-                        details.globalPosition.dy,
-                        details.globalPosition.dx,
-                        details.globalPosition.dy,
-                      ),
-                      items: itemActions.popupMenuItems(useIcons: true),
-                    );
-                  },
+                  onLongPress: () => showBottomSheetPill(
+                    context: context,
+                    item: currentItem,
+                    content: (scrollContext, scrollController) => ListView(
+                      shrinkWrap: true,
+                      controller: scrollController,
+                      children: itemActions.listTileItems(scrollContext, useIcons: true),
+                    ),
+                  ),
+                  onSecondaryTapDown: (details) => showMenu(
+                    context: context,
+                    position: RelativeRect.fromLTRB(
+                      details.globalPosition.dx,
+                      details.globalPosition.dy,
+                      details.globalPosition.dx,
+                      details.globalPosition.dy,
+                    ),
+                    items: itemActions.popupMenuItems(useIcons: true),
+                  ),
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
@@ -666,7 +674,7 @@ class _AudioPlayerFullScreenState extends ConsumerState<AudioPlayerFullScreen> {
                         child: CustomScrollView(
                           slivers: [
                             SliverPadding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                              padding: const EdgeInsets.all(8.0),
                               sliver: SliverPersistentHeader(
                                 pinned: true,
                                 delegate: _AudioPlayerHeaderDelegate(
@@ -685,19 +693,22 @@ class _AudioPlayerFullScreenState extends ConsumerState<AudioPlayerFullScreen> {
                                       child: Stack(
                                         fit: StackFit.expand,
                                         children: [
-                                          IgnorePointer(
-                                            ignoring: transitionProgress > 0.15,
-                                            child: Opacity(
-                                              opacity: 1 - transitionProgress,
-                                              child: SingleChildScrollView(
-                                                physics: const NeverScrollableScrollPhysics(),
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    albumArt(context, size: 300),
-                                                    const SizedBox(height: 18),
-                                                    buildMetadata(context),
-                                                  ],
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                                            child: IgnorePointer(
+                                              ignoring: transitionProgress > 0.15,
+                                              child: Opacity(
+                                                opacity: 1 - transitionProgress,
+                                                child: SingleChildScrollView(
+                                                  physics: const NeverScrollableScrollPhysics(),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      albumArt(context, size: 300),
+                                                      const SizedBox(height: 18),
+                                                      buildMetadata(context),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),

@@ -48,7 +48,7 @@ class _ArtistDetailScreenState extends ConsumerState<ArtistDetailScreen> {
       label: current.name,
       item: current,
       backgroundColor: backgroundColor.withAlpha(80),
-      backDrops: artist?.images,
+      backDrops: artist?.getPosters,
       onRefresh: () async {
         await provider.fetchDetails(widget.item);
       },

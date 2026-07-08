@@ -1,11 +1,11 @@
 import 'package:chopper/chopper.dart';
-import 'package:fladder/providers/service_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fladder/jellyfin/jellyfin_open_api.swagger.dart';
 import 'package:fladder/models/boxset_model.dart';
 import 'package:fladder/models/item_base_model.dart';
 import 'package:fladder/providers/api_provider.dart';
+import 'package:fladder/providers/service_provider.dart';
 import 'package:fladder/util/map_bool_helper.dart';
 
 class _CollectionSetModel {
@@ -28,7 +28,8 @@ class _CollectionSetModel {
 }
 
 final collectionsProvider = StateNotifierProvider.autoDispose<BoxSetNotifier, _CollectionSetModel>((ref) {
-  return BoxSetNotifier(ref);
+  final notifier = BoxSetNotifier(ref)..setItems([]);
+  return notifier;
 });
 
 class BoxSetNotifier extends StateNotifier<_CollectionSetModel> {
@@ -86,10 +87,18 @@ class BoxSetNotifier extends StateNotifier<_CollectionSetModel> {
     return response;
   }
 
-  Future<Response> addToCollection({required BoxSetModel boxSet, required bool add}) async => add
-      ? await api.collectionsCollectionIdItemsPost(collectionId: boxSet.id, ids: state.items.map((e) => e.id).toList())
-      : await api.collectionsCollectionIdItemsDelete(
-          collectionId: boxSet.id, ids: state.items.map((e) => e.id).toList());
+  Future<Response> addToCollection({required BoxSetModel boxSet, required bool add}) async {
+    final response = add
+        ? await api.collectionsCollectionIdItemsPost(
+            collectionId: boxSet.id, ids: state.items.map((e) => e.id).toList())
+        : await api.collectionsCollectionIdItemsDelete(
+            collectionId: boxSet.id, ids: state.items.map((e) => e.id).toList());
+
+    if (response.isSuccessful) {
+      state = state.copyWith(collections: state.collections.setKey(boxSet, response.isSuccessful ? add : !add));
+    }
+    return response;
+  }
 
   Future<void> addToNewCollection({required String name}) async {
     final result = await api.collectionsPost(name: name, ids: state.items.map((e) => e.id).toList());

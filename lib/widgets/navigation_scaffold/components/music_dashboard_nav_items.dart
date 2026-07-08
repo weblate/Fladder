@@ -24,6 +24,96 @@ import 'package:fladder/widgets/shared/custom_tooltip.dart';
 import 'package:fladder/widgets/shared/item_actions.dart';
 import 'package:fladder/widgets/shared/modal_bottom_sheet.dart';
 
+class MusicLibraryItem {
+  final String label;
+  final String pathKey;
+  final Icon selectedIcon;
+  final Icon icon;
+  final VoidCallback onTap;
+  MusicLibraryItem({
+    required this.label,
+    required this.pathKey,
+    required this.selectedIcon,
+    required this.icon,
+    required this.onTap,
+  });
+
+  static List<MusicLibraryItem> fromViews(
+    BuildContext context,
+    List<ViewModel> views,
+    bool expanded,
+    WidgetRef ref,
+  ) {
+    final musicViews = views.where((view) => view.collectionType == CollectionType.music).map((e) => e.id).toList();
+
+    return [
+      MusicLibraryItem(
+        label: context.localized.musicAlbum(2),
+        pathKey: "albums",
+        selectedIcon: Icon(FladderItemType.musicAlbum.selectedicon),
+        icon: Icon(FladderItemType.musicAlbum.icon),
+        onTap: () {
+          ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.grid;
+          context.pushRoute(
+            LibrarySearchRoute(
+              viewModelId: "${musicViews.join(",")},albums",
+              key: const Key("albums-nav-item"),
+            ).withFilter(
+              const LibraryFilterModel(
+                types: {
+                  FladderItemType.musicAlbum: true,
+                },
+              ),
+            ),
+          );
+        },
+      ),
+      MusicLibraryItem(
+        label: context.localized.track(2),
+        pathKey: "tracks",
+        selectedIcon: Icon(FladderItemType.audio.selectedicon),
+        icon: Icon(FladderItemType.audio.icon),
+        onTap: () {
+          ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.list;
+          context.pushRoute(
+            LibrarySearchRoute(
+              viewModelId: "${musicViews.join(",")},tracks",
+              key: const Key("tracks-nav-item"),
+            ).withFilter(
+              const LibraryFilterModel(
+                types: {
+                  FladderItemType.audio: true,
+                },
+              ),
+            ),
+          );
+        },
+      ),
+      MusicLibraryItem(
+        label: context.localized.mediaTypeArtists(2),
+        pathKey: "artists",
+        selectedIcon: Icon(FladderItemType.person.selectedicon),
+        icon: Icon(FladderItemType.person.icon),
+        onTap: () {
+          ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.grid;
+          context.pushRoute(
+            LibrarySearchRoute(
+              viewModelId: "${musicViews.join(",")},artists",
+              key: const Key("artists-nav-item"),
+            ).withFilter(
+              const LibraryFilterModel(
+                types: {
+                  FladderItemType.person: true,
+                },
+              ),
+            ),
+          );
+        },
+      ),
+    ];
+  }
+}
+
 List<Widget> buildMusicDashboardNavItems(
   BuildContext context,
   List<ViewModel> views,
@@ -31,80 +121,19 @@ List<Widget> buildMusicDashboardNavItems(
   bool expanded,
   WidgetRef ref,
 ) {
-  final musicViews = views.where((view) => view.collectionType == CollectionType.music).map((e) => e.id).toList();
-
+  final musicItems = MusicLibraryItem.fromViews(context, views, expanded, ref);
   return [
-    CombinedViewNavigationItem(
-      label: context.localized.musicAlbum(2),
-      expandedSideBar: expanded,
-      usePostersForLibrary: false,
-      shouldExpand: expanded,
-      pathKey: "albums",
-      selectedIcon: Icon(FladderItemType.musicAlbum.selectedicon),
-      icon: Icon(FladderItemType.musicAlbum.icon),
-      onTap: () {
-        ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.grid;
-        context.pushRoute(
-          LibrarySearchRoute(
-            viewModelId: "${musicViews.join(",")},albums",
-            key: const Key("albums-nav-item"),
-          ).withFilter(
-            const LibraryFilterModel(
-              types: {
-                FladderItemType.musicAlbum: true,
-              },
-            ),
-          ),
-        );
-      },
-    ),
-    CombinedViewNavigationItem(
-      label: context.localized.track(2),
-      expandedSideBar: expanded,
-      usePostersForLibrary: false,
-      shouldExpand: expanded,
-      pathKey: "tracks",
-      selectedIcon: Icon(FladderItemType.audio.selectedicon),
-      icon: Icon(FladderItemType.audio.icon),
-      onTap: () {
-        ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.list;
-        context.pushRoute(
-          LibrarySearchRoute(
-            viewModelId: "${musicViews.join(",")},tracks",
-            key: const Key("tracks-nav-item"),
-          ).withFilter(
-            const LibraryFilterModel(
-              types: {
-                FladderItemType.audio: true,
-              },
-            ),
-          ),
-        );
-      },
-    ),
-    CombinedViewNavigationItem(
-      label: context.localized.mediaTypeArtists(2),
-      expandedSideBar: expanded,
-      usePostersForLibrary: false,
-      shouldExpand: expanded,
-      pathKey: "artists",
-      selectedIcon: Icon(FladderItemType.person.selectedicon),
-      icon: Icon(FladderItemType.person.icon),
-      onTap: () {
-        ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.grid;
-        context.pushRoute(
-          LibrarySearchRoute(
-            viewModelId: "${musicViews.join(",")},artists",
-            key: const Key("artists-nav-item"),
-          ).withFilter(
-            const LibraryFilterModel(
-              types: {
-                FladderItemType.person: true,
-              },
-            ),
-          ),
-        );
-      },
+    ...musicItems.map(
+      (item) => CombinedViewNavigationItem(
+        label: item.label,
+        expandedSideBar: expanded,
+        usePostersForLibrary: false,
+        shouldExpand: expanded,
+        pathKey: item.pathKey,
+        selectedIcon: item.selectedIcon,
+        icon: item.icon,
+        onTap: item.onTap,
+      ),
     ),
     const Divider(
       indent: 32,
