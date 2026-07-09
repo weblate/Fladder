@@ -2091,5 +2091,14 @@
         }
     },
     "playItems": "播放项目",
-    "shuffleItems": "随机排列项目"
+    "shuffleItems": "随机排列项目",
+    "disc": "光盘 {number}",
+    "@disc": {
+        "description": "disc",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    }
 }
