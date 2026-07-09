@@ -100,37 +100,48 @@ class _AddToCollectionState extends ConsumerState<AddToCollection> {
               children: [
                 ...collectonOptions.collections.entries.map(
                   (e) {
-                    return FocusButton(
-                      onTap: () => toggleCollection(e.key, e.value == true),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: e.value == true
-                              ? Theme.of(context).colorScheme.primaryContainer
-                              : Theme.of(context).colorScheme.surfaceContainer,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  e.key.name,
-                                  style: Theme.of(context).textTheme.bodyLarge,
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: FocusButton(
+                        onTap: () => toggleCollection(e.key, e.value == true),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: e.value == true
+                                ? Theme.of(context).colorScheme.primaryContainer
+                                : Theme.of(context).colorScheme.surfaceContainer,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    e.key.name,
+                                    style: Theme.of(context).textTheme.bodyLarge,
+                                  ),
                                 ),
-                              ),
-                              Checkbox(
-                                value: e.value,
-                                onChanged: (value) async => toggleCollection(e.key, value ?? false),
-                              ),
-                            ],
+                                Checkbox(
+                                  value: e.value,
+                                  tristate: true,
+                                  onChanged: (value) async => toggleCollection(e.key, value ?? false),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     );
                   },
                 ),
+                if (collectonOptions.isLoading)
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
               ],
             ),
           ),

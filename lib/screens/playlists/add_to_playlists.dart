@@ -177,6 +177,13 @@ class _AddToPlaylistState extends ConsumerState<AddToPlaylist> {
                     );
                   },
                 ),
+                if (collectonOptions.isLoading)
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
               ],
             ),
           ),
