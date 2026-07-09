@@ -46,6 +46,13 @@ class MusicLibraryItem {
   ) {
     final musicViews = views.where((view) => view.collectionType == CollectionType.music).map((e) => e.id).toList();
 
+    final collectionView =
+        views.where((view) => view.collectionType == CollectionType.boxsets).map((e) => e.id).toList();
+
+    if (musicViews.isEmpty && collectionView.isEmpty) {
+      return [];
+    }
+
     return [
       MusicLibraryItem(
         label: context.localized.musicAlbum(2),
@@ -110,6 +117,22 @@ class MusicLibraryItem {
           );
         },
       ),
+      if (collectionView.isNotEmpty)
+        MusicLibraryItem(
+          label: context.localized.mediaTypeCollection(2),
+          pathKey: "collections",
+          selectedIcon: Icon(FladderItemType.boxset.selectedicon),
+          icon: Icon(FladderItemType.boxset.icon),
+          onTap: () {
+            ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.grid;
+            context.pushRoute(
+              LibrarySearchRoute(
+                viewModelId: "${collectionView.join(",")},collections",
+                key: const Key("collections-nav-item"),
+              ),
+            );
+          },
+        ),
     ];
   }
 }

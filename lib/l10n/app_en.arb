@@ -569,6 +569,16 @@
       }
     }
   },
+  "mediaTypeCollection": "{count, plural, one{Collection} other{Collections}}",
+  "@mediaTypeCollection": {
+    "description": "Collection (plural)",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "1"
+      }
+    }
+  },
   "metaDataSavedFor": "Metadata saved for {item}",
   "@metaDataSavedFor": {
     "description": "metaDataSavedFor",

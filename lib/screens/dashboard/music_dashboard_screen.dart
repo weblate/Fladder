@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:fladder/jellyfin/jellyfin_open_api.enums.swagger.dart';
 import 'package:fladder/models/item_base_model.dart';
 import 'package:fladder/models/items/audio_model.dart';
 import 'package:fladder/models/playback/playback_model.dart';
@@ -110,10 +109,9 @@ class _MusicDashboardScreenState extends ConsumerState<MusicDashboardScreen> {
         availableRecentTrackSections.firstWhereOrNull((section) => section.section == _selectedRecentTrackSection) ??
             availableRecentTrackSections.firstOrNull;
 
-    final views =
-        ref.watch(viewsProvider).views.where((element) => element.collectionType == CollectionType.music).toList();
+    final allViews = ref.watch(viewsProvider).views;
 
-    final musicItems = MusicLibraryItem.fromViews(context, views, false, ref);
+    final musicItems = MusicLibraryItem.fromViews(context, allViews, false, ref);
 
     return NestedScaffold(
       background: ValueListenableBuilder<ItemBaseModel?>(
