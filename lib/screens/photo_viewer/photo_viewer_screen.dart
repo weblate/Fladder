@@ -16,6 +16,7 @@ import 'package:fladder/models/items/photo_queue_source.dart';
 import 'package:fladder/models/items/photos_model.dart';
 import 'package:fladder/providers/settings/photo_view_settings_provider.dart';
 import 'package:fladder/providers/user_provider.dart';
+import 'package:fladder/providers/window_title_provider.dart';
 import 'package:fladder/screens/photo_viewer/photo_viewer_controls.dart';
 import 'package:fladder/screens/photo_viewer/simple_video_player.dart';
 import 'package:fladder/screens/shared/default_title_bar.dart';
@@ -66,6 +67,8 @@ class _PhotoViewerScreenState extends ConsumerState<PhotoViewerScreen> with Widg
 
   static const int _fetchThreshold = 5;
 
+  WindowTitleNotifier? _windowTitleNotifier;
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
@@ -90,6 +93,7 @@ class _PhotoViewerScreenState extends ConsumerState<PhotoViewerScreen> with Widg
     _nextFetchStartIndex = photos.length;
     _loadedPhotoIds.addAll(photos.map((p) => p.id));
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      _windowTitleNotifier = ref.read(windowTitleProvider.notifier);
       cacheNeighbors(currentPage, 2);
       await _fetchMorePhotos();
     });
@@ -97,6 +101,7 @@ class _PhotoViewerScreenState extends ConsumerState<PhotoViewerScreen> with Widg
 
   @override
   void dispose() {
+    _windowTitleNotifier?.removeTitle(this);
     controller.dispose();
     super.dispose();
   }
@@ -224,6 +229,7 @@ class _PhotoViewerScreenState extends ConsumerState<PhotoViewerScreen> with Widg
               if (photos.length - index <= _fetchThreshold) {
                 unawaited(_fetchMorePhotos());
               }
+              _windowTitleNotifier?.updateTitle(this, "${context.localized.mediaTypePhoto(1)} - ${currentPhoto.title}");
             },
             itemBuilder: (context, index) {
               final photo = photos[index];
