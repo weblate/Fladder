@@ -7,6 +7,7 @@ import 'package:overflow_view/overflow_view.dart';
 import 'package:fladder/models/items/audio_model.dart';
 import 'package:fladder/models/media_playback_model.dart';
 import 'package:fladder/providers/settings/video_player_settings_provider.dart';
+import 'package:fladder/providers/user_provider.dart';
 import 'package:fladder/providers/video_player_provider.dart';
 import 'package:fladder/screens/video_player/components/video_volume_slider.dart';
 import 'package:fladder/util/adaptive_layout/adaptive_layout.dart';
@@ -54,6 +55,8 @@ class MusicFloatingPlayerBarContent extends ConsumerWidget {
         layoutMode == LayoutMode.dual &&
         AdaptiveLayout.inputDeviceOf(context) == InputDevice.pointer;
 
+    double opacity = 1.0;
+
     return ThemeOverwrite(
       image: item.getPosters?.primary?.imageProvider,
       child: (context) {
@@ -84,48 +87,77 @@ class MusicFloatingPlayerBarContent extends ConsumerWidget {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                            Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Flexible(
-                                    child: ClickableText(
-                                      text: item.name,
-                                      style: Theme.of(context).textTheme.titleMedium,
-                                      maxLines: 1,
-                                      onTap: () => item.navigateTo(context),
-                                    ),
-                                  ),
-                                  if (item.albumArtists.isNotEmpty)
-                                    Flexible(
-                                      child: ClickableText(
-                                          text: item.albumArtists.map((e) => e.name).join(', '),
-                                          overflow: TextOverflow.ellipsis,
-                                          opacity: 0.65,
-                                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
-                                              ),
-                                          maxLines: 1,
-                                          onTap: () {
-                                            final artistModel = item.artistModel;
-                                            if (artistModel != null) {
-                                              artistModel.navigateTo(context);
-                                            }
-                                          }),
-                                    ),
-                                ],
+                            Expanded(
+                              child: ClipRRect(
+                                child: StatefulBuilder(
+                                  builder: (context, setState) {
+                                    return Dismissible(
+                                      key: ValueKey(item.id),
+                                      direction: DismissDirection.horizontal,
+                                      onUpdate: (details) {
+                                        final delta = details.progress;
+                                        setState(() {
+                                          opacity = (1.0 - (delta * 3)).clamp(0.0, 1.0);
+                                        });
+                                      },
+                                      confirmDismiss: (direction) async {
+                                        if (direction == DismissDirection.startToEnd) {
+                                          ref.read(videoPlayerProvider).skipToPrevious();
+                                        } else if (direction == DismissDirection.endToStart) {
+                                          ref.read(videoPlayerProvider).skipToNext();
+                                        }
+                                        return false;
+                                      },
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Flexible(
+                                            child: ClickableText(
+                                              text: item.name,
+                                              opacity: opacity,
+                                              style: Theme.of(context).textTheme.titleMedium,
+                                              maxLines: 1,
+                                              onTap: () => item.navigateTo(context),
+                                            ),
+                                          ),
+                                          if (item.albumArtists.isNotEmpty)
+                                            Flexible(
+                                              child: ClickableText(
+                                                  text: item.albumArtists.map((e) => e.name).join(', '),
+                                                  overflow: TextOverflow.ellipsis,
+                                                  opacity: 0.65 * opacity,
+                                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurface
+                                                            .withValues(alpha: 0.65),
+                                                      ),
+                                                  maxLines: 1,
+                                                  onTap: () {
+                                                    final artistModel = item.artistModel;
+                                                    if (artistModel != null) {
+                                                      artistModel.navigateTo(context);
+                                                    }
+                                                  }),
+                                            ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             )
                           ],
                         ),
                       ),
-                      Expanded(
-                        child: Row(
-                          spacing: 4,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (viewSize > ViewSize.phone)
+                      if (viewSize > ViewSize.phone)
+                        Expanded(
+                          child: Row(
+                            spacing: 4,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
                               Consumer(
                                 builder: (context, ref, _) {
                                   final pos = ref.watch(mediaPlaybackProvider.select((s) => s.position));
@@ -139,28 +171,50 @@ class MusicFloatingPlayerBarContent extends ConsumerWidget {
                                   );
                                 },
                               ),
-                            if (viewSize > ViewSize.phone)
                               IconButton(
                                 onPressed: () => ref.read(videoPlayerProvider).skipToPrevious(),
                                 icon: const Icon(IconsaxPlusBold.previous),
-                              )
-                            else
-                              const Spacer(),
-                            IconButton.filledTonal(
-                              onPressed: () => ref.read(videoPlayerProvider).playOrPause(),
-                              iconSize: 32,
-                              icon: playbackState.playing
-                                  ? const Icon(IconsaxPlusBold.pause)
-                                  : const Icon(IconsaxPlusBold.play),
-                            ),
-                            if (viewSize > ViewSize.phone)
+                              ),
+                              IconButton.filledTonal(
+                                onPressed: () => ref.read(videoPlayerProvider).playOrPause(),
+                                iconSize: 32,
+                                icon: playbackState.playing
+                                    ? const Icon(IconsaxPlusBold.pause)
+                                    : const Icon(IconsaxPlusBold.play),
+                              ),
                               IconButton(
                                 onPressed: () => ref.read(videoPlayerProvider).skipToNext(),
                                 icon: const Icon(IconsaxPlusBold.next),
                               ),
-                          ],
+                            ],
+                          ),
+                        )
+                      else ...{
+                        IconButton(
+                          onPressed: () async {
+                            final result = (await ref
+                                    .read(userProvider.notifier)
+                                    .setAsFavorite(!item.userData.isFavourite, item.id))
+                                ?.body;
+
+                            if (result != null) {
+                              ref.read(playBackModel.notifier).update((state) => state?.updateUserData(result));
+                            }
+                          },
+                          iconSize: 32,
+                          color: item.userData.isFavourite ? Colors.red : null,
+                          icon: item.userData.isFavourite
+                              ? const Icon(IconsaxPlusBold.heart)
+                              : const Icon(IconsaxPlusLinear.heart),
                         ),
-                      ),
+                        IconButton.filledTonal(
+                          onPressed: () => ref.read(videoPlayerProvider).playOrPause(),
+                          iconSize: 32,
+                          icon: playbackState.playing
+                              ? const Icon(IconsaxPlusBold.pause)
+                              : const Icon(IconsaxPlusBold.play),
+                        ),
+                      },
                       if (viewSize > ViewSize.phone)
                         Expanded(
                           child: Row(

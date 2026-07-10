@@ -462,7 +462,7 @@ class _AudioPlayerFullScreenState extends ConsumerState<AudioPlayerFullScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerHighest.withAlpha(175),
+                color: Theme.of(context).colorScheme.surface.withAlpha(175),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(
@@ -478,20 +478,12 @@ class _AudioPlayerFullScreenState extends ConsumerState<AudioPlayerFullScreen> {
                       icon: const Icon(Icons.clear_all_rounded),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  ...nextUpItems.map(
+                    (e) {
+                      return queueItem(e, canRemove: true);
+                    },
+                  )
                 ],
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final item = nextUpItems[index];
-                  return queueItem(item, canRemove: true);
-                },
-                childCount: nextUpItems.length,
               ),
             ),
           ),

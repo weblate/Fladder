@@ -217,51 +217,49 @@ class _AudioQueueDialogBodyState extends ConsumerState<_AudioQueueDialogBody> {
                 padding: const EdgeInsets.only(bottom: 24),
                 children: [
                   if (nextUpItems.isNotEmpty) ...[
-                    SliverToBoxAdapter(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surfaceContainerLow,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        child: Column(
-                          children: [
-                            _QueueSectionHeader(
-                              icon: IconsaxPlusBold.music_playlist,
-                              title: context.localized.upNext,
-                              trailing: IconButton(
-                                tooltip: context.localized.clear,
-                                onPressed: () async {
-                                  await ref.read(videoPlayerProvider.notifier).clearTemporaryQueue();
-                                },
-                                icon: const Icon(Icons.clear_all_rounded),
-                              ),
-                            ),
-                            _QueueSortList(
-                              items: nextUpItems,
-                              onReorder: (oldIndex, newIndex) {
-                                widget.onSectionReorder(
-                                  AudioQueueSection.nextUp,
-                                  oldIndex,
-                                  newIndex,
-                                );
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceContainerLow,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      child: Column(
+                        children: [
+                          _QueueSectionHeader(
+                            icon: IconsaxPlusBold.music_playlist,
+                            title: context.localized.upNext,
+                            trailing: IconButton(
+                              tooltip: context.localized.clear,
+                              onPressed: () async {
+                                await ref.read(videoPlayerProvider.notifier).clearTemporaryQueue();
                               },
-                              onTapItem: (item) {
-                                widget.playSelected(item);
-                                context.maybePop();
-                              },
-                              onShowItemActions: (index, item, globalPosition) => _showItemActionsMenu(
-                                item,
-                                globalPosition,
-                                removeAction: () => ref.read(videoPlayerProvider.notifier).removeAudioQueueSectionItem(
-                                      AudioQueueSection.nextUp,
-                                      index,
-                                    ),
-                              ),
+                              icon: const Icon(Icons.clear_all_rounded),
                             ),
-                            const SizedBox(height: 8),
-                          ],
-                        ),
+                          ),
+                          _QueueSortList(
+                            items: nextUpItems,
+                            onReorder: (oldIndex, newIndex) {
+                              widget.onSectionReorder(
+                                AudioQueueSection.nextUp,
+                                oldIndex,
+                                newIndex,
+                              );
+                            },
+                            onTapItem: (item) {
+                              widget.playSelected(item);
+                              context.maybePop();
+                            },
+                            onShowItemActions: (index, item, globalPosition) => _showItemActionsMenu(
+                              item,
+                              globalPosition,
+                              removeAction: () => ref.read(videoPlayerProvider.notifier).removeAudioQueueSectionItem(
+                                    AudioQueueSection.nextUp,
+                                    index,
+                                  ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                        ],
                       ),
                     ),
                   ],
