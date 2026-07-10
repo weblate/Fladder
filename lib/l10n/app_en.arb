@@ -2800,5 +2800,7 @@
         "type": "int"
       }
     }
-  }
+  },
+  "incognitoMode": "Incognito mode",
+  "incognitoModeDesc": "Incognito mode disables sending playback status to the server"
 }

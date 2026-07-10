@@ -24,6 +24,7 @@ import 'package:fladder/providers/api_provider.dart';
 import 'package:fladder/providers/auth_provider.dart';
 import 'package:fladder/providers/connectivity_provider.dart';
 import 'package:fladder/providers/image_provider.dart';
+import 'package:fladder/providers/incognito_mode_provider.dart';
 import 'package:fladder/providers/sync_provider.dart';
 import 'package:fladder/providers/user_provider.dart';
 import 'package:fladder/util/jellyfin_extension.dart';
@@ -610,11 +611,15 @@ class JellyService {
     );
   }
 
-  Future<Response> sessionsPlayingPost({required PlaybackStartInfo? body}) async => api.sessionsPlayingPost(body: body);
+  Future<Response> sessionsPlayingPost({required PlaybackStartInfo? body}) async {
+    if (ref.read(incognitoModeProvider)) return Response(http.Response("", 200), null);
+    return api.sessionsPlayingPost(body: body);
+  }
 
   Future<Response> sessionsPlayingStoppedPost({
     required PlaybackStopInfo? body,
-  }) {
+  }) async {
+    if (ref.read(incognitoModeProvider)) return Response(http.Response("", 200), null);
     final positionTicks = body?.positionTicks;
     if (positionTicks != null) {
       ref
@@ -624,8 +629,10 @@ class JellyService {
     return api.sessionsPlayingStoppedPost(body: body);
   }
 
-  Future<Response> sessionsPlayingProgressPost({required PlaybackProgressInfo? body}) async =>
-      api.sessionsPlayingProgressPost(body: body);
+  Future<Response> sessionsPlayingProgressPost({required PlaybackProgressInfo? body}) async {
+    if (ref.read(incognitoModeProvider)) return Response(http.Response("", 200), null);
+    return api.sessionsPlayingProgressPost(body: body);
+  }
 
   Future<Response<PlaybackInfoResponse>> itemsItemIdPlaybackInfoPost({
     required String? itemId,
