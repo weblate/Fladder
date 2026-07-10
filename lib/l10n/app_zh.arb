@@ -2100,5 +2100,17 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "mediaTypeCollection": "{count, plural, one{合集} other{合集}}",
+    "@mediaTypeCollection": {
+        "description": "Collection (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "incognitoMode": "隐身模式",
+    "incognitoModeDesc": "隐身模式会禁用向服务器发送播放状态"
 }
