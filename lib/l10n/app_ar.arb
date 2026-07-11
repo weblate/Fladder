@@ -2103,5 +2103,17 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "mediaTypeCollection": "{count, plural, one{مجموعة} other{مجموعات}}",
+    "@mediaTypeCollection": {
+        "description": "Collection (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "incognitoMode": "وضع التخفي",
+    "incognitoModeDesc": "وضع التخفي يمنع إرسال حالة التشغيل إلى الخادم"
 }
