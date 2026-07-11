@@ -54,10 +54,8 @@ class PhotoQueueSource {
         ItemFields.primaryimageaspectratio,
       ],
       isFavorite: filters.favourites,
-      filters: [
-        ...filters.itemFilters.included,
-      ],
-      includeItemTypes: [BaseItemKind.photo, BaseItemKind.video],
+      filters: filters.itemFilters.included,
+      includeItemTypes: filters.types.included.map((e) => e.dtoKind).expand((e) => e).toList(),
       enableImages: true,
       enableUserData: true,
       imageTypeLimit: 1,

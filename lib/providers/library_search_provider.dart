@@ -810,7 +810,7 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
           try {
             final fetchedAlbumContent = await api.itemsGet(
               parentId: album.id,
-              includeItemTypes: [BaseItemKind.video, BaseItemKind.photo],
+              includeItemTypes: state.filters.types.included.map((e) => e.dtoKind).expand((e) => e).toList(),
               recursive: true,
               fields: {
                 ItemFields.genres,
@@ -823,10 +823,8 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
                 ItemFields.customrating,
                 ItemFields.primaryimageaspectratio,
               }.toList(),
-              filters: [
-                ...state.filters.itemFilters.included,
-                if (state.filters.favourites == true) ItemFilter.isfavorite,
-              ],
+              isFavorite: state.filters.favourites,
+              filters: state.filters.itemFilters.included,
               sortBy: shuffle ? [ItemSortBy.random] : null,
             );
             albumItems.addAll(fetchedAlbumContent.body?.items.whereType<PhotoModel>() ?? []);
