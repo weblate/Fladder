@@ -117,7 +117,7 @@ List<Widget> buildClientSettingsAdvanced(BuildContext context, WidgetRef ref) {
           ),
         ),
       SettingsListTile(
-        label: Text(context.localized.incognitoMode),
+        label: Text(context.localized.incognitoModeGlobal),
         subLabel: Text(context.localized.incognitoModeDesc),
         onTap: () => ref.read(incognitoModeProvider.notifier).state = !ref.read(incognitoModeProvider),
         trailing: Switch(

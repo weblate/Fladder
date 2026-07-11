@@ -612,14 +612,14 @@ class JellyService {
   }
 
   Future<Response> sessionsPlayingPost({required PlaybackStartInfo? body}) async {
-    if (ref.read(incognitoModeProvider)) return Response(http.Response("", 200), null);
+    if (ref.read(incognitoProvider)) return Response(http.Response("", 200), null);
     return api.sessionsPlayingPost(body: body);
   }
 
   Future<Response> sessionsPlayingStoppedPost({
     required PlaybackStopInfo? body,
   }) async {
-    if (ref.read(incognitoModeProvider)) return Response(http.Response("", 200), null);
+    if (ref.read(incognitoProvider)) return Response(http.Response("", 200), null);
     final positionTicks = body?.positionTicks;
     if (positionTicks != null) {
       ref
@@ -630,7 +630,7 @@ class JellyService {
   }
 
   Future<Response> sessionsPlayingProgressPost({required PlaybackProgressInfo? body}) async {
-    if (ref.read(incognitoModeProvider)) return Response(http.Response("", 200), null);
+    if (ref.read(incognitoProvider)) return Response(http.Response("", 200), null);
     return api.sessionsPlayingProgressPost(body: body);
   }
 

@@ -2801,7 +2801,9 @@
       }
     }
   },
-  "incognitoMode": "Incognito mode",
+  "incognito": "Incognito",
+  "incognitoModeGlobal": "Incognito mode (App)",
+  "incognitoModeLocal": "Incognito mode (Profile)",
   "incognitoModeDesc": "Incognito mode disables sending playback status to the server",
   "showInSideBar": "Show in sidebar",
   "hideInSideBar": "Hide from sidebar",

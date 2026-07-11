@@ -226,7 +226,7 @@ class _AdaptiveLayoutBuilderState extends ConsumerState<AdaptiveLayoutBuilder> {
     final useAdditionalPadding = isDesktop || kIsWeb || isAndroidTV;
 
     final isOffline = ref.watch(connectivityStatusProvider.select((value) => value == ConnectionState.offline));
-    final isIncognitoMode = ref.watch(incognitoModeProvider);
+    final isIncognitoMode = ref.watch(incognitoProvider);
 
     final statusBarHeight = mediaQuery.padding.top;
 

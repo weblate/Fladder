@@ -351,4 +351,9 @@ class User extends _$User {
       ),
     );
   }
+
+  void toggleIncognitoMode() {
+    final currentMode = state?.incognitoMode;
+    userState = state?.copyWith(incognitoMode: currentMode == true ? null : true);
+  }
 }
