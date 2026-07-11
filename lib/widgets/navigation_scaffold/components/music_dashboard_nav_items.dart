@@ -6,18 +6,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 
 import 'package:fladder/jellyfin/jellyfin_open_api.enums.swagger.dart';
-import 'package:fladder/models/collection_types.dart';
 import 'package:fladder/models/item_base_model.dart';
 import 'package:fladder/models/items/playlist_model.dart';
 import 'package:fladder/models/library_filter_model.dart';
+import 'package:fladder/models/library_filters_model.dart';
 import 'package:fladder/models/view_model.dart';
 import 'package:fladder/providers/settings/client_settings_provider.dart';
+import 'package:fladder/providers/user_provider.dart';
 import 'package:fladder/routes/auto_router.gr.dart';
 import 'package:fladder/screens/library_search/widgets/library_views.dart';
 import 'package:fladder/screens/metadata/refresh_metadata.dart';
 import 'package:fladder/theme.dart';
 import 'package:fladder/util/color_extensions.dart';
-import 'package:fladder/util/fladder_image.dart';
 import 'package:fladder/util/localization_helper.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/navigation_button.dart';
 import 'package:fladder/widgets/shared/custom_tooltip.dart';
@@ -70,6 +70,7 @@ class MusicLibraryItem {
                 types: {
                   FladderItemType.musicAlbum: true,
                 },
+                recursive: true,
               ),
             ),
           );
@@ -91,6 +92,7 @@ class MusicLibraryItem {
                 types: {
                   FladderItemType.audio: true,
                 },
+                recursive: true,
               ),
             ),
           );
@@ -145,12 +147,13 @@ List<Widget> buildMusicDashboardNavItems(
   WidgetRef ref,
 ) {
   final musicItems = MusicLibraryItem.fromViews(context, views, expanded, ref);
+  final usePostersForLibrary = ref.watch(clientSettingsProvider.select((value) => value.usePosterForLibrary));
   return [
     ...musicItems.map(
       (item) => CombinedViewNavigationItem(
         label: item.label,
         expandedSideBar: expanded,
-        usePostersForLibrary: false,
+        usePostersForLibrary: usePostersForLibrary,
         shouldExpand: expanded,
         pathKey: item.pathKey,
         selectedIcon: item.selectedIcon,
@@ -162,6 +165,17 @@ List<Widget> buildMusicDashboardNavItems(
       indent: 32,
       endIndent: 32,
     ),
+    if (playLists.isNotEmpty && expanded)
+      Align(
+        alignment: Alignment.centerLeft,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 28),
+          child: Text(
+            context.localized.mediaTypePlaylist(2),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ),
+      ),
     ...playLists.entries.map(
       (entry) {
         final derivePosterColor = ref.watch(clientSettingsProvider.select((value) => value.dynamicPosterColors));
@@ -172,36 +186,18 @@ List<Widget> buildMusicDashboardNavItems(
         return CombinedViewNavigationItem(
           label: entry.key.name,
           expandedSideBar: expanded,
-          usePostersForLibrary: false,
+          usePostersForLibrary: usePostersForLibrary,
           shouldExpand: expanded,
           pathKey: entry.key.id,
           selectedIcon: Icon(FladderItemType.playlist.selectedicon),
           icon: Icon(FladderItemType.playlist.icon),
-          customIcon: SizedBox.square(
-            dimension: 45,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: FladderTheme.smallShape.borderRadius,
-                color: backgroundColor,
-              ),
-              clipBehavior: Clip.hardEdge,
-              padding: const EdgeInsets.all(2),
-              child: ClipRRect(
-                borderRadius: FladderTheme.smallShape.borderRadius,
-                child: FladderImage(
-                  image: entry.key.images?.primary,
-                  placeHolder: Container(
-                    color: backgroundColor,
-                    child: Icon(
-                      FladderItemType.playlist.icon,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
+          customIcon: usePostersForLibrary
+              ? entry.key.iconWidget(
+                  context,
+                  usePoster: usePostersForLibrary,
+                  backgroundColor: backgroundColor,
+                )
+              : null,
           onTap: () {
             ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.list;
             entry.key.navigateTo(context);
@@ -269,6 +265,94 @@ class CombinedViewNavigationItem extends ConsumerWidget {
   }
 }
 
+class FilterNavigationItem extends ConsumerWidget {
+  final List<ViewModel> views;
+  final LibraryFiltersModel filter;
+  final bool expandedSideBar;
+  final bool usePostersForLibrary;
+  final bool shouldExpand;
+  final TooltipPosition toolTipPosition;
+  const FilterNavigationItem({
+    required this.views,
+    required this.filter,
+    required this.expandedSideBar,
+    required this.usePostersForLibrary,
+    required this.shouldExpand,
+    this.toolTipPosition = TooltipPosition.right,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selected =
+        context.router.currentUrl.contains("parentId=${views.map((e) => e.id).join(",")},${filter.navKey}");
+
+    final actions = [
+      ItemActionButton(
+        label: Text(context.localized.hideInSideBar),
+        icon: const Icon(IconsaxPlusLinear.eye_slash),
+        action: () => ref.read(userProvider.notifier).hideFilterFromSideBar(filter),
+      )
+    ];
+
+    return CustomTooltip(
+      tooltipContent: Container(
+        decoration: BoxDecoration(
+          borderRadius: FladderTheme.smallShape.borderRadius,
+          color: Theme.of(context).colorScheme.surface,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            children: [
+              Text(
+                filter.name,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              Text(
+                views.map((e) => e.name).join(", "),
+                style: Theme.of(context).textTheme.bodySmall,
+              )
+            ],
+          ),
+        ),
+      ),
+      position: toolTipPosition,
+      child: views.last.toNavigationButton(
+        selected,
+        true,
+        shouldExpand,
+        label: filter.name,
+        () => filter.navigateTo(context),
+        onSecondaryTapDown: (details) => showItemContextMenu(
+          context,
+          ref,
+          details.globalPosition,
+          actions,
+        ),
+        onLongPress: () => showBottomSheetPill(
+          context: context,
+          content: (context, scrollController) => ListView(
+            shrinkWrap: true,
+            controller: scrollController,
+            children: actions.listTileItems(context, useIcons: true),
+          ),
+        ),
+        selectedIcon: filter.selectedIcon,
+        icon: filter.icon,
+        customIcon: filter.createIcon(
+          context,
+          usePostersForLibrary: usePostersForLibrary,
+          expandedSideBar: expandedSideBar,
+          selected: selected,
+          views: views,
+        ),
+        trailing: actions,
+      ),
+    );
+  }
+}
+
 class ViewNavigationItem extends ConsumerWidget {
   final ViewModel view;
   final bool expandedSideBar;
@@ -286,7 +370,8 @@ class ViewNavigationItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selected = context.router.currentUrl.contains(view.id);
+    final selected = context.router.currentUrl.contains("parentId=${view.id}&");
+
     final actions = [
       ItemActionButton(
         label: Text(context.localized.scanLibrary),
@@ -330,25 +415,7 @@ class ViewNavigationItem extends ConsumerWidget {
             children: actions.listTileItems(context, useIcons: true),
           ),
         ),
-        customIcon: usePostersForLibrary
-            ? Container(
-                decoration: BoxDecoration(
-                  borderRadius: FladderTheme.smallShape.borderRadius,
-                ),
-                clipBehavior: Clip.hardEdge,
-                child: SizedBox.square(
-                  dimension: 45,
-                  child: FladderImage(
-                    image: view.imageData?.primary,
-                    placeHolder: Card(
-                      child: Icon(
-                        selected ? view.collectionType.icon : view.collectionType.iconOutlined,
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            : null,
+        customIcon: usePostersForLibrary ? view.createIcon(context, selected: selected) : null,
         trailing: actions,
       ),
     );

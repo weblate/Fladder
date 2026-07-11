@@ -49,23 +49,14 @@ abstract class LibraryFilterModel with _$LibraryFilterModel {
     Map<FladderItemType, bool> types,
     @Default(SortingOptions.sortName) SortingOptions sortingOption,
     @Default(SortingOrder.ascending) SortingOrder sortOrder,
-    @Default(false) bool? favourites,
+    bool? favourites,
     @Default(true) bool hideEmptyShows,
-    @Default(true) bool? recursive,
+    @Default(false) bool? recursive,
     @Default(GroupBy.none) GroupBy groupBy,
+    @Default(false) bool isDefault,
   }) = _LibraryFilterModel;
 
-  bool get hasActiveFilters {
-    return genres.hasEnabled ||
-        studios.hasEnabled ||
-        tags.hasEnabled ||
-        years.hasEnabled ||
-        officialRatings.hasEnabled ||
-        hideEmptyShows ||
-        itemFilters.hasEnabled ||
-        recursive == false ||
-        favourites == true;
-  }
+  bool get hasActiveFilters => this != defaultFilter;
 
   LibraryFilterModel loadModel(LibraryFilterModel model) {
     return copyWith(
@@ -100,7 +91,9 @@ abstract class LibraryFilterModel with _$LibraryFilterModel {
         other.sortingOption == sortingOption &&
         other.sortOrder == sortOrder &&
         other.favourites == favourites &&
-        other.recursive == recursive;
+        other.recursive == recursive &&
+        other.groupBy == groupBy &&
+        other.hideEmptyShows == hideEmptyShows;
   }
 
   @override
@@ -113,24 +106,25 @@ abstract class LibraryFilterModel with _$LibraryFilterModel {
         officialRatings.hashCode ^
         types.hashCode ^
         sortingOption.hashCode ^
-        itemFilters.hashCode ^
         sortOrder.hashCode ^
         favourites.hashCode ^
-        recursive.hashCode;
+        recursive.hashCode ^
+        groupBy.hashCode ^
+        hideEmptyShows.hashCode;
   }
 
+  LibraryFilterModel get defaultFilter => LibraryFilterModel(
+        genres: genres.setAll(false),
+        tags: tags.setAll(false),
+        officialRatings: officialRatings.setAll(false),
+        years: years.setAll(false),
+        studios: studios.setAll(false),
+        itemFilters: itemFilters.setAll(false),
+        types: types.setAll(false),
+      );
+
   LibraryFilterModel clear() {
-    return copyWith(
-      genres: genres.setAll(false),
-      tags: tags.setAll(false),
-      officialRatings: officialRatings.setAll(false),
-      years: years.setAll(false),
-      favourites: false,
-      recursive: true,
-      studios: studios.setAll(false),
-      itemFilters: itemFilters.setAll(false),
-      hideEmptyShows: false,
-    );
+    return defaultFilter;
   }
 }
 
@@ -159,6 +153,7 @@ extension LibrarySearchRouteExtension on LibrarySearchRoute {
       types: model.types,
       genres: model.genres,
       recursive: model.recursive,
+      isDefault: model.isDefault,
     );
   }
 }

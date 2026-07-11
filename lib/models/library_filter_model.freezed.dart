@@ -28,6 +28,7 @@ mixin _$LibraryFilterModel implements DiagnosticableTreeMixin {
   bool get hideEmptyShows;
   bool? get recursive;
   GroupBy get groupBy;
+  bool get isDefault;
 
   /// Create a copy of LibraryFilterModel
   /// with the given fields replaced by the non-null parameter values.
@@ -56,12 +57,13 @@ mixin _$LibraryFilterModel implements DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('favourites', favourites))
       ..add(DiagnosticsProperty('hideEmptyShows', hideEmptyShows))
       ..add(DiagnosticsProperty('recursive', recursive))
-      ..add(DiagnosticsProperty('groupBy', groupBy));
+      ..add(DiagnosticsProperty('groupBy', groupBy))
+      ..add(DiagnosticsProperty('isDefault', isDefault));
   }
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'LibraryFilterModel(genres: $genres, itemFilters: $itemFilters, studios: $studios, tags: $tags, years: $years, officialRatings: $officialRatings, types: $types, sortingOption: $sortingOption, sortOrder: $sortOrder, favourites: $favourites, hideEmptyShows: $hideEmptyShows, recursive: $recursive, groupBy: $groupBy)';
+    return 'LibraryFilterModel(genres: $genres, itemFilters: $itemFilters, studios: $studios, tags: $tags, years: $years, officialRatings: $officialRatings, types: $types, sortingOption: $sortingOption, sortOrder: $sortOrder, favourites: $favourites, hideEmptyShows: $hideEmptyShows, recursive: $recursive, groupBy: $groupBy, isDefault: $isDefault)';
   }
 }
 
@@ -84,7 +86,8 @@ abstract mixin class $LibraryFilterModelCopyWith<$Res> {
       bool? favourites,
       bool hideEmptyShows,
       bool? recursive,
-      GroupBy groupBy});
+      GroupBy groupBy,
+      bool isDefault});
 }
 
 /// @nodoc
@@ -113,6 +116,7 @@ class _$LibraryFilterModelCopyWithImpl<$Res>
     Object? hideEmptyShows = null,
     Object? recursive = freezed,
     Object? groupBy = null,
+    Object? isDefault = null,
   }) {
     return _then(_self.copyWith(
       genres: null == genres
@@ -167,6 +171,10 @@ class _$LibraryFilterModelCopyWithImpl<$Res>
           ? _self.groupBy
           : groupBy // ignore: cast_nullable_to_non_nullable
               as GroupBy,
+      isDefault: null == isDefault
+          ? _self.isDefault
+          : isDefault // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -277,7 +285,8 @@ extension LibraryFilterModelPatterns on LibraryFilterModel {
             bool? favourites,
             bool hideEmptyShows,
             bool? recursive,
-            GroupBy groupBy)?
+            GroupBy groupBy,
+            bool isDefault)?
         $default, {
     required TResult orElse(),
   }) {
@@ -297,7 +306,8 @@ extension LibraryFilterModelPatterns on LibraryFilterModel {
             _that.favourites,
             _that.hideEmptyShows,
             _that.recursive,
-            _that.groupBy);
+            _that.groupBy,
+            _that.isDefault);
       case _:
         return orElse();
     }
@@ -331,7 +341,8 @@ extension LibraryFilterModelPatterns on LibraryFilterModel {
             bool? favourites,
             bool hideEmptyShows,
             bool? recursive,
-            GroupBy groupBy)
+            GroupBy groupBy,
+            bool isDefault)
         $default,
   ) {
     final _that = this;
@@ -350,7 +361,8 @@ extension LibraryFilterModelPatterns on LibraryFilterModel {
             _that.favourites,
             _that.hideEmptyShows,
             _that.recursive,
-            _that.groupBy);
+            _that.groupBy,
+            _that.isDefault);
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -383,7 +395,8 @@ extension LibraryFilterModelPatterns on LibraryFilterModel {
             bool? favourites,
             bool hideEmptyShows,
             bool? recursive,
-            GroupBy groupBy)?
+            GroupBy groupBy,
+            bool isDefault)?
         $default,
   ) {
     final _that = this;
@@ -402,7 +415,8 @@ extension LibraryFilterModelPatterns on LibraryFilterModel {
             _that.favourites,
             _that.hideEmptyShows,
             _that.recursive,
-            _that.groupBy);
+            _that.groupBy,
+            _that.isDefault);
       case _:
         return null;
     }
@@ -442,10 +456,11 @@ class _LibraryFilterModel extends LibraryFilterModel
       },
       this.sortingOption = SortingOptions.sortName,
       this.sortOrder = SortingOrder.ascending,
-      this.favourites = false,
+      this.favourites,
       this.hideEmptyShows = true,
-      this.recursive = true,
-      this.groupBy = GroupBy.none})
+      this.recursive = false,
+      this.groupBy = GroupBy.none,
+      this.isDefault = false})
       : _genres = genres,
         _itemFilters = itemFilters,
         _studios = studios,
@@ -528,7 +543,6 @@ class _LibraryFilterModel extends LibraryFilterModel
   @JsonKey()
   final SortingOrder sortOrder;
   @override
-  @JsonKey()
   final bool? favourites;
   @override
   @JsonKey()
@@ -539,6 +553,9 @@ class _LibraryFilterModel extends LibraryFilterModel
   @override
   @JsonKey()
   final GroupBy groupBy;
+  @override
+  @JsonKey()
+  final bool isDefault;
 
   /// Create a copy of LibraryFilterModel
   /// with the given fields replaced by the non-null parameter values.
@@ -571,12 +588,13 @@ class _LibraryFilterModel extends LibraryFilterModel
       ..add(DiagnosticsProperty('favourites', favourites))
       ..add(DiagnosticsProperty('hideEmptyShows', hideEmptyShows))
       ..add(DiagnosticsProperty('recursive', recursive))
-      ..add(DiagnosticsProperty('groupBy', groupBy));
+      ..add(DiagnosticsProperty('groupBy', groupBy))
+      ..add(DiagnosticsProperty('isDefault', isDefault));
   }
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'LibraryFilterModel(genres: $genres, itemFilters: $itemFilters, studios: $studios, tags: $tags, years: $years, officialRatings: $officialRatings, types: $types, sortingOption: $sortingOption, sortOrder: $sortOrder, favourites: $favourites, hideEmptyShows: $hideEmptyShows, recursive: $recursive, groupBy: $groupBy)';
+    return 'LibraryFilterModel(genres: $genres, itemFilters: $itemFilters, studios: $studios, tags: $tags, years: $years, officialRatings: $officialRatings, types: $types, sortingOption: $sortingOption, sortOrder: $sortOrder, favourites: $favourites, hideEmptyShows: $hideEmptyShows, recursive: $recursive, groupBy: $groupBy, isDefault: $isDefault)';
   }
 }
 
@@ -601,7 +619,8 @@ abstract mixin class _$LibraryFilterModelCopyWith<$Res>
       bool? favourites,
       bool hideEmptyShows,
       bool? recursive,
-      GroupBy groupBy});
+      GroupBy groupBy,
+      bool isDefault});
 }
 
 /// @nodoc
@@ -630,6 +649,7 @@ class __$LibraryFilterModelCopyWithImpl<$Res>
     Object? hideEmptyShows = null,
     Object? recursive = freezed,
     Object? groupBy = null,
+    Object? isDefault = null,
   }) {
     return _then(_LibraryFilterModel(
       genres: null == genres
@@ -684,6 +704,10 @@ class __$LibraryFilterModelCopyWithImpl<$Res>
           ? _self.groupBy
           : groupBy // ignore: cast_nullable_to_non_nullable
               as GroupBy,
+      isDefault: null == isDefault
+          ? _self.isDefault
+          : isDefault // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
