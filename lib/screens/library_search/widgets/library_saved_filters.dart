@@ -132,6 +132,7 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
                       (filter) {
                         final isCurrentFilter = filter.filter == currentFilters;
                         return Container(
+                          key: ValueKey(filter.id),
                           margin: const EdgeInsets.symmetric(vertical: 4),
                           child: Card(
                             color: isCurrentFilter
