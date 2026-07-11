@@ -1387,7 +1387,7 @@
   "unableToPlayMedia": "There was an error finding a compatible media type",
   "errorOpeningMedia": "Something went wrong trying to play this media",
   "unableToPlayBooksOnWeb": "Books are not supported on web for now",
-  "defaultFilterForLibrary": "Default filter for library",
+  "defaultFilterForLibrary": "Set default filter for library",
   "updateFilterForLibrary": "Update filter",
   "removeFilterForLibrary": "Remove {filter}?",
   "@removeFilterForLibrary": {
@@ -2805,5 +2805,6 @@
   "incognitoModeDesc": "Incognito mode disables sending playback status to the server",
   "showInSideBar": "Show in sidebar",
   "hideInSideBar": "Hide from sidebar",
-  "showInSideBarDesc": "Show this filter in the sidebar for quick access"
+  "showInSideBarDesc": "Show this filter in the sidebar for quick access",
+  "applyFilter": "Apply filter"
 }

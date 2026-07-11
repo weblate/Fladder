@@ -100,10 +100,20 @@ class ItemActionButton extends ItemAction {
       );
 
   @override
-  Widget toButton() => IconButton(
-      tooltip: label != null ? (label is Text ? (label as Text).data : null) : null,
-      onPressed: action,
-      icon: icon ?? const SizedBox.shrink());
+  Widget toButton() => backgroundColor != null
+      ? IconButton.filled(
+          onPressed: action,
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(backgroundColor),
+            foregroundColor: WidgetStatePropertyAll(foregroundColor),
+          ),
+          icon: icon ?? const SizedBox.shrink(),
+        )
+      : IconButton(
+          tooltip: label != null ? (label is Text ? (label as Text).data : null) : null,
+          onPressed: action,
+          icon: icon ?? const SizedBox.shrink(),
+        );
 
   @override
   PopupMenuItem toPopupMenuItem({bool useIcons = false}) {

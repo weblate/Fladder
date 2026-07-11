@@ -53,9 +53,9 @@ class PhotoQueueSource {
         ItemFields.customrating,
         ItemFields.primaryimageaspectratio,
       ],
+      isFavorite: filters.favourites,
       filters: [
         ...filters.itemFilters.included,
-        if (filters.favourites == true) ItemFilter.isfavorite,
       ],
       includeItemTypes: [BaseItemKind.photo, BaseItemKind.video],
       enableImages: true,

@@ -230,7 +230,7 @@ class _AdaptiveLayoutBuilderState extends ConsumerState<AdaptiveLayoutBuilder> {
 
     final statusBarHeight = mediaQuery.padding.top;
 
-    final bannerHeight = isOffline || isIncognitoMode ? 21.0 : 0.0;
+    final bannerHeight = isOffline || isIncognitoMode ? 32.0 : 0.0;
 
     final topPadding = isAndroidTV ? 12.0 : defaultTitleBarHeight;
 

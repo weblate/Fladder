@@ -183,7 +183,7 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
       ItemActionButton(
         label: Text(context.localized.filter(2)),
         action: () => showSavedFilters(context, uniqueKey),
-        icon: const Icon(IconsaxPlusLinear.refresh),
+        icon: const Icon(IconsaxPlusLinear.filter_edit),
       ),
       ItemActionButton(
         label: Text(context.localized.selectViewType),
@@ -508,306 +508,299 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
       }
     }
 
-    return MediaQuery(
-      data: mediaQuery.copyWith(
-        padding: mediaQuery.padding.copyWith(top: mediaQuery.padding.top + adaptiveLayout.statusBarHeight),
-        viewPadding: mediaQuery.viewPadding.copyWith(top: mediaQuery.viewPadding.top + adaptiveLayout.statusBarHeight),
-      ),
-      child: PopScope(
-        key: uniqueKey,
-        canPop: !librarySearchResults.selecteMode,
-        onPopInvokedWithResult: (didPop, result) {
-          if (librarySearchResults.selecteMode) {
-            libraryProvider.toggleSelectMode();
-          }
-        },
-        child: NestedScaffold(
-          background: BackgroundImage(images: postersList.map((e) => e.images).nonNulls.toList()),
-          body: Scaffold(
-            extendBody: true,
-            backgroundColor: Colors.transparent,
-            extendBodyBehindAppBar: true,
-            bottomNavigationBar: AdaptiveLayout.inputDeviceOf(context) != InputDevice.dPad
-                ? HideOnScroll(
-                    controller: scrollController,
-                    visibleBuilder: (visible) => BottomMenuBar(
-                      actions: generateQuickActions(false),
-                      combined: true,
-                      extended: visible,
-                      sticky: librarySearchResults.selecteMode,
-                      fabAction: FloatingActionButton(
-                        onPressed: () => playLibrary(false),
-                        tooltip: context.localized.libraryPlayItems,
-                        child: const Icon(IconsaxPlusBold.play),
-                      ),
+    return PopScope(
+      key: uniqueKey,
+      canPop: !librarySearchResults.selecteMode,
+      onPopInvokedWithResult: (didPop, result) {
+        if (librarySearchResults.selecteMode) {
+          libraryProvider.toggleSelectMode();
+        }
+      },
+      child: NestedScaffold(
+        background: BackgroundImage(images: postersList.map((e) => e.images).nonNulls.toList()),
+        body: Scaffold(
+          extendBody: true,
+          backgroundColor: Colors.transparent,
+          extendBodyBehindAppBar: true,
+          bottomNavigationBar: AdaptiveLayout.inputDeviceOf(context) != InputDevice.dPad
+              ? HideOnScroll(
+                  controller: scrollController,
+                  visibleBuilder: (visible) => BottomMenuBar(
+                    actions: generateQuickActions(false),
+                    combined: true,
+                    extended: visible,
+                    sticky: librarySearchResults.selecteMode,
+                    fabAction: FloatingActionButton(
+                      onPressed: () => playLibrary(false),
+                      tooltip: context.localized.libraryPlayItems,
+                      child: const Icon(IconsaxPlusBold.play),
                     ),
-                  )
-                : null,
-            body: PinchPosterZoom(
-              scaleDifference: (difference) => ref.read(clientSettingsProvider.notifier).addPosterSize(difference),
-              child: FladderScrollbar(
-                visible: AdaptiveLayout.inputDeviceOf(context) != InputDevice.pointer,
-                controller: scrollController,
-                child: PullToRefresh(
-                  refreshKey: refreshKey,
-                  autoFocus: false,
-                  contextRefresh: false,
-                  onRefresh: () async {
-                    final filter = incomingFilter();
-                    if (libraryProvider.mounted) {
-                      return libraryProvider.initRefresh(
-                        widget.folderId,
-                        widget.viewModelId,
-                        filter,
-                      );
-                    }
-                  },
-                  refreshOnStart: false,
-                  child: (context) {
-                    return CustomScrollView(
-                      controller: scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      slivers: [
-                        SliverAppBar(
-                          floating: !floatingAppBar,
-                          collapsedHeight: 80,
-                          automaticallyImplyLeading: false,
-                          primary: true,
-                          pinned: floatingAppBar,
-                          elevation: 5,
-                          surfaceTintColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                          backgroundColor: Colors.transparent,
-                          titleSpacing: 4,
-                          flexibleSpace: RepaintBoundary(
-                            child: Container(
-                              width: double.infinity,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    Theme.of(context).colorScheme.surface.withAlpha(255),
-                                    Theme.of(context).colorScheme.surface.withAlpha(0),
-                                  ],
-                                ),
+                  ),
+                )
+              : null,
+          body: PinchPosterZoom(
+            scaleDifference: (difference) => ref.read(clientSettingsProvider.notifier).addPosterSize(difference),
+            child: FladderScrollbar(
+              visible: AdaptiveLayout.inputDeviceOf(context) != InputDevice.pointer,
+              controller: scrollController,
+              child: PullToRefresh(
+                refreshKey: refreshKey,
+                autoFocus: false,
+                contextRefresh: false,
+                onRefresh: () async {
+                  final filter = incomingFilter();
+                  if (libraryProvider.mounted) {
+                    return libraryProvider.initRefresh(
+                      widget.folderId,
+                      widget.viewModelId,
+                      filter,
+                    );
+                  }
+                },
+                refreshOnStart: false,
+                child: (context) {
+                  return CustomScrollView(
+                    controller: scrollController,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    slivers: [
+                      SliverAppBar(
+                        floating: !floatingAppBar,
+                        collapsedHeight: 80,
+                        automaticallyImplyLeading: false,
+                        primary: true,
+                        pinned: floatingAppBar,
+                        elevation: 5,
+                        surfaceTintColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        backgroundColor: Colors.transparent,
+                        titleSpacing: 4,
+                        flexibleSpace: RepaintBoundary(
+                          child: Container(
+                            width: double.infinity,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Theme.of(context).colorScheme.surface.withAlpha(255),
+                                  Theme.of(context).colorScheme.surface.withAlpha(0),
+                                ],
                               ),
-                              child: useBlurredBackground
-                                  ? ShaderMask(
-                                      shaderCallback: (bounds) {
-                                        return LinearGradient(
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                          colors: [
-                                            Colors.white.withAlpha(255),
-                                            Colors.white.withAlpha(0),
-                                          ],
-                                        ).createShader(
-                                          Rect.fromLTRB(0, 10, bounds.width, bounds.height),
-                                        );
-                                      },
-                                      blendMode: BlendMode.dstIn,
-                                      child: const BackgroundImage(),
-                                    )
-                                  : null,
                             ),
+                            child: useBlurredBackground
+                                ? ShaderMask(
+                                    shaderCallback: (bounds) {
+                                      return LinearGradient(
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        colors: [
+                                          Colors.white.withAlpha(255),
+                                          Colors.white.withAlpha(0),
+                                        ],
+                                      ).createShader(
+                                        Rect.fromLTRB(0, 10, bounds.width, bounds.height),
+                                      );
+                                    },
+                                    blendMode: BlendMode.dstIn,
+                                    child: const BackgroundImage(),
+                                  )
+                                : null,
                           ),
-                          actions: [
-                            SizedBox.square(
-                              dimension: toolbarHeight,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.surfaceContainerLow,
-                                  borderRadius: FladderTheme.defaultShape.borderRadius,
-                                ),
-                                child: Tooltip(
-                                  message: librarySearchResults.nestedCurrentItem?.type.label(context.localized) ??
-                                      context.localized.library(1),
-                                  child: AdaptiveLayout.inputDeviceOf(context) == InputDevice.pointer
-                                      ? PopupMenuButton(
-                                          tooltip: context.localized.library(1),
-                                          icon: Icon(librarySearchResults.nestedCurrentItem?.type.icon ??
-                                              IconsaxPlusLinear.document),
-                                          itemBuilder: (context) => menuActions.toList().popupMenuItems(useIcons: true),
-                                        )
-                                      : IconButton(
-                                          onPressed: () async {
-                                            await showBottomSheetPill(
-                                              context: context,
-                                              content: (context, scrollController) => ListView(
-                                                shrinkWrap: true,
-                                                controller: scrollController,
-                                                children: menuActions
-                                                    .map(
-                                                      (e) => e.toListItem(context, useIcons: true, shouldPop: true),
-                                                    )
-                                                    .toList(),
-                                              ),
-                                            );
-                                          },
-                                          icon: Padding(
-                                            padding: const EdgeInsets.all(6),
-                                            child: Icon(
-                                              librarySearchResults.nestedCurrentItem?.type.icon ??
-                                                  IconsaxPlusLinear.document,
-                                              color:
-                                                  librarySearchResults.nestedCurrentItem?.userData.isFavourite == true
-                                                      ? Theme.of(context).colorScheme.primary
-                                                      : null,
-                                            ),
-                                          ),
-                                        ),
-                                ),
+                        ),
+                        actions: [
+                          SizedBox.square(
+                            dimension: toolbarHeight,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.surfaceContainerLow,
+                                borderRadius: FladderTheme.defaultShape.borderRadius,
                               ),
-                            ),
-                            if (AdaptiveLayout.layoutModeOf(context) == LayoutMode.single) ...[
-                              const SizedBox(width: 6),
-                              SizedBox.square(dimension: toolbarHeight - 3.0, child: const SettingsUserIcon()),
-                            ],
-                            const SizedBox(width: 12)
-                          ],
-                          title: Padding(
-                            padding: sideBarPadding,
-                            child: SizedBox(
-                              height: toolbarHeight,
-                              child: Row(
-                                spacing: 2,
-                                children: [
-                                  const SizedBox(width: 2),
-                                  if (AdaptiveLayout.inputDeviceOf(context) != InputDevice.dPad)
-                                    Center(
-                                      child: SizedBox.square(
-                                        dimension: toolbarHeight,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context).colorScheme.surfaceContainerLow,
-                                            borderRadius: FladderTheme.defaultShape.borderRadius,
+                              child: Tooltip(
+                                message: librarySearchResults.nestedCurrentItem?.type.label(context.localized) ??
+                                    context.localized.library(1),
+                                child: AdaptiveLayout.inputDeviceOf(context) == InputDevice.pointer
+                                    ? PopupMenuButton(
+                                        tooltip: context.localized.library(1),
+                                        icon: Icon(librarySearchResults.nestedCurrentItem?.type.icon ??
+                                            IconsaxPlusLinear.document),
+                                        itemBuilder: (context) => menuActions.toList().popupMenuItems(useIcons: true),
+                                      )
+                                    : IconButton(
+                                        onPressed: () async {
+                                          await showBottomSheetPill(
+                                            context: context,
+                                            content: (context, scrollController) => ListView(
+                                              shrinkWrap: true,
+                                              controller: scrollController,
+                                              children: menuActions
+                                                  .map(
+                                                    (e) => e.toListItem(context, useIcons: true, shouldPop: true),
+                                                  )
+                                                  .toList(),
+                                            ),
+                                          );
+                                        },
+                                        icon: Padding(
+                                          padding: const EdgeInsets.all(6),
+                                          child: Icon(
+                                            librarySearchResults.nestedCurrentItem?.type.icon ??
+                                                IconsaxPlusLinear.document,
+                                            color: librarySearchResults.nestedCurrentItem?.userData.isFavourite == true
+                                                ? Theme.of(context).colorScheme.primary
+                                                : null,
                                           ),
-                                          child: context.router.backButton(),
                                         ),
                                       ),
-                                    ),
-                                  Flexible(
-                                    child: Hero(
-                                      tag: "PrimarySearch",
-                                      child: SuggestionSearchBar(
-                                        autoFocus: isEmptySearchScreen,
-                                        key: uniqueKey,
-                                        title: librarySearchResults.searchBarTitle(context),
-                                        debounceDuration: const Duration(seconds: 1),
-                                        onItem: (value) async {
-                                          await value.navigateTo(context);
-                                          refreshKey.currentState?.show();
-                                        },
-                                        onSubmited: (value) async {
-                                          if (librarySearchResults.searchQuery != value) {
-                                            libraryProvider.setSearch(value);
-                                            refreshKey.currentState?.show();
-                                          }
-                                        },
+                              ),
+                            ),
+                          ),
+                          if (AdaptiveLayout.layoutModeOf(context) == LayoutMode.single) ...[
+                            const SizedBox(width: 6),
+                            SizedBox.square(dimension: toolbarHeight - 3.0, child: const SettingsUserIcon()),
+                          ],
+                          const SizedBox(width: 12)
+                        ],
+                        title: Padding(
+                          padding: sideBarPadding,
+                          child: SizedBox(
+                            height: toolbarHeight,
+                            child: Row(
+                              spacing: 2,
+                              children: [
+                                const SizedBox(width: 2),
+                                if (AdaptiveLayout.inputDeviceOf(context) != InputDevice.dPad)
+                                  Center(
+                                    child: SizedBox.square(
+                                      dimension: toolbarHeight,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).colorScheme.surfaceContainerLow,
+                                          borderRadius: FladderTheme.defaultShape.borderRadius,
+                                        ),
+                                        child: context.router.backButton(),
                                       ),
                                     ),
                                   ),
+                                Flexible(
+                                  child: Hero(
+                                    tag: "PrimarySearch",
+                                    child: SuggestionSearchBar(
+                                      autoFocus: isEmptySearchScreen,
+                                      key: uniqueKey,
+                                      title: librarySearchResults.searchBarTitle(context),
+                                      debounceDuration: const Duration(seconds: 1),
+                                      onItem: (value) async {
+                                        await value.navigateTo(context);
+                                        refreshKey.currentState?.show();
+                                      },
+                                      onSubmited: (value) async {
+                                        if (librarySearchResults.searchQuery != value) {
+                                          libraryProvider.setSearch(value);
+                                          refreshKey.currentState?.show();
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        bottom: PreferredSize(
+                          preferredSize: Size(0, AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad ? 85 : 35),
+                          child: Padding(
+                            padding: sideBarPadding,
+                            child: IgnorePointer(
+                              ignoring: librarySearchResults.loading,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Row(
+                                    spacing: 6,
+                                    children: [
+                                      ScrollStatePosition(
+                                        controller: scrollController,
+                                        positionBuilder: (state) => AnimatedFadeSize(
+                                          child: state != ScrollState.top
+                                              ? Padding(
+                                                  padding: const EdgeInsets.only(left: 8.0),
+                                                  child: Tooltip(
+                                                    message: context.localized.scrollToTop,
+                                                    child: IconButton.filled(
+                                                      onPressed: () => scrollController.animateTo(0,
+                                                          duration: const Duration(milliseconds: 500),
+                                                          curve: Curves.easeInOutCubic),
+                                                      icon: const Icon(
+                                                        IconsaxPlusLinear.arrow_up,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : const SizedBox(),
+                                        ),
+                                      ),
+                                      Flexible(
+                                        child: SingleChildScrollView(
+                                          padding: const EdgeInsets.all(8),
+                                          scrollDirection: Axis.horizontal,
+                                          child: LibraryFilterChips(
+                                            key: uniqueKey,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  if (AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                                      height: 50,
+                                      child: Row(
+                                        spacing: 4,
+                                        children: generateQuickActions(true).map((e) => e.toButton()).toList(),
+                                      ),
+                                    )
                                 ],
                               ),
                             ),
                           ),
-                          bottom: PreferredSize(
-                            preferredSize: Size(0, AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad ? 85 : 35),
-                            child: Padding(
-                              padding: sideBarPadding,
-                              child: IgnorePointer(
-                                ignoring: librarySearchResults.loading,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Row(
-                                      spacing: 6,
-                                      children: [
-                                        ScrollStatePosition(
-                                          controller: scrollController,
-                                          positionBuilder: (state) => AnimatedFadeSize(
-                                            child: state != ScrollState.top
-                                                ? Padding(
-                                                    padding: const EdgeInsets.only(left: 8.0),
-                                                    child: Tooltip(
-                                                      message: context.localized.scrollToTop,
-                                                      child: IconButton.filled(
-                                                        onPressed: () => scrollController.animateTo(0,
-                                                            duration: const Duration(milliseconds: 500),
-                                                            curve: Curves.easeInOutCubic),
-                                                        icon: const Icon(
-                                                          IconsaxPlusLinear.arrow_up,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                : const SizedBox(),
-                                          ),
-                                        ),
-                                        Flexible(
-                                          child: SingleChildScrollView(
-                                            padding: const EdgeInsets.all(8),
-                                            scrollDirection: Axis.horizontal,
-                                            child: LibraryFilterChips(
-                                              key: uniqueKey,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    if (AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad)
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                                        height: 50,
-                                        child: Row(
-                                          spacing: 4,
-                                          children: generateQuickActions(true).map((e) => e.toButton()).toList(),
-                                        ),
-                                      )
-                                  ],
-                                ),
-                              ),
-                            ),
+                        ),
+                      ),
+                      if (AdaptiveLayout.of(context).isDesktop)
+                        const SliverToBoxAdapter(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              PosterSizeWidget(),
+                            ],
                           ),
                         ),
-                        if (AdaptiveLayout.of(context).isDesktop)
-                          const SliverToBoxAdapter(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                PosterSizeWidget(),
-                              ],
-                            ),
+                      if (postersList.isNotEmpty)
+                        SliverPadding(
+                          padding: EdgeInsets.only(
+                            left: mediaQuery.padding.left,
+                            right: mediaQuery.padding.right,
+                          ).add(
+                            EdgeInsetsDirectional.only(start: adaptiveLayout.sideBarWidth),
                           ),
-                        if (postersList.isNotEmpty)
-                          SliverPadding(
-                            padding: EdgeInsets.only(
-                              left: mediaQuery.padding.left,
-                              right: mediaQuery.padding.right,
-                            ).add(
-                              EdgeInsetsDirectional.only(start: adaptiveLayout.sideBarWidth),
-                            ),
-                            sliver: LibraryViews(
-                              key: uniqueKey,
-                              items: postersList,
-                              groupByType: librarySearchResults.filters.groupBy,
-                            ),
-                          )
-                        else
-                          SliverFillRemaining(
-                            child: Center(
-                              child: Text(context.localized.noItemsToShow),
-                            ),
+                          sliver: LibraryViews(
+                            key: uniqueKey,
+                            items: postersList,
+                            groupByType: librarySearchResults.filters.groupBy,
                           ),
-                        SliverPadding(padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.20))
-                      ],
-                    );
-                  },
-                ),
+                        )
+                      else
+                        SliverFillRemaining(
+                          child: Center(
+                            child: Text(context.localized.noItemsToShow),
+                          ),
+                        ),
+                      SliverPadding(padding: EdgeInsets.only(bottom: MediaQuery.sizeOf(context).height * 0.20))
+                    ],
+                  );
+                },
               ),
             ),
           ),

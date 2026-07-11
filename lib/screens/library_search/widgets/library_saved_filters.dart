@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 
+import 'package:fladder/models/library_filters_model.dart';
 import 'package:fladder/providers/library_search_provider.dart';
 import 'package:fladder/providers/views_provider.dart';
 import 'package:fladder/screens/shared/default_alert_dialog.dart';
 import 'package:fladder/screens/shared/outlined_text_field.dart';
+import 'package:fladder/util/adaptive_layout/adaptive_layout.dart';
 import 'package:fladder/util/localization_helper.dart';
 import 'package:fladder/util/map_bool_helper.dart';
+import 'package:fladder/widgets/shared/item_actions.dart';
 
 Future<void> showSavedFilters(
   BuildContext context,
@@ -50,6 +53,64 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
         .watch(viewsProvider.select((value) => value.views.where((element) => filterKeys.contains(element.id))))
         .toList();
 
+    List<ItemActionButton> filterActions(LibraryFiltersModel filter, bool isCurrentFilter) => [
+          ItemActionButton(
+            label: Text(context.localized.applyFilter),
+            action: isCurrentFilter ? null : () => provider.loadModel(filter.filter),
+            icon: const Icon(IconsaxPlusBold.filter_add),
+          ),
+          if (views.length == 1)
+            ItemActionButton(
+              label: Text(context.localized.defaultFilterForLibrary),
+              backgroundColor: filter.isFavourite ? Colors.yellowAccent.shade700.withValues(alpha: 0.5) : null,
+              foregroundColor: filter.isFavourite ? Colors.yellowAccent : null,
+              action: () => filterProvider.saveFilter(filter.copyWith(isFavourite: !filter.isFavourite)),
+              icon: Icon(
+                color: filter.isFavourite ? Colors.yellowAccent : null,
+                filter.isFavourite ? IconsaxPlusBold.star_1 : IconsaxPlusLinear.star_1,
+              ),
+            ),
+          ItemActionButton(
+            label: Text(context.localized.showInSideBar),
+            backgroundColor: filter.showInSideBar ? Colors.lightBlueAccent.shade700.withValues(alpha: 0.5) : null,
+            foregroundColor: filter.showInSideBar ? Colors.lightBlueAccent : null,
+            action: () => filterProvider.saveFilter(filter.copyWith(showInSideBar: !filter.showInSideBar)),
+            icon: Icon(
+              color: filter.showInSideBar ? Colors.lightBlueAccent : null,
+              filter.showInSideBar ? IconsaxPlusBold.menu : IconsaxPlusLinear.menu_1,
+            ),
+          ),
+          ItemActionButton(
+            label: Text(context.localized.updateFilterForLibrary),
+            action: isCurrentFilter || anyFilterSelected ? null : () => provider.updateFilter(filter),
+            icon: const Icon(IconsaxPlusBold.refresh),
+          ),
+          ItemActionButton(
+            label: Text(context.localized.delete),
+            action: () {
+              showDefaultAlertDialog(
+                context,
+                context.localized.removeFilterForLibrary(filter.name),
+                context.localized.deleteFilterConfirmation,
+                (context) {
+                  filterProvider.removeFilter(filter);
+                  Navigator.of(context).pop();
+                },
+                context.localized.delete,
+                (context) {
+                  Navigator.of(context).pop();
+                },
+                context.localized.cancel,
+              );
+            },
+            backgroundColor: Theme.of(context).colorScheme.errorContainer,
+            foregroundColor: Theme.of(context).colorScheme.onErrorContainer,
+            icon: const Icon(IconsaxPlusLinear.trash),
+          ),
+        ];
+
+    final smallSize = AdaptiveLayout.viewSizeOf(context) <= ViewSize.phone;
+
     return Dialog(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -78,83 +139,27 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
                                 : null,
                             child: Padding(
                               padding: const EdgeInsets.only(right: 8),
-                              child: Row(spacing: 8, children: [
-                                Expanded(
-                                  child: OutlinedTextField(
-                                    fillColor: Colors.transparent,
-                                    controller: TextEditingController(text: filter.name),
-                                    onSubmitted: (value) => provider.updateFilter(filter.copyWith(name: value)),
-                                  ),
-                                ),
-                                IconButton.filledTonal(
-                                  onPressed: isCurrentFilter ? null : () => provider.loadModel(filter.filter),
-                                  icon: const Icon(IconsaxPlusBold.filter_add),
-                                ),
-                                if (views.length == 1)
-                                  IconButton.filledTonal(
-                                    tooltip: context.localized.defaultFilterForLibrary,
-                                    style: ButtonStyle(
-                                      backgroundColor: WidgetStatePropertyAll(
-                                        filter.isFavourite ? Colors.yellowAccent.shade700.withValues(alpha: 0.5) : null,
-                                      ),
-                                    ),
-                                    onPressed: () =>
-                                        filterProvider.saveFilter(filter.copyWith(isFavourite: !filter.isFavourite)),
-                                    icon: Icon(
-                                      color: filter.isFavourite ? Colors.yellowAccent : null,
-                                      filter.isFavourite ? IconsaxPlusBold.star_1 : IconsaxPlusLinear.star_1,
+                              child: Row(
+                                spacing: 8,
+                                children: [
+                                  Expanded(
+                                    child: OutlinedTextField(
+                                      fillColor: Colors.transparent,
+                                      controller: TextEditingController(text: filter.name),
+                                      onSubmitted: (value) => provider.updateFilter(filter.copyWith(name: value)),
                                     ),
                                   ),
-                                IconButton.filledTonal(
-                                  tooltip: context.localized.showInSideBar,
-                                  style: ButtonStyle(
-                                    backgroundColor: WidgetStatePropertyAll(
-                                      filter.showInSideBar
-                                          ? Colors.lightBlueAccent.shade700.withValues(alpha: 0.5)
-                                          : null,
-                                    ),
-                                  ),
-                                  onPressed: () =>
-                                      filterProvider.saveFilter(filter.copyWith(showInSideBar: !filter.showInSideBar)),
-                                  icon: Icon(
-                                    color: filter.showInSideBar ? Colors.lightBlueAccent : null,
-                                    filter.showInSideBar ? IconsaxPlusBold.menu : IconsaxPlusLinear.menu_1,
-                                  ),
-                                ),
-                                IconButton.filledTonal(
-                                  tooltip: context.localized.updateFilterForLibrary,
-                                  onPressed:
-                                      isCurrentFilter || anyFilterSelected ? null : () => provider.updateFilter(filter),
-                                  icon: const Icon(IconsaxPlusBold.refresh),
-                                ),
-                                IconButton.filledTonal(
-                                  tooltip: context.localized.delete,
-                                  onPressed: () {
-                                    showDefaultAlertDialog(
-                                      context,
-                                      context.localized.removeFilterForLibrary(filter.name),
-                                      context.localized.deleteFilterConfirmation,
-                                      (context) {
-                                        filterProvider.removeFilter(filter);
-                                        Navigator.of(context).pop();
-                                      },
-                                      context.localized.delete,
-                                      (context) {
-                                        Navigator.of(context).pop();
-                                      },
-                                      context.localized.cancel,
-                                    );
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor:
-                                        WidgetStatePropertyAll(Theme.of(context).colorScheme.errorContainer),
-                                    iconColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.onErrorContainer),
-                                    foregroundColor:
-                                        WidgetStatePropertyAll(Theme.of(context).colorScheme.onErrorContainer),
-                                  ),
-                                  icon: const Icon(IconsaxPlusLinear.trash),
-                                ),
-                              ]),
+                                  if (smallSize)
+                                    PopupMenuButton(
+                                      icon: const Icon(IconsaxPlusLinear.more),
+                                      itemBuilder: (context) => filterActions(filter, isCurrentFilter)
+                                          .map((e) => e.toPopupMenuItem(useIcons: true))
+                                          .toList(),
+                                    )
+                                  else
+                                    ...filterActions(filter, isCurrentFilter).map((e) => e.toButton())
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -165,7 +170,7 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
               ),
               const Divider(),
             ],
-            if (filters.length < 10 && !anyFilterSelected)
+            if (!anyFilterSelected)
               StatefulBuilder(builder: (context, setState) {
                 return Container(
                   margin: const EdgeInsets.symmetric(vertical: 4),
@@ -200,27 +205,6 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
                   ),
                 );
               })
-            else if (filters.length >= 10)
-              Text(context.localized.libraryFiltersLimitReached),
-            ElevatedButton(
-              onPressed: () {
-                showDefaultAlertDialog(
-                  context,
-                  context.localized.libraryFiltersRemoveAll,
-                  context.localized.libraryFiltersRemoveAllConfirm,
-                  (context) {
-                    filterProvider.deleteAllFilters();
-                    Navigator.of(context).pop();
-                  },
-                  context.localized.delete,
-                  (context) {
-                    Navigator.of(context).pop();
-                  },
-                  context.localized.cancel,
-                );
-              },
-              child: Text(context.localized.libraryFiltersRemoveAll),
-            ),
           ],
         ),
       ),
