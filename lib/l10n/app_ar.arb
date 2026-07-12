@@ -613,7 +613,7 @@
     "videoScalingContain": "احتواء",
     "videoScalingCover": "تغطية",
     "unableToPlayMedia": "حدث خطأ في العثور على نوع وسائط متوافق",
-    "defaultFilterForLibrary": "اعدادات الفلتر الافتراضي للمكتبة",
+    "defaultFilterForLibrary": "إعداد الفلتر الافتراضي للمكتبة",
     "updateFilterForLibrary": "تحديث الفلتر",
     "libraryFiltersLimitReached": "تم الوصول إلى حد الفلاتر (10) قم بإزالة بعض الفلتره",
     "libraryFiltersRemoveAll": "إزالة جميع الفلاتر",
@@ -2115,5 +2115,12 @@
         }
     },
     "incognitoMode": "وضع التخفي",
-    "incognitoModeDesc": "وضع التخفي يمنع إرسال حالة التشغيل إلى الخادم"
+    "incognitoModeDesc": "وضع التخفي يمنع إرسال حالة التشغيل إلى الخادم",
+    "incognito": "التخفي",
+    "incognitoModeGlobal": "وضع التخفي (التطبيق)",
+    "incognitoModeLocal": "وضع التخفي (الملف الشخصي)",
+    "showInSideBar": "إظهار في الشريط الجانبي",
+    "hideInSideBar": "إخفاء من الشريط الجانبي",
+    "showInSideBarDesc": "إظهار هذا الفلتر في الشريط الجانبي للوصول السريع",
+    "applyFilter": "تطبيق الفلتر"
 }
