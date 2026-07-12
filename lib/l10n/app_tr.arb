@@ -1739,5 +1739,220 @@
     "removeFromRadarr": "Radarr'dan kaldır",
     "markAllSeasonsAsAvailable": "Tüm sezonları mevcut olarak işaretle",
     "markAsAvailable": "Mevcut olarak işaretle",
-    "deleteData": "Verileri sil"
+    "deleteData": "Verileri sil",
+    "mediaTypeCollection": "{count, plural, one{Koleksiyon } other{Koleksiyonlar}}",
+    "@mediaTypeCollection": {
+        "description": "Collection (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "posterColorsTitle": "Oluşturulan afiş renkleri",
+    "posterColorsDesc": "Afişlerde varsayılan renk yerine oluşturulan renkleri kullan",
+    "removeSeriesFromSonarrConfirm": "Bu diziyi Sonarr'dan kaldırmak istiyor musunuz? Bu işlem, dosyalar DAHİL tüm verileri silecektir.",
+    "removeMovieFromRadarrConfirm": "Bu filmi Radarr'dan kaldırmak istiyor musunuz? Bu işlem, dosyalar DAHİL tüm verileri silecektir.",
+    "removedFromSonarr": "Sonarr'dan kaldırıldı",
+    "removedFromRadarr": "Radarr'dan kaldırıldı",
+    "markAllSeasonsAsAvailableConfirm": "Tüm sezonları mevcut olarak işaretle?",
+    "markAsAvailableConfirm": "Mevcut olarak işaretle?",
+    "markedAsAvailable": "Mevcut olarak işaretlendi",
+    "deleteSeerrDataConfirm": "Seerr'deki tüm dosyaları silmek istiyor musunuz? Bu işlem geri alınamaz.\n Eğer veriler {service} üzerinde hâlâ mevcutsa, yeniden içe aktarılabilir.",
+    "@deleteSeerrDataConfirm": {
+        "description": "Confirmation message for deleting Seerr data",
+        "placeholders": {
+            "service": {
+                "type": "String",
+                "example": "Sonarr/Radarr"
+            }
+        }
+    },
+    "dataDeleted": "Veriler silindi",
+    "approve": "Onayla",
+    "decline": "Reddet",
+    "pendingRequests": "{count, plural, other{Bekleyen istek yok} one{{count} bekleyen istek} two{{count} bekleyen istek}}",
+    "@pendingRequests": {
+        "description": "pendingRequests",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "processing": "İşleniyor",
+    "seerrDetails": "Seerr detayları",
+    "viewTrailer": "Fragmanı izle",
+    "watch": "İzle",
+    "watchChannel": "{channel} izle",
+    "@watchChannel": {
+        "placeholders": {
+            "channel": {
+                "type": "String"
+            }
+        }
+    },
+    "now": "Şimdi",
+    "nowPlaying": "Şimdi oynatılan",
+    "upNext": "Sıradaki",
+    "queue": "Kuyruk",
+    "queueIsEmpty": "Kuyruk boş",
+    "queueItemCount": "{count} öğe",
+    "@queueItemCount": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "removeFromQueue": "Kuyruktan kaldır",
+    "noPrograms": "Mevcut program yok",
+    "switchChannel": "Kanal değiştir",
+    "switchChannelDesc": "{channelName} kanalında \"{programName}\" izlemek istiyor musunuz?",
+    "@switchChannelDesc": {
+        "placeholders": {
+            "programName": {
+                "type": "String"
+            },
+            "channelName": {
+                "type": "String"
+            }
+        }
+    },
+    "specialFeature": "{count, plural, other{Özel İçerikler} one{Özel İçerik} }",
+    "@specialFeature": {
+        "description": "special feature",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "activeTvChannels": "Aktif TV Kanalları",
+    "enableNewTVLayout": "Yeni TV düzenini etkinleştir",
+    "liveTV": "Canlı TV",
+    "liveTvManageTunersEpg": "Tuner cihazlarını ve EPG sağlayıcılarını yönet",
+    "tunerDevices": "Tuner Cihazları",
+    "epgGuideProviders": "EPG Rehber Sağlayıcıları",
+    "noTunerDevicesConfigured": "Yapılandırılmış tuner cihazı yok",
+    "noEpgProvidersConfigured": "Yapılandırılmış EPG sağlayıcısı yok",
+    "addTunerDevice": "Tuner Cihazı Ekle",
+    "addProvider": "Sağlayıcı Ekle",
+    "tunerHostAddedSuccessfully": "Tuner sunucusu başarıyla eklendi",
+    "failedToAddTunerHost": "Tuner sunucusu eklenemedi: {error}",
+    "@failedToAddTunerHost": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "tunerHostUpdatedSuccessfully": "Tuner sunucusu başarıyla güncellendi",
+    "failedToUpdateTunerHost": "Tuner sunucusu güncellenemedi: {error}",
+    "@failedToUpdateTunerHost": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "deleteTunerHost": "Tuner Sunucusunu Sil",
+    "deleteTunerHostConfirm": "\"{name}\" öğesini silmek istediğinizden emin misiniz?",
+    "@deleteTunerHostConfirm": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "tunerHostDeletedSuccessfully": "Tuner sunucusu başarıyla silindi",
+    "failedToDeleteTunerHost": "Tuner sunucusu silinemedi: {error}",
+    "@failedToDeleteTunerHost": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "epgProviderAddedSuccessfully": "EPG sağlayıcısı başarıyla eklendi",
+    "failedToAddEpgProvider": "EPG sağlayıcısı eklenemedi: {error}",
+    "@failedToAddEpgProvider": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "epgProviderUpdatedSuccessfully": "EPG sağlayıcısı başarıyla güncellendi",
+    "failedToUpdateEpgProvider": "EPG sağlayıcısı güncellenemedi: {error}",
+    "@failedToUpdateEpgProvider": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "deleteEpgProvider": "EPG Sağlayıcısını Sil",
+    "deleteEpgProviderConfirm": "Bu sağlayıcıyı silmek istediğinizden emin misiniz?",
+    "epgProviderDeletedSuccessfully": "EPG sağlayıcısı başarıyla silindi",
+    "failedToDeleteEpgProvider": "EPG sağlayıcısı silinemedi: {error}",
+    "@failedToDeleteEpgProvider": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "editTunerDevice": "Tuner Cihazını Düzenle",
+    "friendlyName": "Görünen Ad",
+    "url": "URL",
+    "userAgent": "Kullanıcı Aracısı (User Agent)",
+    "userAgentOptional": "Kullanıcı Aracısı (User Agent) (isteğe bağlı)",
+    "maxConcurrentStreams": "Maksimum Eşzamanlı Akış",
+    "addEpgProvider": "EPG Sağlayıcısı Ekle",
+    "editEpgProvider": "EPG Sağlayıcısını Düzenle",
+    "xmltvPathUrl": "XMLTV Yolu/URL'si",
+    "enableAllTuners": "Tüm tunerler için etkinleştir",
+    "enabledTuners": "Etkin tunerlar",
+    "selectTuners": "Tunerları seç",
+    "moviePrefix": "Film ön eki",
+    "movieCategories": "Film kategorileri",
+    "newsCategories": "Haber kategorileri",
+    "sportsCategories": "Spor kategorileri",
+    "kidsCategories": "Çocuk kategorileri",
+    "fileOrUrl": "Dosya veya URL",
+    "tunerIpAddress": "Tuner IP Adresi",
+    "fallbackMaxBitrate": "Maksimum Yedek Bit Hızı (Mbps)",
+    "concurrentStreams": "Maksimum Eşzamanlı Akış",
+    "concurrentStreamsHint": "0 = Sınırsız",
+    "allowFmp4Container": "fMP4 kod dönüştürme kapsayıcısına izin ver",
+    "allowStreamSharing": "Akış paylaşımına izin ver",
+    "enableStreamLooping": "Akış döngüsünü etkinleştir",
+    "ignoreDts": "DTS zaman damgalarını yoksay",
+    "readAtNativeFramerate": "Yerel kare hızında oku",
+    "importFavoritesOnly": "Yalnızca favori kanalları içe aktar",
+    "allowHWTranscoding": "Donanımsal kod dönüştürmeye izin ver",
+    "detectDevices": "Cihazları Algıla",
+    "discoveredDevices": "Keşfedilen Cihazlar",
+    "noDevicesFound": "Cihaz bulunamadı",
+    "failedToDiscoverDevices": "Cihazlar keşfedilemedi: {error}",
+    "@failedToDiscoverDevices": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "path": "Yol",
+    "maxConcurrentStreamsLabel": "Maksimum Eşzamanlı Akış",
+    "noCategories": "Kategori yok",
+    "moviePrefixSubLabel": "Film adlarına bir ön ek uygulanmışsa, sunucunun bunu düzgün bir şekilde işleyebilmesi için buraya yazın.",
+    "movieCategoriesSubLabel": "Film ön ekiyle eşleşen kanallara atanacak kategoriler",
+    "newsCategoriesSubLabel": "Haber ön ekiyle eşleşen kanallara atanacak kategoriler",
+    "sportsCategoriesSubLabel": "Spor ön ekiyle eşleşen kanallara atanacak kategoriler",
+    "kidsCategoriesSubLabel": "Çocuk ön ekiyle eşleşen kanallara atanacak kategoriler",
+    "enableNewTVLayoutDesc": "Kontrol panelinde daha büyük, TV stili afişler gösterir. Bu, gelecekteki bir sürümde varsayılan düzen olacaktır."
 }
