@@ -228,11 +228,17 @@ class _AdaptiveLayoutBuilderState extends ConsumerState<AdaptiveLayoutBuilder> {
     final isOffline = ref.watch(connectivityStatusProvider.select((value) => value == ConnectionState.offline));
     final isIncognitoMode = ref.watch(incognitoProvider);
 
+    final hasStatusBanner = isOffline || isIncognitoMode;
+
     final statusBarHeight = mediaQuery.padding.top;
 
-    final bannerHeight = isOffline || isIncognitoMode ? 32.0 : 0.0;
+    final bannerHeight = hasStatusBanner ? 32.0 : 0.0;
 
-    final topPadding = isAndroidTV ? 12.0 : defaultTitleBarHeight;
+    final topPadding = isAndroidTV
+        ? hasStatusBanner
+            ? 12.0
+            : 6.0
+        : defaultTitleBarHeight;
 
     return ValueListenableBuilder(
       valueListenable: isKeyboardOpen,
