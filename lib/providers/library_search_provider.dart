@@ -96,16 +96,24 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
       state = state.copyWith(
         filters: state.filters.copyWith(
           types: state.filters.types.replaceMap(activeFilter.types, enabledOnly: true),
-          genres: state.filters.genres.replaceMap(activeFilter.genres, enabledOnly: true),
+          genres: state.filters.genres.replaceMap(
+            activeFilter.genres,
+            enabledOnly: true,
+            comparison: (key1, key2) => key1.toLowerCase() == key2.toLowerCase(),
+          ),
           studios: state.filters.studios.replaceMap(activeFilter.studios, enabledOnly: true),
-          tags: state.filters.tags.replaceMap(activeFilter.tags, enabledOnly: true),
+          tags: state.filters.tags.replaceMap(
+            activeFilter.tags,
+            enabledOnly: true,
+            comparison: (key1, key2) => key1.toLowerCase() == key2.toLowerCase(),
+          ),
           recursive: activeFilter.recursive,
           favourites: activeFilter.favourites,
           sortingOption: activeFilter.sortingOption,
           sortOrder: activeFilter.sortOrder,
           itemFilters: activeFilter.itemFilters,
           officialRatings: activeFilter.officialRatings,
-          years: activeFilter.years,
+          years: state.filters.years.replaceMap(activeFilter.years, enabledOnly: true),
         ),
       );
     }
@@ -233,20 +241,21 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
     if (loadedFilters == true) return;
     loadedFilters = true;
 
+    final itemIds = state.currentIds;
+
     final enabledCollections = state.views.included.map((e) => e.collectionType.itemKinds).expand((element) => element);
-    final mappedList = await Future.wait(state.views.included.map((viewModel) => _loadFilters(viewModel)));
-    final studios = (await Future.wait(state.views.included.map((viewModel) => _loadStudios(viewModel))))
-        .expand((element) => element)
-        .toSet()
-        .toList();
+    final mappedList = await Future.wait(itemIds.map((id) => _loadFilters(id)));
+    final studios =
+        (await Future.wait(itemIds.map((id) => _loadStudios(id)))).expand((element) => element).toSet().toList();
     var tempState = state.copyWith();
-    final genres = (await Future.wait(state.views.included.map((viewModel) => _loadGenres(viewModel))))
-        .expand((element) => element)
-        .toSet()
-        .toList();
+    final genres =
+        (await Future.wait(itemIds.map((id) => _loadGenres(id)))).expand((element) => element).toSet().toList();
     final tags = mappedList
         .expand((element) => element?.tags ?? <String>[])
         .sorted((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+
+    final years =
+        (await Future.wait(itemIds.map((id) => _loadYears(id)))).expand((element) => element).toSet().toList();
 
     var tempFilters = tempState.filters;
     tempState = tempState.copyWith(
@@ -256,25 +265,35 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
             : tempFilters.types.replaceMap(filters.types),
         genres: {for (var element in genres) element.name: false}.replaceMap(filters.genres),
         studios: {for (var element in studios) element: false}.replaceMap(filters.studios),
+        itemFilters: {for (var element in ItemFilter.values) element: false}.replaceMap(filters.itemFilters),
+        years: {for (var element in years) element: false}.replaceMap(filters.years),
         tags: {for (var element in tags) element: false}.replaceMap(filters.tags),
       ),
     );
+    log(tempState.filters.years.toString());
     state = tempState;
   }
 
-  Future<QueryFilters?> _loadFilters(ViewModel viewModel) async {
-    final response = await api.itemsFilters2Get(parentId: viewModel.id);
+  Future<QueryFilters?> _loadFilters(String id) async {
+    final response = await api.itemsFilters2Get(parentId: id);
     return response.body;
   }
 
-  Future<List<Studio>> _loadStudios(ViewModel viewModel) async {
-    final response = await api.studiosGet(parentId: viewModel.id);
+  Future<List<Studio>> _loadStudios(String id) async {
+    final response = await api.studiosGet(parentId: id);
     return response.body?.items?.map((e) => Studio(id: e.id ?? "", name: e.name ?? "")).toList() ?? [];
   }
 
-  Future<List<GenreItems>> _loadGenres(ViewModel viewModel) async {
-    final response = await api.genresGet(parentId: viewModel.id);
+  Future<List<GenreItems>> _loadGenres(String id) async {
+    final response = await api.genresGet(parentId: id);
     return response.body?.items?.map((e) => GenreItems(id: e.id ?? "", name: e.name ?? "")).toList() ?? [];
+  }
+
+  Future<List<int>> _loadYears(String id) async {
+    final response = await api.yearsGet(
+      parentId: id,
+    );
+    return response.body?.items?.map((e) => int.tryParse(e.name.toString())).whereType<int>().toList() ?? [];
   }
 
   Future<ServerQueryResult?> _loadLibrary(
@@ -940,6 +959,16 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
             showInSideBar: model.showInSideBar,
           ),
         );
+  }
+
+  void setYearsRange(int? first, int? last) {
+    state = state.copyWith(
+      filters: state.filters.copyWith(
+        years: state.filters.years.replaceMap(
+          {for (var i = first ?? 0; i <= (last ?? 0); i++) i: true},
+        ),
+      ),
+    );
   }
 }
 

@@ -611,6 +611,21 @@ class JellyService {
     );
   }
 
+  Future<Response<BaseItemDtoQueryResult>> yearsGet({
+    String? parentId,
+    List<ItemSortBy>? sortBy,
+    List<SortOrder>? sortOrder,
+    List<BaseItemKind>? includeItemTypes,
+  }) async {
+    return api.yearsGet(
+      parentId: parentId,
+      userId: account?.id,
+      sortBy: sortBy,
+      recursive: true,
+      sortOrder: sortOrder,
+    );
+  }
+
   Future<Response> sessionsPlayingPost({required PlaybackStartInfo? body}) async {
     if (ref.read(incognitoProvider)) return Response(http.Response("", 200), null);
     return api.sessionsPlayingPost(body: body);

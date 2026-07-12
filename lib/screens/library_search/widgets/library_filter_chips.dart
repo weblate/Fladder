@@ -8,10 +8,12 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:fladder/jellyfin/jellyfin_open_api.enums.swagger.dart';
 import 'package:fladder/models/item_base_model.dart';
 import 'package:fladder/models/items/item_shared_models.dart';
+import 'package:fladder/models/library_search/library_search_model.dart';
 import 'package:fladder/models/library_search/library_search_options.dart';
 import 'package:fladder/providers/library_search_provider.dart';
 import 'package:fladder/providers/user_provider.dart';
 import 'package:fladder/routes/auto_router.gr.dart';
+import 'package:fladder/screens/seerr/widgets/seerr_filter_dialogs.dart';
 import 'package:fladder/screens/shared/chips/category_chip.dart';
 import 'package:fladder/seerr/seerr_models.dart';
 import 'package:fladder/util/localization_helper.dart';
@@ -114,6 +116,21 @@ class _LibraryFilterChipsState extends ConsumerState<LibraryFilterChips> {
           onCancel: () => libraryProvider.setGenres(librarySearchResults.filters.genres),
           onClear: () => libraryProvider.setGenres(librarySearchResults.filters.genres.setAll(false)),
         ),
+      if (librarySearchResults.filters.years.isNotEmpty)
+        ExpressiveButton(
+          isSelected: librarySearchResults.yearRange.$1 != null || librarySearchResults.yearRange.$2 != null,
+          icon: const Icon(IconsaxPlusBold.calendar_1),
+          label: Text(yearLabel(context, librarySearchResults.yearRange)),
+          onPressed: () => openYearDialog(
+            context,
+            (first, last) {
+              libraryProvider.setYearsRange(first, last);
+              context.refreshData();
+            },
+            librarySearchResults.yearRange,
+            fullYearRange: librarySearchResults.availableYearRange,
+          ),
+        ),
       if (librarySearchResults.filters.studios.isNotEmpty)
         CategoryChip<Studio>(
           label: Text(context.localized.studio(librarySearchResults.filters.studios.length)),
@@ -165,15 +182,6 @@ class _LibraryFilterChipsState extends ConsumerState<LibraryFilterChips> {
           onSave: (value) => libraryProvider.setRatings(value),
           onCancel: () => libraryProvider.setRatings(librarySearchResults.filters.officialRatings),
           onClear: () => libraryProvider.setRatings(librarySearchResults.filters.officialRatings.setAll(false)),
-        ),
-      if (librarySearchResults.filters.years.isNotEmpty)
-        CategoryChip<int>(
-          label: Text(context.localized.year(librarySearchResults.filters.years.length)),
-          items: librarySearchResults.filters.years,
-          labelBuilder: (item) => Text(item.toString()),
-          onSave: (value) => libraryProvider.setYears(value),
-          onCancel: () => libraryProvider.setYears(librarySearchResults.filters.years),
-          onClear: () => libraryProvider.setYears(librarySearchResults.filters.years.setAll(false)),
         ),
     ];
 

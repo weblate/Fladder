@@ -25,6 +25,7 @@ abstract class LibraryFilterModel with _$LibraryFilterModel {
       ItemFilter.isunplayed: false,
       ItemFilter.isresumable: false,
     })
+    @Default({})
     Map<ItemFilter, bool> itemFilters,
     @StudioEncoder() @Default({}) Map<Studio, bool> studios,
     @Default({}) Map<String, bool> tags,
@@ -64,7 +65,7 @@ abstract class LibraryFilterModel with _$LibraryFilterModel {
       itemFilters: itemFilters.replaceMap(model.itemFilters),
       studios: studios.replaceMap(model.studios),
       tags: tags.replaceMap(model.tags),
-      years: years.replaceMap(model.years),
+      years: years.setAll(false).replaceMap(model.years),
       officialRatings: officialRatings.replaceMap(model.officialRatings),
       types: types.replaceMap(model.types),
       sortingOption: model.sortingOption,
@@ -152,6 +153,10 @@ extension LibrarySearchRouteExtension on LibrarySearchRoute {
       sortingOptions: model.sortingOption,
       types: model.types,
       genres: model.genres,
+      studios: model.studios,
+      itemFilters: model.itemFilters,
+      tags: model.tags,
+      years: model.years,
       recursive: model.recursive,
       isDefault: model.isDefault,
     );

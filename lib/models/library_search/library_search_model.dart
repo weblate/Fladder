@@ -133,6 +133,24 @@ extension LibrarySearchModelX on LibrarySearchModel {
     );
   }
 
+  (int? min, int? max) get yearRange {
+    final years = filters.years.included;
+    if (years.isEmpty) return (null, null);
+    return (
+      years.reduce((value, element) => value < element ? value : element),
+      years.reduce((value, element) => value > element ? value : element)
+    );
+  }
+
+  (int min, int max) get availableYearRange {
+    final years = filters.years.keys;
+    if (years.isEmpty) return (DateTime.now().year - 100, DateTime.now().year + 10);
+    return (
+      years.reduce((value, element) => value < element ? value : element),
+      years.reduce((value, element) => value > element ? value : element)
+    );
+  }
+
   List<String> get currentIds =>
       folderOverwrite.isNotEmpty ? folderOverwrite.map((e) => e.id).toList() : views.included.map((e) => e.id).toList();
 }

@@ -6,8 +6,10 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 
+import 'package:fladder/jellyfin/jellyfin_open_api.enums.swagger.dart';
 import 'package:fladder/models/boxset_model.dart';
 import 'package:fladder/models/item_base_model.dart';
+import 'package:fladder/models/items/item_shared_models.dart';
 import 'package:fladder/models/items/playlist_model.dart';
 import 'package:fladder/models/library_filter_model.dart';
 import 'package:fladder/models/library_search/library_search_model.dart';
@@ -54,6 +56,10 @@ class LibrarySearchScreen extends ConsumerStatefulWidget {
   final SortingOptions? sortingOptions;
   final Map<FladderItemType, bool>? types;
   final Map<String, bool>? genres;
+  final Map<Studio, bool>? studios;
+  final Map<ItemFilter, bool>? itemFilters;
+  final Map<String, bool>? tags;
+  final Map<int, bool>? years;
   final bool? recursive;
   final bool? isDefault;
   const LibrarySearchScreen({
@@ -64,6 +70,10 @@ class LibrarySearchScreen extends ConsumerStatefulWidget {
     @QueryParam("sortOptions") this.sortingOptions,
     @QueryParam("itemTypes") this.types,
     @QueryParam("genres") this.genres,
+    @QueryParam("studios") this.studios,
+    @QueryParam("itemFilters") this.itemFilters,
+    @QueryParam("tags") this.tags,
+    @QueryParam("years") this.years,
     @QueryParam("recursive") this.recursive,
     @QueryParam("isDefault") this.isDefault,
     super.key,
@@ -491,6 +501,10 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
           widget.sortingOptions != null ||
           widget.types != null ||
           widget.genres != null ||
+          widget.itemFilters != null ||
+          widget.studios != null ||
+          widget.years != null ||
+          widget.tags != null ||
           widget.recursive != null) {
         final defaultFilter = const LibraryFilterModel();
 
@@ -500,6 +514,10 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
           sortingOption: widget.sortingOptions ?? defaultFilter.sortingOption,
           types: widget.types ?? {},
           genres: widget.genres ?? {},
+          itemFilters: widget.itemFilters ?? {},
+          studios: widget.studios ?? {},
+          years: widget.years ?? {},
+          tags: widget.tags ?? {},
           recursive: widget.recursive,
           isDefault: widget.isDefault ?? false,
         );
@@ -508,7 +526,7 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
       }
     }
 
-    final collapsedHeight = AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad ? 150.0 : 110.0;
+    final collapsedHeight = AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad ? 155.0 : 110.0;
 
     return MediaQuery(
       data: mediaQuery.copyWith(
