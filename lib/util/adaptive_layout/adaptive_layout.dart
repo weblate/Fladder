@@ -225,7 +225,7 @@ class _AdaptiveLayoutBuilderState extends ConsumerState<AdaptiveLayoutBuilder> {
 
     final useAdditionalPadding = isDesktop || kIsWeb || isAndroidTV;
 
-    final isOffline = ref.watch(connectivityStatusProvider.select((value) => value == ConnectionState.offline));
+    final isOffline = ref.watch(offlineStateProvider);
     final isIncognitoMode = ref.watch(incognitoProvider);
 
     final hasStatusBanner = isOffline || isIncognitoMode;
@@ -236,8 +236,8 @@ class _AdaptiveLayoutBuilderState extends ConsumerState<AdaptiveLayoutBuilder> {
 
     final topPadding = isAndroidTV
         ? hasStatusBanner
-            ? 12.0
-            : 6.0
+            ? 21.0
+            : 4.0
         : defaultTitleBarHeight;
 
     return ValueListenableBuilder(

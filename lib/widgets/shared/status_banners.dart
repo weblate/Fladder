@@ -14,7 +14,7 @@ class StatusBanners extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final offlineMode = ref.watch(connectivityStatusProvider.select((value) => value == ConnectionState.offline));
+    final offlineMode = ref.watch(offlineStateProvider);
     final incognitoMode = ref.watch(incognitoProvider);
     final statusBarHeight = AdaptiveLayout.of(context).statusBarHeight;
 

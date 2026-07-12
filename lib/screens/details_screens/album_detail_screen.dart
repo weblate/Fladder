@@ -9,6 +9,7 @@ import 'package:fladder/providers/items/album_details_provider.dart';
 import 'package:fladder/providers/settings/client_settings_provider.dart';
 import 'package:fladder/providers/user_provider.dart';
 import 'package:fladder/providers/video_player_provider.dart';
+import 'package:fladder/routes/auto_router.gr.dart';
 import 'package:fladder/screens/shared/detail_scaffold.dart';
 import 'package:fladder/screens/shared/fladder_notification_overlay.dart';
 import 'package:fladder/screens/shared/media/components/poster_placeholder.dart';
@@ -243,6 +244,13 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
                         if (album?.overview.genreItems.isNotEmpty == true)
                           Genres(
                             genres: album?.overview.genreItems.take(10).toList() ?? [],
+                            onGenreClicked: (genre) {
+                              final itemViewId = album?.parentId ?? "";
+                              LibrarySearchRoute(
+                                folderId: [itemViewId],
+                                genres: {genre.name: true},
+                              ).push(context);
+                            },
                           ),
                       ],
                     ),
