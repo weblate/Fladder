@@ -270,7 +270,6 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
         tags: {for (var element in tags) element: false}.replaceMap(filters.tags),
       ),
     );
-    log(tempState.filters.years.toString());
     state = tempState;
   }
 

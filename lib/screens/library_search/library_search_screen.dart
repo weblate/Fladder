@@ -162,8 +162,6 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
       (value) => value.backgroundImage == BackgroundType.blurred && value.enableBlurEffects,
     ));
 
-    final sideBarPadding = EdgeInsetsDirectional.only(start: adaptiveLayout.sideBarWidth);
-
     List<ItemAction>? itemActions = librarySearchResults.nestedCurrentItem?.generateActions(
       context,
       ref,
@@ -526,8 +524,6 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
       }
     }
 
-    final collapsedHeight = AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad ? 155.0 : 110.0;
-
     return MediaQuery(
       data: mediaQuery.copyWith(
         padding: mediaQuery.padding.copyWith(top: mediaQuery.padding.top + adaptiveLayout.topBarHeight),
@@ -588,209 +584,59 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
                       controller: scrollController,
                       physics: const AlwaysScrollableScrollPhysics(),
                       slivers: [
-                        SliverAppBar(
-                          floating: !floatingAppBar,
-                          collapsedHeight: collapsedHeight,
-                          automaticallyImplyLeading: false,
-                          primary: true,
-                          pinned: floatingAppBar,
-                          elevation: 5,
-                          surfaceTintColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                          backgroundColor: Colors.transparent,
-                          titleSpacing: 4,
-                          flexibleSpace: RepaintBoundary(
-                            child: Container(
-                              width: double.infinity,
-                              height: collapsedHeight,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    Theme.of(context).colorScheme.surface.withAlpha(255),
-                                    Theme.of(context).colorScheme.surface.withAlpha(0),
-                                  ],
-                                ),
-                              ),
-                              child: useBlurredBackground
-                                  ? ShaderMask(
-                                      shaderCallback: (bounds) {
-                                        return LinearGradient(
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                          colors: [
-                                            Colors.white.withAlpha(255),
-                                            Colors.white.withAlpha(0),
-                                          ],
-                                        ).createShader(
-                                          Rect.fromLTRB(0, 10, bounds.width, bounds.height),
-                                        );
-                                      },
-                                      blendMode: BlendMode.dstIn,
-                                      child: const BackgroundImage(),
-                                    )
-                                  : null,
-                            ),
-                          ),
-                          actions: [
-                            SizedBox.square(
-                              dimension: toolbarHeight,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.surfaceContainerLow,
-                                  borderRadius: FladderTheme.defaultShape.borderRadius,
-                                ),
-                                child: Tooltip(
-                                  message: librarySearchResults.nestedCurrentItem?.type.label(context.localized) ??
-                                      context.localized.library(1),
-                                  child: AdaptiveLayout.inputDeviceOf(context) == InputDevice.pointer
-                                      ? PopupMenuButton(
-                                          tooltip: context.localized.library(1),
-                                          icon: Icon(librarySearchResults.nestedCurrentItem?.type.icon ??
-                                              IconsaxPlusLinear.document),
-                                          itemBuilder: (context) => menuActions.toList().popupMenuItems(useIcons: true),
-                                        )
-                                      : IconButton(
-                                          onPressed: () async {
-                                            await showBottomSheetPill(
-                                              context: context,
-                                              content: (context, scrollController) => ListView(
-                                                shrinkWrap: true,
-                                                controller: scrollController,
-                                                children: menuActions
-                                                    .map(
-                                                      (e) => e.toListItem(context, useIcons: true, shouldPop: true),
-                                                    )
-                                                    .toList(),
-                                              ),
-                                            );
-                                          },
-                                          icon: Padding(
-                                            padding: const EdgeInsets.all(6),
-                                            child: Icon(
-                                              librarySearchResults.nestedCurrentItem?.type.icon ??
-                                                  IconsaxPlusLinear.document,
-                                              color:
-                                                  librarySearchResults.nestedCurrentItem?.userData.isFavourite == true
-                                                      ? Theme.of(context).colorScheme.primary
-                                                      : null,
-                                            ),
-                                          ),
-                                        ),
-                                ),
-                              ),
-                            ),
-                            if (AdaptiveLayout.layoutModeOf(context) == LayoutMode.single) ...[
-                              const SizedBox(width: 6),
-                              SizedBox.square(dimension: toolbarHeight - 3.0, child: const SettingsUserIcon()),
-                            ],
-                            const SizedBox(width: 12)
-                          ],
-                          title: Padding(
-                            padding: sideBarPadding,
-                            child: SizedBox(
-                              height: toolbarHeight,
-                              child: Row(
-                                spacing: 2,
-                                children: [
-                                  const SizedBox(width: 2),
-                                  if (AdaptiveLayout.inputDeviceOf(context) != InputDevice.dPad)
-                                    Center(
-                                      child: SizedBox.square(
-                                        dimension: toolbarHeight,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context).colorScheme.surfaceContainerLow,
-                                            borderRadius: FladderTheme.defaultShape.borderRadius,
-                                          ),
-                                          child: context.router.backButton(),
-                                        ),
-                                      ),
-                                    ),
-                                  Flexible(
-                                    child: Hero(
-                                      tag: "PrimarySearch",
-                                      child: SuggestionSearchBar(
-                                        autoFocus: isEmptySearchScreen,
-                                        key: uniqueKey,
-                                        title: librarySearchResults.searchBarTitle(context),
-                                        debounceDuration: const Duration(seconds: 1),
-                                        onItem: (value) async {
-                                          await value.navigateTo(context);
-                                          refreshKey.currentState?.show();
-                                        },
-                                        onSubmited: (value) async {
-                                          if (librarySearchResults.searchQuery != value) {
-                                            libraryProvider.setSearch(value);
-                                            refreshKey.currentState?.show();
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          bottom: PreferredSize(
-                            preferredSize: const Size(0, 0),
-                            child: Padding(
-                              padding: sideBarPadding,
-                              child: IgnorePointer(
-                                ignoring: librarySearchResults.loading,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Row(
-                                      spacing: 6,
-                                      children: [
-                                        if (AdaptiveLayout.inputDeviceOf(context) != InputDevice.dPad)
-                                          ScrollStatePosition(
-                                            controller: scrollController,
-                                            positionBuilder: (state) => AnimatedFadeSize(
-                                              child: state != ScrollState.top
-                                                  ? Padding(
-                                                      padding: const EdgeInsets.only(left: 8.0),
-                                                      child: Tooltip(
-                                                        message: context.localized.scrollToTop,
-                                                        child: IconButton.filled(
-                                                          onPressed: () => scrollController.animateTo(0,
-                                                              duration: const Duration(milliseconds: 500),
-                                                              curve: Curves.easeInOutCubic),
-                                                          icon: const Icon(
-                                                            IconsaxPlusLinear.arrow_up,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : const SizedBox(),
-                                            ),
-                                          ),
-                                        Flexible(
-                                          child: SingleChildScrollView(
-                                            padding: const EdgeInsets.all(8),
-                                            scrollDirection: Axis.horizontal,
-                                            child: LibraryFilterChips(
-                                              key: uniqueKey,
-                                            ),
-                                          ),
-                                        ),
+                        PinnedHeaderSliver(
+                          child: HideOnScroll(
+                            controller: scrollController,
+                            visibleBuilder: (visible) => Stack(
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  height: AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad ? 160 : 80,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Theme.of(context).colorScheme.surface.withAlpha(255),
+                                        Theme.of(context).colorScheme.surface.withAlpha(0),
                                       ],
                                     ),
-                                    if (AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad)
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                                        child: Row(
-                                          spacing: 4,
-                                          children: generateQuickActions(true).map((e) => e.toButton()).toList(),
-                                        ),
-                                      )
-                                  ],
+                                  ),
+                                  child: useBlurredBackground
+                                      ? ShaderMask(
+                                          shaderCallback: (bounds) {
+                                            return LinearGradient(
+                                              begin: Alignment.topCenter,
+                                              end: Alignment.bottomCenter,
+                                              colors: [
+                                                Colors.white.withAlpha(255),
+                                                Colors.white.withAlpha(0),
+                                              ],
+                                            ).createShader(
+                                              Rect.fromLTRB(0, 10, bounds.width, bounds.height),
+                                            );
+                                          },
+                                          blendMode: BlendMode.dstIn,
+                                          child: const BackgroundImage(),
+                                        )
+                                      : null,
                                 ),
-                              ),
+                                AnimatedSlide(
+                                  duration: const Duration(milliseconds: 250),
+                                  offset: visible || floatingAppBar ? Offset.zero : const Offset(0, -1),
+                                  child: LibraryAppBar(
+                                    toolbarHeight: toolbarHeight,
+                                    menuActions: menuActions,
+                                    librarySearchResults: librarySearchResults,
+                                    quickActions: generateQuickActions(true),
+                                    isEmptySearchScreen: isEmptySearchScreen,
+                                    refreshKey: refreshKey,
+                                    uniqueKey: uniqueKey,
+                                    libraryProvider: libraryProvider,
+                                    scrollController: scrollController,
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
@@ -832,6 +678,183 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class LibraryAppBar extends ConsumerWidget {
+  final double toolbarHeight;
+  final List<ItemAction> menuActions;
+  final LibrarySearchModel librarySearchResults;
+  final List<ItemAction> quickActions;
+  final bool isEmptySearchScreen;
+  final GlobalKey<RefreshIndicatorState> refreshKey;
+  final Key uniqueKey;
+  final LibrarySearchNotifier libraryProvider;
+  final ScrollController scrollController;
+
+  const LibraryAppBar({
+    required this.toolbarHeight,
+    required this.menuActions,
+    required this.librarySearchResults,
+    this.quickActions = const [],
+    required this.isEmptySearchScreen,
+    required this.refreshKey,
+    required this.uniqueKey,
+    required this.libraryProvider,
+    required this.scrollController,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: MediaQuery.paddingOf(context).top,
+        left: AdaptiveLayout.adaptivePadding(context).left,
+        bottom: 16,
+      ),
+      child: Column(
+        children: [
+          IntrinsicHeight(
+            child: Padding(
+              padding: EdgeInsets.only(
+                right: AdaptiveLayout.adaptivePadding(context).right,
+              ),
+              child: Row(
+                spacing: 3,
+                children: [
+                  if (AdaptiveLayout.inputDeviceOf(context) != InputDevice.dPad)
+                    Center(
+                      child: SizedBox.square(
+                        dimension: toolbarHeight,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surfaceContainerLow,
+                            borderRadius: FladderTheme.defaultShape.borderRadius,
+                          ),
+                          child: context.router.backButton(),
+                        ),
+                      ),
+                    ),
+                  Flexible(
+                    child: Hero(
+                      tag: "PrimarySearch",
+                      child: SuggestionSearchBar(
+                        autoFocus: isEmptySearchScreen,
+                        key: uniqueKey,
+                        title: librarySearchResults.searchBarTitle(context),
+                        debounceDuration: const Duration(seconds: 1),
+                        onItem: (value) async {
+                          await value.navigateTo(context);
+                          refreshKey.currentState?.show();
+                        },
+                        onSubmited: (value) async {
+                          if (librarySearchResults.searchQuery != value) {
+                            libraryProvider.setSearch(value);
+                            refreshKey.currentState?.show();
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  SizedBox.square(
+                    dimension: toolbarHeight,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceContainerLow,
+                        borderRadius: FladderTheme.defaultShape.borderRadius,
+                      ),
+                      child: Tooltip(
+                        message: librarySearchResults.nestedCurrentItem?.type.label(context.localized) ??
+                            context.localized.library(1),
+                        child: AdaptiveLayout.inputDeviceOf(context) == InputDevice.pointer
+                            ? PopupMenuButton(
+                                tooltip: context.localized.library(1),
+                                icon: Icon(
+                                    librarySearchResults.nestedCurrentItem?.type.icon ?? IconsaxPlusLinear.document),
+                                itemBuilder: (context) => menuActions.toList().popupMenuItems(useIcons: true),
+                              )
+                            : IconButton(
+                                onPressed: () async {
+                                  await showBottomSheetPill(
+                                    context: context,
+                                    content: (context, scrollController) => ListView(
+                                      shrinkWrap: true,
+                                      controller: scrollController,
+                                      children: menuActions
+                                          .map(
+                                            (e) => e.toListItem(context, useIcons: true, shouldPop: true),
+                                          )
+                                          .toList(),
+                                    ),
+                                  );
+                                },
+                                icon: Padding(
+                                  padding: const EdgeInsets.all(6),
+                                  child: Icon(
+                                    librarySearchResults.nestedCurrentItem?.type.icon ?? IconsaxPlusLinear.document,
+                                    color: librarySearchResults.nestedCurrentItem?.userData.isFavourite == true
+                                        ? Theme.of(context).colorScheme.primary
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ),
+                  ),
+                  if (AdaptiveLayout.layoutModeOf(context) == LayoutMode.single)
+                    SizedBox.square(dimension: toolbarHeight - 3.0, child: const SettingsUserIcon()),
+                ],
+              ),
+            ),
+          ),
+          Row(
+            spacing: 6,
+            children: [
+              if (AdaptiveLayout.inputDeviceOf(context) != InputDevice.dPad)
+                ScrollStatePosition(
+                  controller: scrollController,
+                  positionBuilder: (state) => AnimatedFadeSize(
+                    child: state != ScrollState.top
+                        ? Tooltip(
+                            message: context.localized.scrollToTop,
+                            child: IconButton.filled(
+                              onPressed: () => scrollController.animateTo(0,
+                                  duration: const Duration(milliseconds: 500), curve: Curves.easeInOutCubic),
+                              icon: const Icon(
+                                IconsaxPlusLinear.arrow_up,
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                  ),
+                ),
+              Flexible(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(vertical: 8).add(EdgeInsets.only(
+                    right: AdaptiveLayout.adaptivePadding(context).right,
+                  )),
+                  scrollDirection: Axis.horizontal,
+                  child: LibraryFilterChips(
+                    key: uniqueKey,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if (AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad)
+            Container(
+              padding: EdgeInsets.only(
+                right: AdaptiveLayout.adaptivePadding(context).right,
+              ),
+              child: Row(
+                spacing: 4,
+                children: quickActions.map((e) => e.toButton()).toList(),
+              ),
+            )
+        ],
       ),
     );
   }
