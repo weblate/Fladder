@@ -10,7 +10,6 @@ import 'package:fladder/models/library_search/library_search_model.dart';
 import 'package:fladder/models/view_model.dart';
 import 'package:fladder/routes/auto_router.gr.dart';
 import 'package:fladder/theme.dart';
-import 'package:fladder/util/map_bool_helper.dart';
 
 part 'library_filters_model.freezed.dart';
 part 'library_filters_model.g.dart';
@@ -41,7 +40,7 @@ abstract class LibraryFiltersModel with _$LibraryFiltersModel {
       id: id ?? Xid().toString(),
       name: name,
       isFavourite: isFavourite ?? false,
-      ids: searchModel.views.included.map((e) => e.id).toList(),
+      ids: searchModel.currentIds,
       filter: searchModel.filters,
       showInSideBar: showInSideBar,
     );

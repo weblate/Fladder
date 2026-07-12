@@ -81,13 +81,13 @@ abstract class LibraryFilterModel with _$LibraryFilterModel {
   @override
   bool operator ==(covariant LibraryFilterModel other) {
     if (identical(this, other)) return true;
-    return mapEquals(other.genres, genres) &&
-        mapEquals(other.studios, studios) &&
-        mapEquals(other.tags, tags) &&
-        mapEquals(other.years, years) &&
-        mapEquals(other.officialRatings, officialRatings) &&
-        mapEquals(other.types, types) &&
-        mapEquals(other.itemFilters, itemFilters) &&
+    return listEquals(other.genres.included, genres.included) &&
+        listEquals(other.studios.included, studios.included) &&
+        listEquals(other.tags.included, tags.included) &&
+        listEquals(other.years.included, years.included) &&
+        listEquals(other.officialRatings.included, officialRatings.included) &&
+        listEquals(other.types.included, types.included) &&
+        listEquals(other.itemFilters.included, itemFilters.included) &&
         other.sortingOption == sortingOption &&
         other.sortOrder == sortOrder &&
         other.favourites == favourites &&

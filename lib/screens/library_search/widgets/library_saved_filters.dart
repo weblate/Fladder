@@ -5,7 +5,6 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 
 import 'package:fladder/models/library_filters_model.dart';
 import 'package:fladder/providers/library_search_provider.dart';
-import 'package:fladder/providers/views_provider.dart';
 import 'package:fladder/screens/shared/default_alert_dialog.dart';
 import 'package:fladder/screens/shared/outlined_text_field.dart';
 import 'package:fladder/util/adaptive_layout/adaptive_layout.dart';
@@ -37,21 +36,21 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = TextEditingController();
     final provider = ref.watch(librarySearchProvider(providerKey).notifier);
+
     final currentFilters = ref.watch(librarySearchProvider(providerKey).select((value) => value.filters));
 
+    final folderOverwrite = ref.watch(librarySearchProvider(providerKey).select((value) => value.folderOverwrite));
     final views = ref.watch(librarySearchProvider(providerKey).select((value) => value.views.included));
 
-    final activeLibraries = views.map((e) => e.name).join(", ");
-
     final filters = ref.watch(provider.filterProvider);
+
     final filterProvider = ref.watch(provider.filterProvider.notifier);
+
     final anyFilterSelected = filters.any((element) => element.filter == currentFilters);
 
-    final filterKeys = filters.map((e) => e.ids).expand((element) => element).toList();
-
-    final librarys = ref
-        .watch(viewsProvider.select((value) => value.views.where((element) => filterKeys.contains(element.id))))
-        .toList();
+    final activeLibraries = views.map((e) => e.name).join(", ");
+    final folderNames = folderOverwrite.map((e) => e.name).join(", ");
+    final libraryNames = folderNames.isNotEmpty ? folderNames : activeLibraries;
 
     List<ItemActionButton> filterActions(LibraryFiltersModel filter, bool isCurrentFilter) => [
           ItemActionButton(
@@ -59,7 +58,7 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
             action: isCurrentFilter ? null : () => provider.loadModel(filter.filter),
             icon: const Icon(IconsaxPlusBold.filter_add),
           ),
-          if (views.length == 1)
+          if (views.length == 1 || folderOverwrite.length == 1)
             ItemActionButton(
               label: Text(context.localized.defaultFilterForLibrary),
               backgroundColor: filter.isFavourite ? Colors.yellowAccent.shade700.withValues(alpha: 0.5) : null,
@@ -70,16 +69,17 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
                 filter.isFavourite ? IconsaxPlusBold.star_1 : IconsaxPlusLinear.star_1,
               ),
             ),
-          ItemActionButton(
-            label: Text(context.localized.showInSideBar),
-            backgroundColor: filter.showInSideBar ? Colors.lightBlueAccent.shade700.withValues(alpha: 0.5) : null,
-            foregroundColor: filter.showInSideBar ? Colors.lightBlueAccent : null,
-            action: () => filterProvider.saveFilter(filter.copyWith(showInSideBar: !filter.showInSideBar)),
-            icon: Icon(
-              color: filter.showInSideBar ? Colors.lightBlueAccent : null,
-              filter.showInSideBar ? IconsaxPlusBold.menu : IconsaxPlusLinear.menu_1,
+          if (folderOverwrite.isEmpty)
+            ItemActionButton(
+              label: Text(context.localized.showInSideBar),
+              backgroundColor: filter.showInSideBar ? Colors.lightBlueAccent.shade700.withValues(alpha: 0.5) : null,
+              foregroundColor: filter.showInSideBar ? Colors.lightBlueAccent : null,
+              action: () => filterProvider.saveFilter(filter.copyWith(showInSideBar: !filter.showInSideBar)),
+              icon: Icon(
+                color: filter.showInSideBar ? Colors.lightBlueAccent : null,
+                filter.showInSideBar ? IconsaxPlusBold.menu : IconsaxPlusLinear.menu_1,
+              ),
             ),
-          ),
           ItemActionButton(
             label: Text(context.localized.updateFilterForLibrary),
             action: isCurrentFilter || anyFilterSelected ? null : () => provider.updateFilter(filter),
@@ -119,7 +119,7 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "${context.localized.filter(filters.length)} for ${(librarys.isEmpty ? activeLibraries : librarys.map((e) => e.name).join(", "))}",
+              "${context.localized.filter(filters.length)} for $libraryNames",
               style: Theme.of(context).textTheme.titleLarge,
             ),
             if (filters.isNotEmpty) ...[

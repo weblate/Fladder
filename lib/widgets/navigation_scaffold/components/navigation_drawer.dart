@@ -40,13 +40,15 @@ class NestedNavigationDrawer extends ConsumerWidget {
       surfaceTintColor: isExpanded ? Colors.transparent : null,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(28, AdaptiveLayout.of(context).isDesktop || kIsWeb ? 0 : 16, 16, 0),
+          padding: EdgeInsets.fromLTRB(8, AdaptiveLayout.of(context).isDesktop || kIsWeb ? 0 : 16, 16, 0),
           child: Row(
             children: [
               Expanded(
                 child: Text(
                   context.localized.navigation,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.75),
+                      ),
                 ),
               ),
               IconButton(

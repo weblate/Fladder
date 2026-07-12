@@ -11,6 +11,7 @@ import 'package:fladder/jellyfin/jellyfin_open_api.swagger.dart' as dto;
 import 'package:fladder/l10n/generated/app_localizations.dart';
 import 'package:fladder/models/book_model.dart';
 import 'package:fladder/models/boxset_model.dart';
+import 'package:fladder/models/collection_types.dart';
 import 'package:fladder/models/items/album_model.dart';
 import 'package:fladder/models/items/artist_model.dart';
 import 'package:fladder/models/items/audio_model.dart';
@@ -28,6 +29,7 @@ import 'package:fladder/models/items/playlist_model.dart';
 import 'package:fladder/models/items/season_model.dart';
 import 'package:fladder/models/items/series_model.dart';
 import 'package:fladder/models/items/watched_state.dart';
+import 'package:fladder/models/library_filter_model.dart';
 import 'package:fladder/models/library_search/library_search_options.dart';
 import 'package:fladder/routes/auto_router.gr.dart';
 import 'package:fladder/screens/details_screens/album_detail_screen.dart';
@@ -198,10 +200,18 @@ class ItemBaseModel with ItemBaseModelMappable {
       case FolderModel _:
       case BoxSetModel _:
       case PlaylistModel _:
-        context.router.push(LibrarySearchRoute(folderId: [id], recursive: true));
+        LibrarySearchRoute(folderId: [id], viewModelId: "folder")
+            .withFilter(
+              CollectionType.folders.defaultFilters,
+            )
+            .push(context);
         break;
       case PhotoAlbumModel _:
-        context.router.push(LibrarySearchRoute(folderId: [id], recursive: false));
+        LibrarySearchRoute(folderId: [id], viewModelId: "photo-album")
+            .withFilter(
+              CollectionType.photos.defaultFilters,
+            )
+            .push(context);
         break;
       case PhotoModel _:
         final photo = this as PhotoModel;

@@ -54,22 +54,7 @@ class SideNavigationButtons extends ConsumerWidget {
         .toList()));
 
     final List<Widget> navItems = [
-      if (filters.isNotEmpty)
-        const Divider(
-          indent: 32,
-          endIndent: 32,
-        ),
-      if (filters.isNotEmpty && shouldExpand)
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 28),
-            child: Text(
-              context.localized.filter(2),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ),
-        ),
+      if (filters.isNotEmpty) _LabelDivider(label: context.localized.filter(2), shouldExpand: shouldExpand),
       ...filters.map(
         (filter) {
           final viewsInFilter = views.where((view) => filter.ids.contains(view.id)).toList();
@@ -83,22 +68,7 @@ class SideNavigationButtons extends ConsumerWidget {
           );
         },
       ),
-      if (views.isNotEmpty)
-        const Divider(
-          indent: 32,
-          endIndent: 32,
-        ),
-      if (views.isNotEmpty && shouldExpand)
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 28),
-            child: Text(
-              context.localized.library(2),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ),
-        ),
+      if (views.isNotEmpty) _LabelDivider(label: context.localized.library(2), shouldExpand: shouldExpand),
       if (musicDashboard) ...[
         ...buildMusicDashboardNavItems(
           context,
@@ -282,6 +252,44 @@ class SideNavigationButtons extends ConsumerWidget {
           else
             ...navItems,
         ]
+      ],
+    );
+  }
+}
+
+class _LabelDivider extends StatelessWidget {
+  final String label;
+  final bool shouldExpand;
+
+  const _LabelDivider({
+    required this.label,
+    required this.shouldExpand,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      spacing: 16,
+      children: [
+        if (shouldExpand)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.75),
+                    ),
+              ),
+            ),
+          ),
+        Expanded(
+          child: Divider(
+            indent: shouldExpand ? 0 : 16,
+            endIndent: 16,
+          ),
+        ),
       ],
     );
   }

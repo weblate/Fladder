@@ -508,6 +508,8 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
       }
     }
 
+    final collapsedHeight = AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad ? 150.0 : 110.0;
+
     return MediaQuery(
       data: mediaQuery.copyWith(
         padding: mediaQuery.padding.copyWith(top: mediaQuery.padding.top + adaptiveLayout.topBarHeight),
@@ -570,7 +572,7 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
                       slivers: [
                         SliverAppBar(
                           floating: !floatingAppBar,
-                          collapsedHeight: 80,
+                          collapsedHeight: collapsedHeight,
                           automaticallyImplyLeading: false,
                           primary: true,
                           pinned: floatingAppBar,
@@ -582,7 +584,7 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
                           flexibleSpace: RepaintBoundary(
                             child: Container(
                               width: double.infinity,
-                              height: 200,
+                              height: collapsedHeight,
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   begin: Alignment.topCenter,
@@ -714,7 +716,7 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
                             ),
                           ),
                           bottom: PreferredSize(
-                            preferredSize: Size(0, AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad ? 85 : 35),
+                            preferredSize: const Size(0, 0),
                             child: Padding(
                               padding: sideBarPadding,
                               child: IgnorePointer(
@@ -727,27 +729,28 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
                                     Row(
                                       spacing: 6,
                                       children: [
-                                        ScrollStatePosition(
-                                          controller: scrollController,
-                                          positionBuilder: (state) => AnimatedFadeSize(
-                                            child: state != ScrollState.top
-                                                ? Padding(
-                                                    padding: const EdgeInsets.only(left: 8.0),
-                                                    child: Tooltip(
-                                                      message: context.localized.scrollToTop,
-                                                      child: IconButton.filled(
-                                                        onPressed: () => scrollController.animateTo(0,
-                                                            duration: const Duration(milliseconds: 500),
-                                                            curve: Curves.easeInOutCubic),
-                                                        icon: const Icon(
-                                                          IconsaxPlusLinear.arrow_up,
+                                        if (AdaptiveLayout.inputDeviceOf(context) != InputDevice.dPad)
+                                          ScrollStatePosition(
+                                            controller: scrollController,
+                                            positionBuilder: (state) => AnimatedFadeSize(
+                                              child: state != ScrollState.top
+                                                  ? Padding(
+                                                      padding: const EdgeInsets.only(left: 8.0),
+                                                      child: Tooltip(
+                                                        message: context.localized.scrollToTop,
+                                                        child: IconButton.filled(
+                                                          onPressed: () => scrollController.animateTo(0,
+                                                              duration: const Duration(milliseconds: 500),
+                                                              curve: Curves.easeInOutCubic),
+                                                          icon: const Icon(
+                                                            IconsaxPlusLinear.arrow_up,
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  )
-                                                : const SizedBox(),
+                                                    )
+                                                  : const SizedBox(),
+                                            ),
                                           ),
-                                        ),
                                         Flexible(
                                           child: SingleChildScrollView(
                                             padding: const EdgeInsets.all(8),
@@ -762,7 +765,6 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
                                     if (AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad)
                                       Container(
                                         padding: const EdgeInsets.symmetric(horizontal: 8),
-                                        height: 50,
                                         child: Row(
                                           spacing: 4,
                                           children: generateQuickActions(true).map((e) => e.toButton()).toList(),

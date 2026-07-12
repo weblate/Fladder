@@ -121,7 +121,6 @@ extension CollectionTypeExtension on CollectionType? {
         CollectionType.tvshows => const LibraryFilterModel(
             types: {FladderItemType.series: true},
             recursive: true,
-            isDefault: true,
           ),
         CollectionType.homevideos => const LibraryFilterModel(
             types: {
@@ -131,6 +130,7 @@ extension CollectionTypeExtension on CollectionType? {
               FladderItemType.video: true
             },
           ),
+        CollectionType.folders => const LibraryFilterModel(),
         CollectionType.livetv => const LibraryFilterModel(
             types: {FladderItemType.tvchannel: true},
           ),

@@ -132,4 +132,7 @@ extension LibrarySearchModelX on LibrarySearchModel {
       filters: const LibraryFilterModel(),
     );
   }
+
+  List<String> get currentIds =>
+      folderOverwrite.isNotEmpty ? folderOverwrite.map((e) => e.id).toList() : views.included.map((e) => e.id).toList();
 }

@@ -52,7 +52,7 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
 
   int get pageSize => ref.read(clientSettingsProvider).libraryPageSize ?? 500;
 
-  LibraryFiltersProvider get filterProvider => libraryFiltersProvider(state.views.included.map((e) => e.id).toList());
+  LibraryFiltersProvider get filterProvider => libraryFiltersProvider(state.currentIds);
 
   late final JellyService api = ref.read(jellyApiProvider);
 
@@ -84,8 +84,6 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
     final firstView = state.views.included.firstWhereOrNull((element) => viewModelIds.contains(element.id));
 
     final findFavouriteFilter = ref.read(filterProvider).firstWhereOrNull((element) => element.isFavourite);
-
-    log(filters?.isDefault.toString() ?? "false");
 
     final defaultOrFavourite =
         filters?.isDefault == true && findFavouriteFilter != null ? findFavouriteFilter.filter : filters;
@@ -316,9 +314,7 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
         if (viewModel?.collectionType == CollectionType.tvshows) ItemFields.childcount,
       }.toList(),
       isFavorite: state.filters.favourites,
-      filters: [
-        ...state.filters.itemFilters.included,
-      ],
+      filters: state.filters.itemFilters.included,
       includeItemTypes: state.filters.types.included.map((e) => e.dtoKind).expand((e) => e).toList(),
     );
     return response.body;
