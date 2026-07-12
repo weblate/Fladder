@@ -799,7 +799,7 @@
     "playerSettingsOrientationDesc": "设置视频播放器为特定方向",
     "deviceOrientationLandscapeLeft": "水平向左",
     "deviceOrientationLandscapeRight": "水平向右",
-    "defaultFilterForLibrary": "媒体库的默认筛选器",
+    "defaultFilterForLibrary": "设置媒体库的默认筛选器",
     "removeFilterForLibrary": "删除 {filter}？",
     "@removeFilterForLibrary": {
         "description": "removeFilterForLibrary",
@@ -2112,5 +2112,12 @@
         }
     },
     "incognitoMode": "隐身模式",
-    "incognitoModeDesc": "隐身模式会禁用向服务器发送播放状态"
+    "incognitoModeDesc": "隐身模式会禁用向服务器发送播放状态",
+    "incognito": "隐身",
+    "incognitoModeGlobal": "隐身模式（应用）",
+    "incognitoModeLocal": "隐身模式（个人资料）",
+    "showInSideBar": "在侧边栏中显示",
+    "hideInSideBar": "在侧边栏中隐藏",
+    "showInSideBarDesc": "在侧边栏中显示此筛选器以便快速访问",
+    "applyFilter": "应用筛选器"
 }
