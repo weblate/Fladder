@@ -49,7 +49,7 @@ class SideNavigationRail extends ConsumerWidget {
     final padding = MediaQuery.paddingOf(context);
     final directionalPadding = EdgeInsetsDirectional.fromSTEB(
       padding.left,
-      padding.top + 8,
+      padding.top,
       padding.right,
       padding.bottom,
     );

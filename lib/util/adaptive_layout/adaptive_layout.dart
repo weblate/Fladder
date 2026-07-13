@@ -238,7 +238,9 @@ class _AdaptiveLayoutBuilderState extends ConsumerState<AdaptiveLayoutBuilder> {
         ? hasStatusBanner
             ? 21.0
             : 4.0
-        : defaultTitleBarHeight;
+        : kIsWeb
+            ? 12.0 + bannerHeight
+            : defaultTitleBarHeight;
 
     return ValueListenableBuilder(
       valueListenable: isKeyboardOpen,

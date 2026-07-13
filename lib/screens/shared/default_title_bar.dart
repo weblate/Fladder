@@ -63,149 +63,146 @@ class _DefaultTitleBarState extends ConsumerState<DefaultTitleBar> with WindowLi
             end: Alignment.bottomCenter,
           )),
           height: titleBarHeight,
-          child: kIsWeb
-              ? const SizedBox.shrink()
-              : Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    switch (platform) {
-                      TargetPlatform.android ||
-                      TargetPlatform.iOS =>
-                        SizedBox(height: MediaQuery.paddingOf(context).top),
-                      TargetPlatform.windows || TargetPlatform.linux => Container(
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  color: Colors.black.withValues(alpha: 0),
-                                  child: DragToMoveArea(
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.only(left: 16),
-                                          child: DefaultTextStyle(
-                                            style: TextStyle(
-                                              color: iconColor,
-                                              fontSize: 14,
-                                            ),
-                                            child: Text(widget.label ?? ""),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(boxShadow: [
-                                  BoxShadow(
-                                    color: surfaceColor.withValues(alpha: 0.5),
-                                    blurRadius: 32,
-                                    spreadRadius: 10,
-                                    offset: const Offset(8, -6),
-                                  ),
-                                ]),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              if (!kIsWeb)
+                switch (platform) {
+                  TargetPlatform.android || TargetPlatform.iOS => SizedBox(height: MediaQuery.paddingOf(context).top),
+                  TargetPlatform.windows || TargetPlatform.linux => Container(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              color: Colors.black.withValues(alpha: 0),
+                              child: DragToMoveArea(
                                 child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  mainAxisSize: MainAxisSize.max,
                                   children: [
-                                    FutureBuilder<List<bool>>(future: Future.microtask(() async {
-                                      final isMinimized = await windowManager.isMinimized();
-                                      return [isMinimized];
-                                    }), builder: (context, snapshot) {
-                                      final isMinimized = snapshot.data?.firstOrNull ?? false;
-                                      return IconButton(
-                                        style: IconButton.styleFrom(
-                                            hoverColor: brightness == Brightness.light
-                                                ? Colors.black.withValues(alpha: 0.1)
-                                                : Colors.white.withValues(alpha: 0.2),
-                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2))),
-                                        onPressed: () async {
-                                          fullScreenHelper.closeFullScreen(ref);
-                                          if (isMinimized) {
-                                            windowManager.restore();
-                                          } else {
-                                            windowManager.minimize();
-                                          }
-                                        },
-                                        icon: Transform.translate(
-                                          offset: const Offset(0, -2),
-                                          child: Icon(
-                                            Icons.minimize_rounded,
-                                            color: iconColor,
-                                            size: 20,
-                                          ),
-                                        ),
-                                      );
-                                    }),
-                                    FutureBuilder<List<bool>>(
-                                      future: Future.microtask(() async {
-                                        final isMaximized = await windowManager.isMaximized();
-                                        return [isMaximized];
-                                      }),
-                                      builder: (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
-                                        final maximized = snapshot.data?.firstOrNull ?? false;
-                                        return IconButton(
-                                          style: IconButton.styleFrom(
-                                            hoverColor: brightness == Brightness.light
-                                                ? Colors.black.withValues(alpha: 0.1)
-                                                : Colors.white.withValues(alpha: 0.2),
-                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-                                          ),
-                                          onPressed: () async {
-                                            fullScreenHelper.closeFullScreen(ref);
-                                            if (maximized) {
-                                              await windowManager.unmaximize();
-                                              return;
-                                            }
-                                            if (!maximized) {
-                                              await windowManager.maximize();
-                                            } else {
-                                              await windowManager.unmaximize();
-                                            }
-                                          },
-                                          icon: Transform.translate(
-                                            offset: const Offset(0, 0),
-                                            child: Icon(
-                                              maximized ? Icons.maximize_rounded : Icons.crop_square_rounded,
-                                              color: iconColor,
-                                              size: 19,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    IconButton(
-                                      style: IconButton.styleFrom(
-                                        hoverColor: Colors.red,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(2),
-                                        ),
-                                      ),
-                                      onPressed: () async {
-                                        windowManager.close();
-                                      },
-                                      icon: Transform.translate(
-                                        offset: const Offset(0, -2),
-                                        child: Icon(
-                                          Icons.close_rounded,
+                                    Container(
+                                      padding: const EdgeInsets.only(left: 16),
+                                      child: DefaultTextStyle(
+                                        style: TextStyle(
                                           color: iconColor,
-                                          size: 23,
+                                          fontSize: 14,
                                         ),
+                                        child: Text(widget.label ?? ""),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      TargetPlatform.macOS => const SizedBox.shrink(),
-                      _ => Text(widget.label ?? "Fladder"),
-                    },
-                    const StatusBanners()
-                  ],
-                ),
+                          Container(
+                            decoration: BoxDecoration(boxShadow: [
+                              BoxShadow(
+                                color: surfaceColor.withValues(alpha: 0.5),
+                                blurRadius: 32,
+                                spreadRadius: 10,
+                                offset: const Offset(8, -6),
+                              ),
+                            ]),
+                            child: Row(
+                              children: [
+                                FutureBuilder<List<bool>>(future: Future.microtask(() async {
+                                  final isMinimized = await windowManager.isMinimized();
+                                  return [isMinimized];
+                                }), builder: (context, snapshot) {
+                                  final isMinimized = snapshot.data?.firstOrNull ?? false;
+                                  return IconButton(
+                                    style: IconButton.styleFrom(
+                                        hoverColor: brightness == Brightness.light
+                                            ? Colors.black.withValues(alpha: 0.1)
+                                            : Colors.white.withValues(alpha: 0.2),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2))),
+                                    onPressed: () async {
+                                      fullScreenHelper.closeFullScreen(ref);
+                                      if (isMinimized) {
+                                        windowManager.restore();
+                                      } else {
+                                        windowManager.minimize();
+                                      }
+                                    },
+                                    icon: Transform.translate(
+                                      offset: const Offset(0, -2),
+                                      child: Icon(
+                                        Icons.minimize_rounded,
+                                        color: iconColor,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  );
+                                }),
+                                FutureBuilder<List<bool>>(
+                                  future: Future.microtask(() async {
+                                    final isMaximized = await windowManager.isMaximized();
+                                    return [isMaximized];
+                                  }),
+                                  builder: (BuildContext context, AsyncSnapshot<List<bool>> snapshot) {
+                                    final maximized = snapshot.data?.firstOrNull ?? false;
+                                    return IconButton(
+                                      style: IconButton.styleFrom(
+                                        hoverColor: brightness == Brightness.light
+                                            ? Colors.black.withValues(alpha: 0.1)
+                                            : Colors.white.withValues(alpha: 0.2),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+                                      ),
+                                      onPressed: () async {
+                                        fullScreenHelper.closeFullScreen(ref);
+                                        if (maximized) {
+                                          await windowManager.unmaximize();
+                                          return;
+                                        }
+                                        if (!maximized) {
+                                          await windowManager.maximize();
+                                        } else {
+                                          await windowManager.unmaximize();
+                                        }
+                                      },
+                                      icon: Transform.translate(
+                                        offset: const Offset(0, 0),
+                                        child: Icon(
+                                          maximized ? Icons.maximize_rounded : Icons.crop_square_rounded,
+                                          color: iconColor,
+                                          size: 19,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                IconButton(
+                                  style: IconButton.styleFrom(
+                                    hoverColor: Colors.red,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(2),
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    windowManager.close();
+                                  },
+                                  icon: Transform.translate(
+                                    offset: const Offset(0, -2),
+                                    child: Icon(
+                                      Icons.close_rounded,
+                                      color: iconColor,
+                                      size: 23,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  TargetPlatform.macOS => const SizedBox.shrink(),
+                  _ => Text(widget.label ?? "Fladder"),
+                },
+              const StatusBanners()
+            ],
+          ),
         ),
       ),
     );
