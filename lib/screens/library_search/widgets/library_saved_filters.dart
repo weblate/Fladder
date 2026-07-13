@@ -37,13 +37,12 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
     final controller = TextEditingController();
     final provider = ref.watch(librarySearchProvider(providerKey).notifier);
 
-    final currentFilters = ref.watch(librarySearchProvider(providerKey).select((value) => value.filters));
-
     final folderOverwrite = ref.watch(librarySearchProvider(providerKey).select((value) => value.folderOverwrite));
     final views = ref.watch(librarySearchProvider(providerKey).select((value) => value.views.included));
 
-    final filters = ref.watch(provider.filterProvider);
+    final currentFilters = ref.watch(librarySearchProvider(providerKey).select((value) => value.filters));
 
+    final filters = ref.watch(provider.filterProvider);
     final filterProvider = ref.watch(provider.filterProvider.notifier);
 
     final anyFilterSelected = filters.any((element) => element.filter == currentFilters);
@@ -69,17 +68,16 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
                 filter.isFavourite ? IconsaxPlusBold.star_1 : IconsaxPlusLinear.star_1,
               ),
             ),
-          if (folderOverwrite.isEmpty)
-            ItemActionButton(
-              label: Text(context.localized.showInSideBar),
-              backgroundColor: filter.showInSideBar ? Colors.lightBlueAccent.shade700.withValues(alpha: 0.5) : null,
-              foregroundColor: filter.showInSideBar ? Colors.lightBlueAccent : null,
-              action: () => filterProvider.saveFilter(filter.copyWith(showInSideBar: !filter.showInSideBar)),
-              icon: Icon(
-                color: filter.showInSideBar ? Colors.lightBlueAccent : null,
-                filter.showInSideBar ? IconsaxPlusBold.menu : IconsaxPlusLinear.menu_1,
-              ),
+          ItemActionButton(
+            label: Text(context.localized.showInSideBar),
+            backgroundColor: filter.showInSideBar ? Colors.lightBlueAccent.shade700.withValues(alpha: 0.5) : null,
+            foregroundColor: filter.showInSideBar ? Colors.lightBlueAccent : null,
+            action: () => filterProvider.saveFilter(filter.copyWith(showInSideBar: !filter.showInSideBar)),
+            icon: Icon(
+              color: filter.showInSideBar ? Colors.lightBlueAccent : null,
+              filter.showInSideBar ? IconsaxPlusBold.menu : IconsaxPlusLinear.menu_1,
             ),
+          ),
           ItemActionButton(
             label: Text(context.localized.updateFilterForLibrary),
             action: isCurrentFilter || anyFilterSelected ? null : () => provider.updateFilter(filter),

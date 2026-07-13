@@ -29,7 +29,7 @@ import 'package:fladder/util/list_padding.dart';
 import 'package:fladder/util/localization_helper.dart';
 import 'package:fladder/util/sliver_list_padding.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/background_image.dart';
-import 'package:fladder/widgets/navigation_scaffold/components/music_dashboard_nav_items.dart';
+import 'package:fladder/widgets/navigation_scaffold/components/navigation_items.dart';
 import 'package:fladder/widgets/shared/button_group.dart';
 import 'package:fladder/widgets/shared/ensure_visible.dart';
 import 'package:fladder/widgets/shared/pinch_poster_zoom.dart';

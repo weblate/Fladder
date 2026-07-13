@@ -83,6 +83,10 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
 
     final firstView = state.views.included.firstWhereOrNull((element) => viewModelIds.contains(element.id));
 
+    if (firstView == null && folderId == null) {
+      await loadFolders(folderId: viewModelIds);
+    }
+
     final findFavouriteFilter = ref.read(filterProvider).firstWhereOrNull((element) => element.isFavourite);
 
     final defaultOrFavourite =

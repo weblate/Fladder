@@ -179,6 +179,23 @@ class ViewModel {
     );
   }
 
+  factory ViewModel.createEmpty(String id, CollectionType collectionType) {
+    return ViewModel(
+        name: "",
+        id: id,
+        serverId: "",
+        dateCreated: DateTime.now(),
+        canDelete: false,
+        canDownload: false,
+        parentId: "",
+        collectionType: collectionType,
+        playAccess: PlayAccess.none,
+        recentlyAdded: [],
+        imageData: null,
+        childCount: 0,
+        path: "");
+  }
+
   NavigationButton toNavigationButton(
     bool selected,
     bool horizontal,

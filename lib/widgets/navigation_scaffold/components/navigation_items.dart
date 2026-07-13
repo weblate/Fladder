@@ -20,6 +20,7 @@ import 'package:fladder/theme.dart';
 import 'package:fladder/util/color_extensions.dart';
 import 'package:fladder/util/localization_helper.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/navigation_button.dart';
+import 'package:fladder/widgets/navigation_scaffold/components/side_navigation_buttons.dart';
 import 'package:fladder/widgets/shared/custom_tooltip.dart';
 import 'package:fladder/widgets/shared/item_actions.dart';
 import 'package:fladder/widgets/shared/modal_bottom_sheet.dart';
@@ -161,20 +162,10 @@ List<Widget> buildMusicDashboardNavItems(
         onTap: item.onTap,
       ),
     ),
-    const Divider(
-      indent: 32,
-      endIndent: 32,
-    ),
-    if (playLists.isNotEmpty && expanded)
-      Align(
-        alignment: Alignment.centerLeft,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 28),
-          child: Text(
-            context.localized.mediaTypePlaylist(2),
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-        ),
+    if (playLists.isNotEmpty)
+      LabelDivider(
+        label: context.localized.mediaTypePlaylist(2),
+        shouldExpand: expanded,
       ),
     ...playLists.entries.map(
       (entry) {
@@ -284,8 +275,11 @@ class FilterNavigationItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final createdViews =
+        views.isNotEmpty ? views : filter.ids.map((e) => ViewModel.createEmpty(e, CollectionType.folders));
+
     final selected =
-        context.router.currentUrl.contains("parentId=${views.map((e) => e.id).join(",")},${filter.navKey}");
+        context.router.currentUrl.contains("parentId=${createdViews.map((e) => e.id).join(",")},${filter.navKey}");
 
     final actions = [
       ItemActionButton(
@@ -318,7 +312,7 @@ class FilterNavigationItem extends ConsumerWidget {
         ),
       ),
       position: toolTipPosition,
-      child: views.last.toNavigationButton(
+      child: createdViews.last.toNavigationButton(
         selected,
         true,
         shouldExpand,

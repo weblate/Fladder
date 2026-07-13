@@ -18,8 +18,8 @@ import 'package:fladder/theme.dart';
 import 'package:fladder/util/color_extensions.dart';
 import 'package:fladder/util/localization_helper.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/destination_model.dart';
-import 'package:fladder/widgets/navigation_scaffold/components/music_dashboard_nav_items.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/navigation_button.dart';
+import 'package:fladder/widgets/navigation_scaffold/components/navigation_items.dart';
 import 'package:fladder/widgets/shared/custom_tooltip.dart';
 import 'package:fladder/widgets/shared/simple_overflow_widget.dart';
 
@@ -49,12 +49,11 @@ class SideNavigationButtons extends ConsumerWidget {
     final musicDashboard = ref.watch(musicDashboardModeProvider);
     final playLists = ref.watch(playlistProvider.select((value) => value.collections));
 
-    final filters = ref.watch(userLibraryFilters.select((value) => value
-        .where((element) => element.showInSideBar && views.any((view) => element.ids.contains(view.id)))
-        .toList()));
+    final filters =
+        ref.watch(userLibraryFilters.select((value) => value.where((element) => element.showInSideBar).toList()));
 
     final List<Widget> navItems = [
-      if (filters.isNotEmpty) _LabelDivider(label: context.localized.filter(2), shouldExpand: shouldExpand),
+      if (filters.isNotEmpty) LabelDivider(label: context.localized.filter(2), shouldExpand: shouldExpand),
       ...filters.map(
         (filter) {
           final viewsInFilter = views.where((view) => filter.ids.contains(view.id)).toList();
@@ -68,7 +67,7 @@ class SideNavigationButtons extends ConsumerWidget {
           );
         },
       ),
-      if (views.isNotEmpty) _LabelDivider(label: context.localized.library(2), shouldExpand: shouldExpand),
+      if (views.isNotEmpty) LabelDivider(label: context.localized.library(2), shouldExpand: shouldExpand),
       if (musicDashboard) ...[
         ...buildMusicDashboardNavItems(
           context,
@@ -257,13 +256,14 @@ class SideNavigationButtons extends ConsumerWidget {
   }
 }
 
-class _LabelDivider extends StatelessWidget {
+class LabelDivider extends StatelessWidget {
   final String label;
   final bool shouldExpand;
 
-  const _LabelDivider({
+  const LabelDivider({
     required this.label,
     required this.shouldExpand,
+    super.key,
   });
 
   @override
