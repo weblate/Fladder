@@ -7,6 +7,7 @@ part of 'library_filter_model.dart';
 // **************************************************************************
 
 _LibraryFilterModel _$LibraryFilterModelFromJson(Map<String, dynamic> json) => _LibraryFilterModel(
+      searchQuery: json['searchQuery'] as String? ?? "",
       genres: (json['genres'] as Map<String, dynamic>?)?.map(
             (k, e) => MapEntry(k, e as bool),
           ) ??
@@ -57,6 +58,7 @@ _LibraryFilterModel _$LibraryFilterModelFromJson(Map<String, dynamic> json) => _
     );
 
 Map<String, dynamic> _$LibraryFilterModelToJson(_LibraryFilterModel instance) => <String, dynamic>{
+      'searchQuery': instance.searchQuery,
       'genres': instance.genres,
       'itemFilters': instance.itemFilters.map((k, e) => MapEntry(_$ItemFilterEnumMap[k], e)),
       'studios': const StudioEncoder().toJson(instance.studios),

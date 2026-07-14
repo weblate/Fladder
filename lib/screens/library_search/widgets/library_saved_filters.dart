@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 
+import 'package:fladder/models/library_filter_model.dart';
 import 'package:fladder/models/library_filters_model.dart';
 import 'package:fladder/providers/library_search_provider.dart';
 import 'package:fladder/screens/shared/default_alert_dialog.dart';
@@ -32,6 +33,10 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
     required this.providerKey,
   });
 
+  bool _isCurrentFilter(LibraryFilterModel filter, LibraryFilterModel currentFilters) {
+    return filter == currentFilters;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = TextEditingController();
@@ -45,7 +50,9 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
     final filters = ref.watch(provider.filterProvider);
     final filterProvider = ref.watch(provider.filterProvider.notifier);
 
-    final anyFilterSelected = filters.any((element) => element.filter == currentFilters);
+    final anyFilterSelected = filters.any(
+      (element) => _isCurrentFilter(element.filter, currentFilters),
+    );
 
     final activeLibraries = views.map((e) => e.name).join(", ");
     final folderNames = folderOverwrite.map((e) => e.name).join(", ");
@@ -54,7 +61,11 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
     List<ItemActionButton> filterActions(LibraryFiltersModel filter, bool isCurrentFilter) => [
           ItemActionButton(
             label: Text(context.localized.applyFilter),
-            action: isCurrentFilter ? null : () => provider.loadModel(filter.filter),
+            action: isCurrentFilter
+                ? null
+                : () {
+                    provider.loadModel(filter);
+                  },
             icon: const Icon(IconsaxPlusBold.filter_add),
           ),
           if (views.length == 1 || folderOverwrite.length == 1)
@@ -62,7 +73,7 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
               label: Text(context.localized.defaultFilterForLibrary),
               backgroundColor: filter.isFavourite ? Colors.yellowAccent.shade700.withValues(alpha: 0.5) : null,
               foregroundColor: filter.isFavourite ? Colors.yellowAccent : null,
-              action: () => filterProvider.saveFilter(filter.copyWith(isFavourite: !filter.isFavourite)),
+              action: () => provider.saveFilter(filter.copyWith(isFavourite: !filter.isFavourite)),
               icon: Icon(
                 color: filter.isFavourite ? Colors.yellowAccent : null,
                 filter.isFavourite ? IconsaxPlusBold.star_1 : IconsaxPlusLinear.star_1,
@@ -72,7 +83,7 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
             label: Text(context.localized.showInSideBar),
             backgroundColor: filter.showInSideBar ? Colors.lightBlueAccent.shade700.withValues(alpha: 0.5) : null,
             foregroundColor: filter.showInSideBar ? Colors.lightBlueAccent : null,
-            action: () => filterProvider.saveFilter(filter.copyWith(showInSideBar: !filter.showInSideBar)),
+            action: () => provider.saveFilter(filter.copyWith(showInSideBar: !filter.showInSideBar)),
             icon: Icon(
               color: filter.showInSideBar ? Colors.lightBlueAccent : null,
               filter.showInSideBar ? IconsaxPlusBold.menu : IconsaxPlusLinear.menu_1,
@@ -80,7 +91,7 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
           ),
           ItemActionButton(
             label: Text(context.localized.updateFilterForLibrary),
-            action: isCurrentFilter || anyFilterSelected ? null : () => provider.updateFilter(filter),
+            action: isCurrentFilter ? null : () => provider.updateFilter(filter),
             icon: const Icon(IconsaxPlusBold.refresh),
           ),
           ItemActionButton(
@@ -128,7 +139,7 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
                   children: [
                     ...filters.map(
                       (filter) {
-                        final isCurrentFilter = filter.filter == currentFilters;
+                        final isCurrentFilter = _isCurrentFilter(filter.filter, currentFilters);
                         return Container(
                           key: ValueKey(filter.id),
                           margin: const EdgeInsets.symmetric(vertical: 4),
@@ -145,7 +156,9 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
                                     child: OutlinedTextField(
                                       fillColor: Colors.transparent,
                                       controller: TextEditingController(text: filter.name),
-                                      onSubmitted: (value) => provider.updateFilter(filter.copyWith(name: value)),
+                                      onSubmitted: (value) => provider.updateFilterName(
+                                        filter.copyWith(name: value),
+                                      ),
                                     ),
                                   ),
                                   if (smallSize)
@@ -156,7 +169,7 @@ class LibrarySavedFiltersDialogue extends ConsumerWidget {
                                           .toList(),
                                     )
                                   else
-                                    ...filterActions(filter, isCurrentFilter).map((e) => e.toButton())
+                                    ...filterActions(filter, isCurrentFilter).map((e) => e.toButton()),
                                 ],
                               ),
                             ),

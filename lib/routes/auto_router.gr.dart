@@ -391,6 +391,7 @@ class LibraryRoute extends _i31.PageRouteInfo<void> {
 /// [_i17.LibrarySearchScreen]
 class LibrarySearchRoute extends _i31.PageRouteInfo<LibrarySearchRouteArgs> {
   LibrarySearchRoute({
+    String? query,
     String? viewModelId,
     List<String>? folderId,
     bool? favourites,
@@ -409,6 +410,7 @@ class LibrarySearchRoute extends _i31.PageRouteInfo<LibrarySearchRouteArgs> {
   }) : super(
           LibrarySearchRoute.name,
           args: LibrarySearchRouteArgs(
+            query: query,
             viewModelId: viewModelId,
             folderId: folderId,
             favourites: favourites,
@@ -425,6 +427,7 @@ class LibrarySearchRoute extends _i31.PageRouteInfo<LibrarySearchRouteArgs> {
             key: key,
           ),
           rawQueryParams: {
+            'query': query,
             'parentId': viewModelId,
             'folderId': folderId,
             'favourites': favourites,
@@ -450,6 +453,7 @@ class LibrarySearchRoute extends _i31.PageRouteInfo<LibrarySearchRouteArgs> {
       final queryParams = data.queryParams;
       final args = data.argsAs<LibrarySearchRouteArgs>(
         orElse: () => LibrarySearchRouteArgs(
+          query: queryParams.optString('query'),
           viewModelId: queryParams.optString('parentId'),
           folderId: queryParams.optList('folderId'),
           favourites: queryParams.optBool('favourites'),
@@ -466,6 +470,7 @@ class LibrarySearchRoute extends _i31.PageRouteInfo<LibrarySearchRouteArgs> {
         ),
       );
       return _i17.LibrarySearchScreen(
+        query: args.query,
         viewModelId: args.viewModelId,
         folderId: args.folderId,
         favourites: args.favourites,
@@ -487,6 +492,7 @@ class LibrarySearchRoute extends _i31.PageRouteInfo<LibrarySearchRouteArgs> {
 
 class LibrarySearchRouteArgs {
   const LibrarySearchRouteArgs({
+    this.query,
     this.viewModelId,
     this.folderId,
     this.favourites,
@@ -502,6 +508,8 @@ class LibrarySearchRouteArgs {
     this.isDefault,
     this.key,
   });
+
+  final String? query;
 
   final String? viewModelId;
 
@@ -533,14 +541,15 @@ class LibrarySearchRouteArgs {
 
   @override
   String toString() {
-    return 'LibrarySearchRouteArgs{viewModelId: $viewModelId, folderId: $folderId, favourites: $favourites, sortOrder: $sortOrder, sortingOptions: $sortingOptions, types: $types, genres: $genres, studios: $studios, itemFilters: $itemFilters, tags: $tags, years: $years, recursive: $recursive, isDefault: $isDefault, key: $key}';
+    return 'LibrarySearchRouteArgs{query: $query, viewModelId: $viewModelId, folderId: $folderId, favourites: $favourites, sortOrder: $sortOrder, sortingOptions: $sortingOptions, types: $types, genres: $genres, studios: $studios, itemFilters: $itemFilters, tags: $tags, years: $years, recursive: $recursive, isDefault: $isDefault, key: $key}';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! LibrarySearchRouteArgs) return false;
-    return viewModelId == other.viewModelId &&
+    return query == other.query &&
+        viewModelId == other.viewModelId &&
         const _i38.ListEquality().equals(folderId, other.folderId) &&
         favourites == other.favourites &&
         sortOrder == other.sortOrder &&
@@ -558,6 +567,7 @@ class LibrarySearchRouteArgs {
 
   @override
   int get hashCode =>
+      query.hashCode ^
       viewModelId.hashCode ^
       const _i38.ListEquality().hash(folderId) ^
       favourites.hashCode ^

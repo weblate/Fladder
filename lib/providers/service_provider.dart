@@ -608,6 +608,7 @@ class JellyService {
       userId: account?.id,
       sortBy: sortBy,
       sortOrder: sortOrder,
+      includeItemTypes: includeItemTypes,
     );
   }
 
@@ -622,6 +623,7 @@ class JellyService {
       userId: account?.id,
       sortBy: sortBy,
       recursive: true,
+      includeItemTypes: includeItemTypes,
       sortOrder: sortOrder,
     );
   }

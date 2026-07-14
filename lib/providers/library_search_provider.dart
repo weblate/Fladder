@@ -83,7 +83,7 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
 
     final firstView = state.views.included.firstWhereOrNull((element) => viewModelIds.contains(element.id));
 
-    if (firstView == null && folderId == null) {
+    if (viewModelId?.contains(LibraryFiltersModel.folderKey) == true) {
       await loadFolders(folderId: viewModelIds);
     }
 
@@ -98,27 +98,7 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
     if (!wasInitialized) {
       wasInitialized = true;
       state = state.copyWith(
-        filters: state.filters.copyWith(
-          types: state.filters.types.replaceMap(activeFilter.types, enabledOnly: true),
-          genres: state.filters.genres.replaceMap(
-            activeFilter.genres,
-            enabledOnly: true,
-            comparison: (key1, key2) => key1.toLowerCase() == key2.toLowerCase(),
-          ),
-          studios: state.filters.studios.replaceMap(activeFilter.studios, enabledOnly: true),
-          tags: state.filters.tags.replaceMap(
-            activeFilter.tags,
-            enabledOnly: true,
-            comparison: (key1, key2) => key1.toLowerCase() == key2.toLowerCase(),
-          ),
-          recursive: activeFilter.recursive,
-          favourites: activeFilter.favourites,
-          sortingOption: activeFilter.sortingOption,
-          sortOrder: activeFilter.sortOrder,
-          itemFilters: activeFilter.itemFilters,
-          officialRatings: activeFilter.officialRatings,
-          years: state.filters.years.replaceMap(activeFilter.years, enabledOnly: true),
-        ),
+        filters: state.filters.loadModel(activeFilter),
       );
     }
 
@@ -195,15 +175,15 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
 
     if (state.folderOverwrite.isNotEmpty) {
       await handleItemLoading(state.folderOverwrite.last.id, state.folderOverwrite.last);
-    } else if (state.views.hasEnabled) {
-      await handleViewLoading();
-    } else {
-      if (state.searchQuery.isEmpty && state.filters.favourites == false) {
+    } else if (!state.views.hasEnabled) {
+      if (state.filters.searchQuery.isEmpty && state.filters.favourites != true) {
         state = state.copyWith(posters: []);
       } else {
         final response = await _loadLibrary(recursive: true);
         state = state.copyWith(posters: response?.items ?? []);
       }
+    } else {
+      await handleViewLoading();
     }
 
     loading = false;
@@ -264,6 +244,7 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
     var tempFilters = tempState.filters;
     tempState = tempState.copyWith(
       filters: tempFilters.copyWith(
+        searchQuery: filters.searchQuery,
         types: filters.types.isEmpty
             ? tempFilters.types.setAll(false).setKeys(enabledCollections, true)
             : tempFilters.types.replaceMap(filters.types),
@@ -307,7 +288,7 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
       int? limit,
       int? startIndex,
       String? searchTerm}) async {
-    final searchString = searchTerm ?? (state.searchQuery.isNotEmpty ? state.searchQuery : null);
+    final searchString = searchTerm ?? (state.filters.searchQuery.isNotEmpty ? state.filters.searchQuery : null);
     final response = await api.itemsGet(
       parentId: viewModel?.id ?? id,
       searchTerm: searchString,
@@ -388,7 +369,7 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
   }
 
   void setSearch(String query) {
-    state = state.copyWith(searchQuery: query);
+    state = state.copyWith(filters: state.filters.copyWith(searchQuery: query));
     ref.read(userProvider.notifier).addSearchQuery(query);
   }
 
@@ -438,7 +419,6 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
 
   void clearAllFilters() {
     state = state.copyWith(
-      searchQuery: '',
       filters: state.filters.clear(),
     );
   }
@@ -608,7 +588,7 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
     } else if (state.views.hasEnabled) {
       await handleViewLoading();
     } else {
-      if (state.searchQuery.isEmpty && state.filters.favourites == false) {
+      if (state.filters.searchQuery.isEmpty && state.filters.favourites == false) {
         itemsToPlay = [];
       } else {
         final response = await _loadLibrary(recursive: true, shuffle: shuffle);
@@ -669,7 +649,7 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
   }
 
   PlaybackQueueSource? _createMusicQueueSource({required bool shuffle}) {
-    final recursive = state.searchQuery.isNotEmpty ? true : state.filters.recursive;
+    final recursive = state.filters.searchQuery.isNotEmpty ? true : state.filters.recursive;
 
     if (state.folderOverwrite.isNotEmpty) {
       final currentItem = state.folderOverwrite.last;
@@ -717,7 +697,7 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
   }
 
   PhotoQueueSource? createPhotoQueueSource({required bool shuffle}) {
-    final recursive = state.searchQuery.isNotEmpty ? true : state.filters.recursive;
+    final recursive = state.filters.searchQuery.isNotEmpty ? true : state.filters.recursive;
 
     if (state.folderOverwrite.isNotEmpty) {
       return _buildPhotoQueueSource(
@@ -736,7 +716,7 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
       );
     }
 
-    if (state.searchQuery.isEmpty && state.filters.favourites == false) {
+    if (state.filters.searchQuery.isEmpty && state.filters.favourites == false) {
       return null;
     }
 
@@ -947,10 +927,26 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
     state = state.copyWith();
   }
 
-  void loadModel(LibraryFilterModel model) => state = state.copyWith(filters: state.filters.loadModel(model));
+  void loadModel(LibraryFiltersModel model) {
+    state = state.copyWith(
+      filters: state.filters.loadModel(model.filter),
+    );
+  }
 
-  void saveFiltersNew(String newName) =>
-      ref.read(filterProvider.notifier).saveFilter(LibraryFiltersModel.fromLibrarySearch(newName, state));
+  void saveFilter(LibraryFiltersModel model) => ref.read(filterProvider.notifier).saveFilter(
+        model,
+      );
+
+  void saveFiltersNew(String newName) => ref.read(filterProvider.notifier).saveFilter(
+        LibraryFiltersModel.fromLibrarySearch(
+          newName,
+          state,
+        ),
+      );
+
+  void updateFilterName(LibraryFiltersModel model) {
+    ref.read(filterProvider.notifier).saveFilter(model);
+  }
 
   void updateFilter(LibraryFiltersModel model) {
     ref.read(filterProvider.notifier).saveFilter(

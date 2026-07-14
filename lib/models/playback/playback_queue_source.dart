@@ -200,7 +200,7 @@ class LibraryMusicQueueSource extends PlaybackQueueSource {
   @override
   Future<List<ItemBaseModel>> fetchQueue(ProviderReader read, {int? limit, int? startIndex}) async {
     final filters = libraryState.filters;
-    final searchTerm = libraryState.searchQuery.isNotEmpty ? libraryState.searchQuery : null;
+    final searchTerm = libraryState.filters.searchQuery.isNotEmpty ? libraryState.filters.searchQuery : null;
 
     List<AudioModel> items = [];
 

@@ -19,7 +19,6 @@ abstract class LibrarySearchModel with _$LibrarySearchModel {
     @Default(false) bool loading,
     @Default(false) bool selecteMode,
     @Default(<ItemBaseModel>[]) List<ItemBaseModel> folderOverwrite,
-    @Default("") String searchQuery,
     @Default(<ViewModel, bool>{}) Map<ViewModel, bool> views,
     @Default(<ItemBaseModel>[]) List<ItemBaseModel> posters,
     @Default(<ItemBaseModel>[]) List<ItemBaseModel> selectedPosters,
@@ -31,7 +30,7 @@ abstract class LibrarySearchModel with _$LibrarySearchModel {
 }
 
 extension LibrarySearchModelX on LibrarySearchModel {
-  bool get hasActiveFilters => filters.hasActiveFilters || searchQuery.isNotEmpty;
+  bool get hasActiveFilters => filters.hasActiveFilters;
 
   int get totalItemCount {
     if (libraryItemCounts.isEmpty) return posters.length;
@@ -128,7 +127,6 @@ extension LibrarySearchModelX on LibrarySearchModel {
 
   LibrarySearchModel setFiltersToDefault() {
     return copyWith(
-      searchQuery: '',
       filters: const LibraryFilterModel(),
     );
   }

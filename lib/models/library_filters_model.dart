@@ -26,6 +26,7 @@ abstract class LibraryFiltersModel with _$LibraryFiltersModel {
     required bool isFavourite,
     @Default(false) bool showInSideBar,
     @Default([]) List<String> ids,
+    @Default([]) List<String> viewNames,
     @Default(LibraryFilterModel()) LibraryFilterModel filter,
   }) = _LibraryFiltersModel;
 
@@ -52,12 +53,16 @@ abstract class LibraryFiltersModel with _$LibraryFiltersModel {
 
   Key get navKey => Key("filter-$id");
 
-  Future<void> navigateTo(BuildContext context) async {
+  static String get folderKey => "folder";
+
+  Future<void> navigateTo(BuildContext context, {bool isFolder = false}) async {
     context.pushRoute(
       LibrarySearchRoute(
-        viewModelId: "${ids.join(",")},$navKey",
+        viewModelId: "${ids.join(",")},$navKey${isFolder ? ",$folderKey" : ""}",
         key: navKey,
-      ).withFilter(filter),
+      ).withFilter(
+        filter,
+      ),
     );
   }
 

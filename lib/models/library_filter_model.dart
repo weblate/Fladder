@@ -19,6 +19,7 @@ abstract class LibraryFilterModel with _$LibraryFilterModel {
   const LibraryFilterModel._();
 
   const factory LibraryFilterModel({
+    @Default("") String searchQuery,
     @Default({}) Map<String, bool> genres,
     @Default({
       ItemFilter.isplayed: false,
@@ -61,6 +62,7 @@ abstract class LibraryFilterModel with _$LibraryFilterModel {
 
   LibraryFilterModel loadModel(LibraryFilterModel model) {
     return copyWith(
+      searchQuery: model.searchQuery,
       genres: genres.replaceMap(model.genres),
       itemFilters: itemFilters.replaceMap(model.itemFilters),
       studios: studios.replaceMap(model.studios),
@@ -94,7 +96,8 @@ abstract class LibraryFilterModel with _$LibraryFilterModel {
         other.favourites == favourites &&
         other.recursive == recursive &&
         other.groupBy == groupBy &&
-        other.hideEmptyShows == hideEmptyShows;
+        other.hideEmptyShows == hideEmptyShows &&
+        other.searchQuery == searchQuery;
   }
 
   @override
@@ -159,6 +162,7 @@ extension LibrarySearchRouteExtension on LibrarySearchRoute {
       years: model.years,
       recursive: model.recursive,
       isDefault: model.isDefault,
+      query: model.searchQuery,
     );
   }
 }

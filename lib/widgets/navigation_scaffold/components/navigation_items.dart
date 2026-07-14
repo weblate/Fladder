@@ -278,8 +278,10 @@ class FilterNavigationItem extends ConsumerWidget {
     final createdViews =
         views.isNotEmpty ? views : filter.ids.map((e) => ViewModel.createEmpty(e, CollectionType.folders));
 
-    final selected =
-        context.router.currentUrl.contains("parentId=${createdViews.map((e) => e.id).join(",")},${filter.navKey}");
+    final selected = context.router.currentUrl
+        .contains("parentId=${createdViews.map((e) => e.id).join(",")},${filter.navKey.toString()}");
+
+    final isFolder = views.isEmpty;
 
     final actions = [
       ItemActionButton(
@@ -288,6 +290,8 @@ class FilterNavigationItem extends ConsumerWidget {
         action: () => ref.read(userProvider.notifier).hideFilterFromSideBar(filter),
       )
     ];
+
+    final viewNames = views.map((e) => e.name).join(", ");
 
     return CustomTooltip(
       tooltipContent: Container(
@@ -303,10 +307,11 @@ class FilterNavigationItem extends ConsumerWidget {
                 filter.name,
                 style: Theme.of(context).textTheme.titleSmall,
               ),
-              Text(
-                views.map((e) => e.name).join(", "),
-                style: Theme.of(context).textTheme.bodySmall,
-              )
+              if (viewNames.isNotEmpty)
+                Text(
+                  viewNames,
+                  style: Theme.of(context).textTheme.bodySmall,
+                )
             ],
           ),
         ),
@@ -317,7 +322,7 @@ class FilterNavigationItem extends ConsumerWidget {
         true,
         shouldExpand,
         label: filter.name,
-        () => filter.navigateTo(context),
+        () => filter.navigateTo(context, isFolder: isFolder),
         onSecondaryTapDown: (details) => showItemContextMenu(
           context,
           ref,

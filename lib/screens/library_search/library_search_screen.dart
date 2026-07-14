@@ -49,6 +49,7 @@ import 'package:fladder/widgets/shared/scroll_position.dart';
 
 @RoutePage()
 class LibrarySearchScreen extends ConsumerStatefulWidget {
+  final String? query;
   final String? viewModelId;
   final bool? favourites;
   final List<String>? folderId;
@@ -63,6 +64,7 @@ class LibrarySearchScreen extends ConsumerStatefulWidget {
   final bool? recursive;
   final bool? isDefault;
   const LibrarySearchScreen({
+    @QueryParam("query") this.query,
     @QueryParam("parentId") this.viewModelId,
     @QueryParam("folderId") this.folderId,
     @QueryParam("favourites") this.favourites,
@@ -503,10 +505,12 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
           widget.studios != null ||
           widget.years != null ||
           widget.tags != null ||
-          widget.recursive != null) {
+          widget.recursive != null ||
+          widget.query != null) {
         final defaultFilter = const LibraryFilterModel();
 
         return defaultFilter.copyWith(
+          searchQuery: widget.query ?? "",
           favourites: widget.favourites,
           sortOrder: widget.sortOrder ?? defaultFilter.sortOrder,
           sortingOption: widget.sortingOptions ?? defaultFilter.sortingOption,
@@ -739,24 +743,21 @@ class LibraryAppBar extends ConsumerWidget {
                       ),
                     ),
                   Flexible(
-                    child: Hero(
-                      tag: "PrimarySearch",
-                      child: SuggestionSearchBar(
-                        autoFocus: isEmptySearchScreen,
-                        key: uniqueKey,
-                        title: librarySearchResults.searchBarTitle(context),
-                        debounceDuration: const Duration(seconds: 1),
-                        onItem: (value) async {
-                          await value.navigateTo(context);
+                    child: SuggestionSearchBar(
+                      autoFocus: isEmptySearchScreen,
+                      key: uniqueKey,
+                      title: librarySearchResults.searchBarTitle(context),
+                      debounceDuration: const Duration(seconds: 1),
+                      onItem: (value) async {
+                        await value.navigateTo(context);
+                        refreshKey.currentState?.show();
+                      },
+                      onSubmited: (value) async {
+                        if (librarySearchResults.filters.searchQuery != value) {
+                          libraryProvider.setSearch(value);
                           refreshKey.currentState?.show();
-                        },
-                        onSubmited: (value) async {
-                          if (librarySearchResults.searchQuery != value) {
-                            libraryProvider.setSearch(value);
-                            refreshKey.currentState?.show();
-                          }
-                        },
-                      ),
+                        }
+                      },
                     ),
                   ),
                   SizedBox.square(

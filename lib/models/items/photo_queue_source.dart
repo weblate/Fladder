@@ -25,7 +25,7 @@ class PhotoQueueSource {
     int? startIndex,
   }) async {
     final filters = libraryState.filters;
-    final searchTerm = libraryState.searchQuery.isNotEmpty ? libraryState.searchQuery : null;
+    final searchTerm = libraryState.filters.searchQuery.isNotEmpty ? libraryState.filters.searchQuery : null;
 
     final response = await read(jellyApiProvider).itemsGet(
       parentId: parentId,
