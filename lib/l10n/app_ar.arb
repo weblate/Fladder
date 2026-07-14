@@ -2122,5 +2122,8 @@
     "showInSideBar": "إظهار في الشريط الجانبي",
     "hideInSideBar": "إخفاء من الشريط الجانبي",
     "showInSideBarDesc": "إظهار هذا الفلتر في الشريط الجانبي للوصول السريع",
-    "applyFilter": "تطبيق الفلتر"
+    "applyFilter": "تطبيق الفلتر",
+    "playerSettingsAmbientBlurTitle": "تفعيل التمويه المحيطي",
+    "playerSettingsAmbientBlurDesc": "تفعيل التمويه المحيطي في المشغّل. سيؤدي ذلك إلى تمويه الخلفية خلف المشغّل لتقليل التشتت.",
+    "playerSettingsAmbientBlurDescWarning": "قد يتسبب التمويه المحيطي في مشاكل بالأداء على الأجهزة ذات الإمكانيات المحدودة."
 }
