@@ -135,7 +135,7 @@ class _VideoPlayerState extends ConsumerState<VideoPlayer> with WidgetsBindingOb
                 lastScale = 0.0;
               },
               child: Stack(children: [
-                if (ref.watch(videoPlayerSettingsProvider.select((value) => value.ambientBlur)))
+                if (!kIsWeb && ref.watch(videoPlayerSettingsProvider.select((value) => value.ambientBlur)))
                   AmbientBlur(
                     child: playerController.videoWidget(
                           const Key("VideoPlayerBlur"),
