@@ -2119,5 +2119,8 @@
     "showInSideBar": "在侧边栏中显示",
     "hideInSideBar": "在侧边栏中隐藏",
     "showInSideBarDesc": "在侧边栏中显示此筛选器以便快速访问",
-    "applyFilter": "应用筛选器"
+    "applyFilter": "应用筛选器",
+    "playerSettingsAmbientBlurTitle": "启用环境光模糊",
+    "playerSettingsAmbientBlurDesc": "启用播放器中的环境光模糊效果。这将模糊播放器后的背景，以减少干扰。",
+    "playerSettingsAmbientBlurDescWarning": "环境光模糊可能会导致低端设备出现性能问题。"
 }
