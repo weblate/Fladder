@@ -23,10 +23,10 @@ class AmbientBlur extends StatefulWidget {
     this.sigmaY = 64.0,
     this.duration = const Duration(seconds: 4),
     this.downscaleFactor = 4.0,
-    this.opacity = 0.45,
+    this.opacity = 0.50,
     this.vignetteColor = Colors.black,
-    this.vignetteCornerRadius = 128.0,
-    this.vignetteFeather = 128.0,
+    this.vignetteCornerRadius = 64.0,
+    this.vignetteFeather = 128,
     this.vignetteMargin = 0,
   });
 
@@ -174,7 +174,6 @@ class _AmbientBlurState extends State<AmbientBlur> with SingleTickerProviderStat
                     RawImage(
                       image: _oldImage,
                       fit: BoxFit.fill,
-                      filterQuality: FilterQuality.low,
                     ),
                   if (_currentImage != null && _oldImage != _currentImage)
                     FadeTransition(
@@ -182,7 +181,6 @@ class _AmbientBlurState extends State<AmbientBlur> with SingleTickerProviderStat
                       child: RawImage(
                         image: _currentImage,
                         fit: BoxFit.fill,
-                        filterQuality: FilterQuality.low,
                       ),
                     ),
                   if (widget.vignetteColor.a > 0)
@@ -190,7 +188,7 @@ class _AmbientBlurState extends State<AmbientBlur> with SingleTickerProviderStat
                       child: RepaintBoundary(
                         child: CustomPaint(
                           painter: _RoundedRectVignettePainter(
-                            color: widget.vignetteColor,
+                            color: widget.vignetteColor.withAlpha(125),
                             cornerRadius: widget.vignetteCornerRadius,
                             feather: widget.vignetteFeather,
                             margin: widget.vignetteMargin,
