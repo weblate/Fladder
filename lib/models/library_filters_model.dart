@@ -53,12 +53,10 @@ abstract class LibraryFiltersModel with _$LibraryFiltersModel {
 
   Key get navKey => Key("filter-$id");
 
-  static String get folderKey => "folder";
-
-  Future<void> navigateTo(BuildContext context, {bool isFolder = false}) async {
+  Future<void> navigateTo(BuildContext context) async {
     context.pushRoute(
       LibrarySearchRoute(
-        viewModelId: "${ids.join(",")},$navKey${isFolder ? ",$folderKey" : ""}",
+        parentId: [...ids, navKey.toString()],
         key: navKey,
       ).withFilter(
         filter,

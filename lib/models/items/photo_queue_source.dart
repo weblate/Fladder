@@ -63,6 +63,7 @@ class PhotoQueueSource {
 
     final items = response.body?.items.whereType<PhotoModel>().toList() ?? [];
     final totalCount = response.body?.totalRecordCount ?? items.length;
-    return (items: items, totalCount: totalCount);
+    //Addiotional shuffle because server shuffle does not work in certain occasions
+    return (items: shuffle ? (items..shuffle()) : items, totalCount: totalCount);
   }
 }

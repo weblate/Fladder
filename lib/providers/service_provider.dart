@@ -28,6 +28,7 @@ import 'package:fladder/providers/incognito_mode_provider.dart';
 import 'package:fladder/providers/sync_provider.dart';
 import 'package:fladder/providers/user_provider.dart';
 import 'package:fladder/util/jellyfin_extension.dart';
+import 'package:fladder/util/list_extensions.dart';
 
 const _userSettings = "usersettings";
 const _client = "fladder";
@@ -385,8 +386,13 @@ class JellyService {
       );
     }
 
+    final forceShuffle = searchTerm?.isNotEmpty == true && sortBy?.contains(ItemSortBy.random) == true;
+
     return response.copyWith(
-      body: ServerQueryResult.fromBaseQuery(response.bodyOrThrow, ref),
+      body: ServerQueryResult.fromBaseQuery(
+          response.bodyOrThrow
+              .copyWith(items: forceShuffle ? response.bodyOrThrow.items?.random() : response.bodyOrThrow.items),
+          ref),
     );
   }
 
@@ -622,7 +628,6 @@ class JellyService {
       parentId: parentId,
       userId: account?.id,
       sortBy: sortBy,
-      recursive: true,
       includeItemTypes: includeItemTypes,
       sortOrder: sortOrder,
     );

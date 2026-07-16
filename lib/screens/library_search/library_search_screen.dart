@@ -50,9 +50,8 @@ import 'package:fladder/widgets/shared/scroll_position.dart';
 @RoutePage()
 class LibrarySearchScreen extends ConsumerStatefulWidget {
   final String? query;
-  final String? viewModelId;
+  final List<String>? parentId;
   final bool? favourites;
-  final List<String>? folderId;
   final SortingOrder? sortOrder;
   final SortingOptions? sortingOptions;
   final Map<FladderItemType, bool>? types;
@@ -65,8 +64,7 @@ class LibrarySearchScreen extends ConsumerStatefulWidget {
   final bool? isDefault;
   const LibrarySearchScreen({
     @QueryParam("query") this.query,
-    @QueryParam("parentId") this.viewModelId,
-    @QueryParam("folderId") this.folderId,
+    @QueryParam("parentId") this.parentId,
     @QueryParam("favourites") this.favourites,
     @QueryParam("sortOrder") this.sortOrder,
     @QueryParam("sortOptions") this.sortingOptions,
@@ -93,7 +91,7 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
 
   bool loadOnStart = false;
 
-  Key get uniqueKey => Key(widget.folderId?.join(',').toString() ?? widget.viewModelId ?? "EmptySearch");
+  Key get uniqueKey => Key(widget.parentId?.join(',').toString() ?? "EmptySearch");
   AutoDisposeStateNotifierProvider<LibrarySearchNotifier, LibrarySearchModel> get providerKey =>
       librarySearchProvider(uniqueKey);
   LibrarySearchNotifier get libraryProvider => ref.read(librarySearchProvider(uniqueKey).notifier);
@@ -138,7 +136,7 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isEmptySearchScreen = widget.viewModelId == null && widget.favourites == null && widget.folderId == null;
+    final isEmptySearchScreen = widget.parentId == null && widget.favourites == null;
     final librarySearchResults = ref.watch(providerKey);
     final postersList = librarySearchResults.posters.hideEmptyChildren(librarySearchResults.filters.hideEmptyShows);
     final libraryViewType = ref.watch(libraryViewTypeProvider);
@@ -576,9 +574,8 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
                     final filter = incomingFilter();
                     if (libraryProvider.mounted) {
                       return libraryProvider.initRefresh(
-                        widget.folderId,
-                        widget.viewModelId,
-                        filter,
+                        parentIds: widget.parentId ?? [],
+                        filters: filter,
                       );
                     }
                   },

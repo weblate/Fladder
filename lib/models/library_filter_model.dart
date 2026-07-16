@@ -149,8 +149,7 @@ class StudioEncoder implements JsonConverter<Map<Studio, bool>, String> {
 extension LibrarySearchRouteExtension on LibrarySearchRoute {
   LibrarySearchRoute withFilter(LibraryFilterModel model) {
     return LibrarySearchRoute(
-      viewModelId: args?.viewModelId,
-      folderId: args?.folderId,
+      parentId: args?.parentId,
       favourites: model.favourites,
       sortOrder: model.sortOrder,
       sortingOptions: model.sortingOption,

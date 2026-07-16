@@ -170,7 +170,7 @@ class ItemBaseModel with ItemBaseModelMappable {
       case BoxSetModel _:
       case PlaylistModel _:
       case PhotoAlbumModel _:
-        return LibrarySearchScreen(folderId: [id]);
+        return LibrarySearchScreen(parentId: [id]);
       case PhotoModel _:
         final photo = this as PhotoModel;
         return PhotoViewerScreen(
@@ -200,14 +200,14 @@ class ItemBaseModel with ItemBaseModelMappable {
       case FolderModel _:
       case BoxSetModel _:
       case PlaylistModel _:
-        LibrarySearchRoute(folderId: [id], viewModelId: "folder")
+        LibrarySearchRoute(parentId: [id, "folder"])
             .withFilter(
               CollectionType.folders.defaultFilters,
             )
             .push(context);
         break;
       case PhotoAlbumModel _:
-        LibrarySearchRoute(folderId: [id], viewModelId: "photo-album")
+        LibrarySearchRoute(parentId: [id, "photo-album"])
             .withFilter(
               CollectionType.photos.defaultFilters,
             )

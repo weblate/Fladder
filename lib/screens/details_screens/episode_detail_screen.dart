@@ -162,7 +162,7 @@ class _ItemDetailScreenState extends ConsumerState<EpisodeDetailScreen> {
                     onGenreClicked: (genre) {
                       final itemViewId = details.series?.parentId ?? "";
                       LibrarySearchRoute(
-                        folderId: [itemViewId],
+                        parentId: [itemViewId],
                         genres: {genre.name: true},
                       ).push(context);
                     },

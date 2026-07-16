@@ -63,29 +63,24 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
 
   bool get loading => state.loading;
 
-  Future<void> initRefresh(
-    List<String>? folderId,
-    String? viewModelId,
+  Future<void> initRefresh({
+    required List<String> parentIds,
     LibraryFilterModel? filters,
-  ) async {
+  }) async {
     loading = true;
     state = state.resetLazyLoad();
 
-    List<String> viewModelIds = viewModelId?.split(",") ?? [];
+    final views = await loadViews(parentIds);
 
-    if (state.views.isEmpty && state.folderOverwrite.isEmpty) {
-      if (folderId != null) {
-        await loadFolders(folderId: folderId);
-      } else {
-        await loadViews(viewModelIds);
-      }
+    final isFolder = views.keys.map((e) => e.id).toList().containsAny(parentIds) == false && parentIds.isNotEmpty;
+
+    if (isFolder) {
+      await loadFolders(folderId: parentIds);
+    } else {
+      state = state.copyWith(views: views);
     }
 
-    final firstView = state.views.included.firstWhereOrNull((element) => viewModelIds.contains(element.id));
-
-    if (viewModelId?.contains(LibraryFiltersModel.folderKey) == true) {
-      await loadFolders(folderId: viewModelIds);
-    }
+    final firstView = state.views.included.firstWhereOrNull((element) => parentIds.contains(element.id) == true);
 
     final findFavouriteFilter = ref.read(filterProvider).firstWhereOrNull((element) => element.isFavourite);
 
@@ -93,7 +88,9 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
         filters?.isDefault == true && findFavouriteFilter != null ? findFavouriteFilter.filter : filters;
     final activeFilter = defaultOrFavourite ?? firstView?.collectionType.defaultFilters ?? const LibraryFilterModel();
 
-    await loadFilters(activeFilter);
+    if (firstView != null && state.views.isNotEmpty) {
+      await loadFilters(activeFilter);
+    }
 
     if (!wasInitialized) {
       wasInitialized = true;
@@ -189,7 +186,7 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
     loading = false;
   }
 
-  Future<void> loadViews(
+  Future<Map<ViewModel, bool>> loadViews(
     List<String>? viewModelId,
   ) async {
     final response = await api.usersUserIdViewsGet(includeHidden: false);
@@ -202,9 +199,7 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
 
     final views = mappedModels.setKeys(selectedModels, true);
 
-    state = state.copyWith(
-      views: views,
-    );
+    return views;
   }
 
   Future<void> loadFolders({List<String>? folderId}) async {
@@ -228,20 +223,28 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
     final itemIds = state.currentIds;
 
     final enabledCollections = state.views.included.map((e) => e.collectionType.itemKinds).expand((element) => element);
-    final mappedList = await Future.wait(itemIds.map((id) => _loadFilters(id)));
-    final studios =
-        (await Future.wait(itemIds.map((id) => _loadStudios(id)))).expand((element) => element).toSet().toList();
-    var tempState = state.copyWith();
-    final genres =
-        (await Future.wait(itemIds.map((id) => _loadGenres(id)))).expand((element) => element).toSet().toList();
+
+    final mappedListFuture = Future.wait(itemIds.map((id) => _loadFilters(id)));
+    final studiosFuture = Future.wait(itemIds.map((id) => _loadStudios(id)));
+    final genresFuture = Future.wait(itemIds.map((id) => _loadGenres(id)));
+    final yearsFuture = Future.wait(itemIds.map((id) => _loadYears(id)));
+
+    final mappedList = await mappedListFuture;
+    final studiosRaw = await studiosFuture;
+    final genresRaw = await genresFuture;
+    final yearsRaw = await yearsFuture;
+
+    final studios = studiosRaw.expand((element) => element).toSet().toList();
+    final genres = genresRaw.expand((element) => element).toSet().toList();
+    final years = yearsRaw.expand((element) => element).toSet().toList();
+
     final tags = mappedList
         .expand((element) => element?.tags ?? <String>[])
         .sorted((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
 
-    final years =
-        (await Future.wait(itemIds.map((id) => _loadYears(id)))).expand((element) => element).toSet().toList();
-
+    var tempState = state.copyWith();
     var tempFilters = tempState.filters;
+
     tempState = tempState.copyWith(
       filters: tempFilters.copyWith(
         searchQuery: filters.searchQuery,
@@ -250,11 +253,19 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
             : tempFilters.types.replaceMap(filters.types),
         genres: {for (var element in genres) element.name: false}.replaceMap(filters.genres),
         studios: {for (var element in studios) element: false}.replaceMap(filters.studios),
-        itemFilters: {for (var element in ItemFilter.values) element: false}.replaceMap(filters.itemFilters),
+        itemFilters: {
+          for (var element in {
+            ItemFilter.isplayed,
+            ItemFilter.isunplayed,
+            ItemFilter.isresumable,
+          })
+            element: false
+        }.replaceMap(filters.itemFilters),
         years: {for (var element in years) element: false}.replaceMap(filters.years),
         tags: {for (var element in tags) element: false}.replaceMap(filters.tags),
       ),
     );
+
     state = tempState;
   }
 

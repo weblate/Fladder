@@ -64,7 +64,7 @@ class MusicLibraryItem {
           ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.grid;
           context.pushRoute(
             LibrarySearchRoute(
-              viewModelId: "${musicViews.join(",")},albums",
+              parentId: [...musicViews, "albums"],
               key: const Key("albums-nav-item"),
             ).withFilter(
               const LibraryFilterModel(
@@ -86,7 +86,7 @@ class MusicLibraryItem {
           ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.list;
           context.pushRoute(
             LibrarySearchRoute(
-              viewModelId: "${musicViews.join(",")},tracks",
+              parentId: [...musicViews, "tracks"],
               key: const Key("tracks-nav-item"),
             ).withFilter(
               const LibraryFilterModel(
@@ -108,7 +108,7 @@ class MusicLibraryItem {
           ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.grid;
           context.pushRoute(
             LibrarySearchRoute(
-              viewModelId: "${musicViews.join(",")},artists",
+              parentId: [...musicViews, "artists"],
               key: const Key("artists-nav-item"),
             ).withFilter(
               const LibraryFilterModel(
@@ -130,7 +130,7 @@ class MusicLibraryItem {
             ref.read(libraryViewTypeProvider.notifier).state = LibraryViewTypes.grid;
             context.pushRoute(
               LibrarySearchRoute(
-                viewModelId: "${collectionView.join(",")},collections",
+                parentId: [...collectionView, "collections"],
                 key: const Key("collections-nav-item"),
               ),
             );
@@ -278,10 +278,7 @@ class FilterNavigationItem extends ConsumerWidget {
     final createdViews =
         views.isNotEmpty ? views : filter.ids.map((e) => ViewModel.createEmpty(e, CollectionType.folders));
 
-    final selected = context.router.currentUrl
-        .contains("parentId=${createdViews.map((e) => e.id).join(",")},${filter.navKey.toString()}");
-
-    final isFolder = views.isEmpty;
+    final selected = context.router.currentUrl.contains(filter.navKey.toString());
 
     final actions = [
       ItemActionButton(
@@ -322,7 +319,7 @@ class FilterNavigationItem extends ConsumerWidget {
         true,
         shouldExpand,
         label: filter.name,
-        () => filter.navigateTo(context, isFolder: isFolder),
+        () => filter.navigateTo(context),
         onSecondaryTapDown: (details) => showItemContextMenu(
           context,
           ref,
@@ -369,7 +366,8 @@ class ViewNavigationItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selected = context.router.currentUrl.contains("parentId=${view.id}&");
+    final routerUrl = context.router.currentUrl;
+    final selected = routerUrl.contains("parentId=${view.id}&") && !routerUrl.contains("filter");
 
     final actions = [
       ItemActionButton(

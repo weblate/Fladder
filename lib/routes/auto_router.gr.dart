@@ -392,8 +392,7 @@ class LibraryRoute extends _i31.PageRouteInfo<void> {
 class LibrarySearchRoute extends _i31.PageRouteInfo<LibrarySearchRouteArgs> {
   LibrarySearchRoute({
     String? query,
-    String? viewModelId,
-    List<String>? folderId,
+    List<String>? parentId,
     bool? favourites,
     _i35.SortingOrder? sortOrder,
     _i35.SortingOptions? sortingOptions,
@@ -411,8 +410,7 @@ class LibrarySearchRoute extends _i31.PageRouteInfo<LibrarySearchRouteArgs> {
           LibrarySearchRoute.name,
           args: LibrarySearchRouteArgs(
             query: query,
-            viewModelId: viewModelId,
-            folderId: folderId,
+            parentId: parentId,
             favourites: favourites,
             sortOrder: sortOrder,
             sortingOptions: sortingOptions,
@@ -428,8 +426,7 @@ class LibrarySearchRoute extends _i31.PageRouteInfo<LibrarySearchRouteArgs> {
           ),
           rawQueryParams: {
             'query': query,
-            'parentId': viewModelId,
-            'folderId': folderId,
+            'parentId': parentId,
             'favourites': favourites,
             'sortOrder': sortOrder,
             'sortOptions': sortingOptions,
@@ -454,8 +451,7 @@ class LibrarySearchRoute extends _i31.PageRouteInfo<LibrarySearchRouteArgs> {
       final args = data.argsAs<LibrarySearchRouteArgs>(
         orElse: () => LibrarySearchRouteArgs(
           query: queryParams.optString('query'),
-          viewModelId: queryParams.optString('parentId'),
-          folderId: queryParams.optList('folderId'),
+          parentId: queryParams.optList('parentId'),
           favourites: queryParams.optBool('favourites'),
           sortOrder: queryParams.get('sortOrder'),
           sortingOptions: queryParams.get('sortOptions'),
@@ -471,8 +467,7 @@ class LibrarySearchRoute extends _i31.PageRouteInfo<LibrarySearchRouteArgs> {
       );
       return _i17.LibrarySearchScreen(
         query: args.query,
-        viewModelId: args.viewModelId,
-        folderId: args.folderId,
+        parentId: args.parentId,
         favourites: args.favourites,
         sortOrder: args.sortOrder,
         sortingOptions: args.sortingOptions,
@@ -493,8 +488,7 @@ class LibrarySearchRoute extends _i31.PageRouteInfo<LibrarySearchRouteArgs> {
 class LibrarySearchRouteArgs {
   const LibrarySearchRouteArgs({
     this.query,
-    this.viewModelId,
-    this.folderId,
+    this.parentId,
     this.favourites,
     this.sortOrder,
     this.sortingOptions,
@@ -511,9 +505,7 @@ class LibrarySearchRouteArgs {
 
   final String? query;
 
-  final String? viewModelId;
-
-  final List<String>? folderId;
+  final List<String>? parentId;
 
   final bool? favourites;
 
@@ -541,7 +533,7 @@ class LibrarySearchRouteArgs {
 
   @override
   String toString() {
-    return 'LibrarySearchRouteArgs{query: $query, viewModelId: $viewModelId, folderId: $folderId, favourites: $favourites, sortOrder: $sortOrder, sortingOptions: $sortingOptions, types: $types, genres: $genres, studios: $studios, itemFilters: $itemFilters, tags: $tags, years: $years, recursive: $recursive, isDefault: $isDefault, key: $key}';
+    return 'LibrarySearchRouteArgs{query: $query, parentId: $parentId, favourites: $favourites, sortOrder: $sortOrder, sortingOptions: $sortingOptions, types: $types, genres: $genres, studios: $studios, itemFilters: $itemFilters, tags: $tags, years: $years, recursive: $recursive, isDefault: $isDefault, key: $key}';
   }
 
   @override
@@ -549,8 +541,7 @@ class LibrarySearchRouteArgs {
     if (identical(this, other)) return true;
     if (other is! LibrarySearchRouteArgs) return false;
     return query == other.query &&
-        viewModelId == other.viewModelId &&
-        const _i38.ListEquality().equals(folderId, other.folderId) &&
+        const _i38.ListEquality().equals(parentId, other.parentId) &&
         favourites == other.favourites &&
         sortOrder == other.sortOrder &&
         sortingOptions == other.sortingOptions &&
@@ -568,8 +559,7 @@ class LibrarySearchRouteArgs {
   @override
   int get hashCode =>
       query.hashCode ^
-      viewModelId.hashCode ^
-      const _i38.ListEquality().hash(folderId) ^
+      const _i38.ListEquality().hash(parentId) ^
       favourites.hashCode ^
       sortOrder.hashCode ^
       sortingOptions.hashCode ^

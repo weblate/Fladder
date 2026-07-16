@@ -150,7 +150,7 @@ class ViewModel {
     }
     context.pushRoute(
       LibrarySearchRoute(
-        viewModelId: id,
+        parentId: [id],
       ).withFilter(collectionType.defaultFilters),
     );
   }

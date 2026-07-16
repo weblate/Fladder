@@ -76,9 +76,18 @@ extension CollectionTypeExtension on CollectionType? {
       case CollectionType.tvshows:
         return {FladderItemType.series};
       case CollectionType.homevideos:
-        return {FladderItemType.photoAlbum, FladderItemType.folder, FladderItemType.photo, FladderItemType.video};
+        return {
+          FladderItemType.photoAlbum,
+          FladderItemType.folder,
+          FladderItemType.photo,
+          FladderItemType.video,
+        };
       case CollectionType.livetv:
         return {FladderItemType.tvchannel};
+      case CollectionType.folders:
+        return FladderItemType.values.toSet().difference({FladderItemType.baseType});
+      case CollectionType.books:
+        return {FladderItemType.book};
       default:
         return {};
     }
@@ -111,32 +120,20 @@ extension CollectionTypeExtension on CollectionType? {
 
   LibraryFilterModel get defaultFilters => switch (this) {
         CollectionType.music => const LibraryFilterModel(
-            types: {FladderItemType.musicAlbum: true},
             recursive: true,
           ),
         CollectionType.movies => const LibraryFilterModel(
-            types: {FladderItemType.movie: true},
             recursive: true,
           ),
         CollectionType.tvshows => const LibraryFilterModel(
-            types: {FladderItemType.series: true},
             recursive: true,
           ),
-        CollectionType.homevideos => const LibraryFilterModel(
-            types: {
-              FladderItemType.photoAlbum: true,
-              FladderItemType.folder: true,
-              FladderItemType.photo: true,
-              FladderItemType.video: true
-            },
-          ),
-        CollectionType.folders => const LibraryFilterModel(),
-        CollectionType.livetv => const LibraryFilterModel(
-            types: {FladderItemType.tvchannel: true},
-          ),
+        CollectionType.books => const LibraryFilterModel(),
+        CollectionType.livetv => const LibraryFilterModel(),
         _ => const LibraryFilterModel(),
       }
           .copyWith(
+        types: {for (var item in itemKinds) item: true},
         isDefault: true,
       );
 

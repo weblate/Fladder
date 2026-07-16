@@ -247,7 +247,7 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
                             onGenreClicked: (genre) {
                               final itemViewId = album?.parentId ?? "";
                               LibrarySearchRoute(
-                                folderId: [itemViewId],
+                                parentId: [itemViewId],
                                 genres: {genre.name: true},
                               ).push(context);
                             },
