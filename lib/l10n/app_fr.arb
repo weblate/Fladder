@@ -779,7 +779,7 @@
             }
         }
     },
-    "defaultFilterForLibrary": "Filtre par défaut pour la bibliothèque",
+    "defaultFilterForLibrary": "Définir le filtre par défaut pour la bibliothèque",
     "updateFilterForLibrary": "Mettre à jour le filtre",
     "deleteFilterConfirmation": "Voulez-vous vraiment supprimer ce filtre ?",
     "libraryFiltersLimitReached": "Limite de filtres atteinte (10), supprimez-en quelques-uns",
@@ -2019,5 +2019,22 @@
     "musicDashboard": "Tableau de bord musical",
     "quiet": "Faible",
     "loud": "Fort",
-    "toggleSubtitles": "Afficher/Masquer les sous-titres"
+    "toggleSubtitles": "Afficher/Masquer les sous-titres",
+    "openJellyfinQuickConnect": "Ouvrir Jellyfin QuickConnect",
+    "posterColorsDesc": "Utilisez des couleurs générées pour les affiches à la place de la couleur par défaut",
+    "share": "Partager",
+    "disc": "Disque {number}",
+    "@disc": {
+        "description": "disc",
+        "placeholders": {
+            "number": {
+                "type": "int"
+            }
+        }
+    },
+    "incognito": "Incognito",
+    "showInSideBar": "Afficher dans la barre latérale",
+    "hideInSideBar": "Cacher de la barre latérale",
+    "showInSideBarDesc": "Afficher ce filtre dans la barre latérale pour un accès rapide",
+    "playerSettingsAmbientBlurTitle": "Activer le flou ambiant"
 }
