@@ -2036,5 +2036,7 @@
     "showInSideBar": "Afficher dans la barre latérale",
     "hideInSideBar": "Cacher de la barre latérale",
     "showInSideBarDesc": "Afficher ce filtre dans la barre latérale pour un accès rapide",
-    "playerSettingsAmbientBlurTitle": "Activer le flou ambiant"
+    "playerSettingsAmbientBlurTitle": "Activer le flou ambiant",
+    "posterColorsTitle": "Couleurs d'affiche générées",
+    "setAs": "Définir comme"
 }
