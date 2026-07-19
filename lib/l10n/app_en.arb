@@ -509,6 +509,16 @@
       }
     }
   },
+  "mediaTypeMusicVideo": "{count, plural, one{Music Video} other{Music Videos}}",
+  "@mediaTypeMusicVideo": {
+    "description": "Music Video (plural)",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "1"
+      }
+    }
+  },
   "mediaTypePhoto": "{count, plural, one{Photo} other{Photos}}",
   "@mediaTypePhoto": {
     "description": "Photo (plural)",
