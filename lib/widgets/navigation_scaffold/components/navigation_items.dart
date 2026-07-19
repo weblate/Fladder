@@ -280,6 +280,8 @@ class FilterNavigationItem extends ConsumerWidget {
 
     final selected = context.router.currentUrl.contains(filter.navKey.toString());
 
+    final viewNames = filter.viewNames.isEmpty ? views.map((e) => e.name).join(", ") : filter.viewNames.join(", ");
+
     final actions = [
       ItemActionButton(
         label: Text(context.localized.hideInSideBar),
@@ -302,9 +304,9 @@ class FilterNavigationItem extends ConsumerWidget {
                 filter.name,
                 style: Theme.of(context).textTheme.titleSmall,
               ),
-              if (filter.viewNames.isNotEmpty)
+              if (viewNames.isNotEmpty)
                 Text(
-                  filter.viewNames.join(", "),
+                  viewNames,
                   style: Theme.of(context).textTheme.bodySmall,
                 )
             ],
