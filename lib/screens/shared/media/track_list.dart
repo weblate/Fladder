@@ -24,7 +24,7 @@ typedef TrackArtistTapCallback = void Function(AudioModel track);
 typedef TrackSecondaryTapCallback = void Function(AudioModel track, TapDownDetails details);
 
 class TrackList extends ConsumerStatefulWidget {
-  final String title;
+  final String? title;
   final bool enableSorting;
   final bool showHeader;
   final bool showDiscSplit;
@@ -41,7 +41,7 @@ class TrackList extends ConsumerStatefulWidget {
   final EdgeInsets? padding;
 
   const TrackList({
-    required this.title,
+    this.title,
     this.enableSorting = true,
     this.showHeader = true,
     this.showDiscSplit = false,
@@ -279,7 +279,7 @@ class _TrackListState extends ConsumerState<TrackList> {
         spacing: 8,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (widget.title.isNotEmpty) Text(widget.title, style: Theme.of(context).textTheme.titleLarge),
+          if (widget.title?.isNotEmpty == true) Text(widget.title!, style: Theme.of(context).textTheme.titleLarge),
           Table(
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             children: [

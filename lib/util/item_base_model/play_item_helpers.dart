@@ -229,6 +229,53 @@ extension AudioModelAudioPlayback on AudioModel? {
   }
 }
 
+extension PlayQueueSource on PlaybackQueueSource? {
+  Future<void> play(
+    BuildContext context,
+    WidgetRef ref, {
+    Duration? startPosition,
+    bool showPlaybackOption = false,
+  }) async {
+    final queueSource = this;
+    if (queueSource == null) return;
+
+    await ref.read(videoPlayerProvider.notifier).init();
+
+    final queue = await queueSource.fetchQueue(ref.read);
+    if (queue.isEmpty) {
+      FladderSnack.show(context.localized.unableToPlayMedia, context: context);
+      return;
+    }
+
+    final op = CancelableOperation.fromFuture(ref.read(playbackModelHelper).createPlaybackModel(
+          context,
+          queue.firstOrNull,
+          libraryQueue: queue,
+          queueSource: queueSource,
+          showPlaybackOptions: showPlaybackOption,
+          startPosition: startPosition,
+        ));
+
+    final model = await op.valueOrCancellation(null);
+    if (op.isCanceled || model == null) {
+      if (!op.isCanceled && !showPlaybackOption) {
+        FladderSnack.show(context.localized.unableToPlayMedia, context: context);
+      }
+      return;
+    }
+
+    final currentIndex = queue.indexWhere((element) => element.id == model.item.id).clamp(0, queue.length - 1);
+    final actualStartPosition = startPosition ?? await model.startDuration() ?? Duration.zero;
+
+    await ref.read(videoPlayerProvider.notifier).loadAudioPlaybackItem(
+          model,
+          queue,
+          currentIndex,
+          actualStartPosition,
+        );
+  }
+}
+
 extension ArtistModelLatestTracksPlayback on ArtistModel? {
   Future<void> playLatestTracks(
     BuildContext context,

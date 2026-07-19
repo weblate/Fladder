@@ -56,6 +56,41 @@ class ArtistLatestTracksQueueSource extends PlaybackQueueSource {
   }
 }
 
+class ArtistFavoriteQueueSource extends PlaybackQueueSource {
+  final String artistId;
+
+  const ArtistFavoriteQueueSource({
+    required this.artistId,
+    required super.limit,
+  });
+
+  @override
+  bool get supportsRefill => true;
+
+  @override
+  Future<List<ItemBaseModel>> fetchQueue(ProviderReader read, {int? limit, int? startIndex}) async {
+    final response = await read(jellyApiProvider).itemsGet(
+      artistIds: [artistId],
+      includeItemTypes: [BaseItemKind.audio],
+      recursive: true,
+      sortBy: [
+        ItemSortBy.album,
+        ItemSortBy.parentindexnumber,
+        ItemSortBy.indexnumber,
+        ItemSortBy.sortname,
+      ],
+      isFavorite: true,
+      sortOrder: [SortOrder.ascending],
+      enableTotalRecordCount: false,
+      collapseBoxSetItems: false,
+      startIndex: startIndex,
+      limit: limit ?? this.limit,
+    );
+
+    return response.body?.items.whereType<AudioModel>().toList() ?? [];
+  }
+}
+
 class ArtistCatalogQueueSource extends PlaybackQueueSource {
   final String artistId;
 

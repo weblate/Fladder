@@ -16,10 +16,12 @@ import 'package:fladder/models/items/item_shared_models.dart';
 import 'package:fladder/models/items/movie_model.dart';
 import 'package:fladder/models/items/photos_model.dart';
 import 'package:fladder/models/items/series_model.dart';
+import 'package:fladder/models/playback/playback_queue_source.dart';
 import 'package:fladder/providers/sync_provider.dart';
 import 'package:fladder/providers/user_provider.dart';
 import 'package:fladder/routes/auto_router.gr.dart';
 import 'package:fladder/screens/collections/add_to_collection.dart';
+import 'package:fladder/screens/details_screens/tracks_detail_screen.dart';
 import 'package:fladder/screens/metadata/edit_item.dart';
 import 'package:fladder/screens/metadata/identifty_screen.dart';
 import 'package:fladder/screens/metadata/info_screen.dart';
@@ -199,11 +201,25 @@ extension ItemBaseModelExtensions on ItemBaseModel {
       if (!exclude.contains(ItemActions.instantMix))
         if (this is AudioModel || this is AlbumModel || this is ArtistModel)
           ItemActionButton(
-            action: () => switch (this) {
-              AudioModel audio => audio.playInstantMix(context, ref),
-              AlbumModel album => album.playInstantMix(context, ref),
-              ArtistModel artist => artist.playInstantMix(context, ref),
-              _ => Future.value(),
+            action: () {
+              final limit = 200;
+              final queueSource = switch (this) {
+                AudioModel audio => AudioInstantMixQueueSource(audioId: audio.id, limit: limit),
+                AlbumModel album => AlbumInstantMixQueueSource(albumId: album.id, limit: limit),
+                ArtistModel artist => ArtistInstantMixQueueSource(artistId: artist.id, limit: limit),
+                _ => null,
+              };
+
+              if (queueSource != null) {
+                return showTracksDetailsScreen(
+                  context: context,
+                  item: this,
+                  ref: ref,
+                  queueSource: queueSource,
+                );
+              } else {
+                return Future.value();
+              }
             },
             icon: const Icon(IconsaxPlusLinear.blend_2),
             label: Text(context.localized.instantMix),

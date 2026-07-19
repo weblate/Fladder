@@ -5,11 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 
 import 'package:fladder/models/items/album_model.dart';
+import 'package:fladder/models/playback/playback_queue_source.dart';
 import 'package:fladder/providers/items/album_details_provider.dart';
 import 'package:fladder/providers/settings/client_settings_provider.dart';
 import 'package:fladder/providers/user_provider.dart';
 import 'package:fladder/providers/video_player_provider.dart';
 import 'package:fladder/routes/auto_router.gr.dart';
+import 'package:fladder/screens/details_screens/tracks_detail_screen.dart';
 import 'package:fladder/screens/shared/detail_scaffold.dart';
 import 'package:fladder/screens/shared/fladder_notification_overlay.dart';
 import 'package:fladder/screens/shared/media/components/poster_placeholder.dart';
@@ -214,9 +216,15 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
                                           ),
                                           SelectableIconButton(
                                             onPressed: tracks.isNotEmpty
-                                                ? () async {
-                                                    await album.playInstantMix(detailsContext, ref);
-                                                  }
+                                                ? () => showTracksDetailsScreen(
+                                                      context: detailsContext,
+                                                      item: album!,
+                                                      ref: ref,
+                                                      queueSource: AlbumInstantMixQueueSource(
+                                                        albumId: album.id,
+                                                        limit: 200,
+                                                      ),
+                                                    )
                                                 : null,
                                             selected: false,
                                             icon: IconsaxPlusLinear.blend_2,
