@@ -2125,5 +2125,45 @@
     "applyFilter": "تطبيق الفلتر",
     "playerSettingsAmbientBlurTitle": "تفعيل التمويه المحيطي",
     "playerSettingsAmbientBlurDesc": "تفعيل التمويه المحيطي في المشغّل. سيؤدي ذلك إلى تمويه الخلفية خلف المشغّل لتقليل التشتت.",
-    "playerSettingsAmbientBlurDescWarning": "قد يتسبب التمويه المحيطي في مشاكل بالأداء على الأجهزة ذات الإمكانيات المحدودة."
+    "playerSettingsAmbientBlurDescWarning": "قد يتسبب التمويه المحيطي في مشاكل بالأداء على الأجهزة ذات الإمكانيات المحدودة.",
+    "mediaTypeMusicVideo": "{count, plural, one{فيديو موسيقي} other{فيديوهات موسيقية}}",
+    "@mediaTypeMusicVideo": {
+        "description": "Music Video (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "openSelected": "فتح العناصر المحددة",
+    "discography": "الأعمال الكاملة",
+    "youLiked": "أعجبتك",
+    "instantMixBy": "مزج فوري لـ {artist}",
+    "@instantMixBy": {
+        "description": "Instant Mix of artist",
+        "placeholders": {
+            "artist": {
+                "type": "String"
+            }
+        }
+    },
+    "latestTracksBy": "أحدث المقاطع لـ {artist}",
+    "@latestTracksBy": {
+        "description": "Latest tracks by artist",
+        "placeholders": {
+            "artist": {
+                "type": "String"
+            }
+        }
+    },
+    "favoritesOf": "مفضلات {artist}",
+    "@favoritesOf": {
+        "description": "Favorites of artist",
+        "placeholders": {
+            "artist": {
+                "type": "String"
+            }
+        }
+    }
 }
