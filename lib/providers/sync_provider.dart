@@ -223,16 +223,22 @@ class SyncNotifier extends StateNotifier<SyncSettingsModel> {
   Directory get mainDirectory => Directory(path.joinAll([_savePath ?? "", subPath]));
 
   Directory? get saveDirectory {
-    if (kIsWeb) return null;
-    final directory = _savePath != null
-        ? Directory(path.joinAll([_savePath ?? "", subPath, ref.read(userProvider)?.id ?? "UnknownUser"]))
-        : null;
-    directory?.createSync(recursive: true);
-    if (directory?.existsSync() == true) {
-      final noMedia = File(path.joinAll([directory?.path ?? "", ".nomedia"]));
-      noMedia.writeAsString('');
+    try {
+      if (kIsWeb) return null;
+      final directory = _savePath != null
+          ? Directory(path.joinAll([_savePath ?? "", subPath, ref.read(userProvider)?.id ?? "UnknownUser"]))
+          : null;
+      directory?.createSync(recursive: true);
+      if (directory?.existsSync() == true) {
+        final noMedia = File(path.joinAll([directory?.path ?? "", ".nomedia"]));
+        noMedia.writeAsString('');
+        noMedia.createSync();
+      }
+      return directory;
+    } catch (e) {
+      log('Error accessing save directory: ${e.toString()}');
+      return null;
     }
-    return directory;
   }
 
   String? get syncPath => saveDirectory?.path;
