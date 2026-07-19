@@ -15,7 +15,6 @@ import 'package:fladder/models/boxset_model.dart';
 import 'package:fladder/models/item_base_model.dart';
 import 'package:fladder/models/items/photos_model.dart';
 import 'package:fladder/models/items/playlist_model.dart';
-import 'package:fladder/models/library_search/library_search_model.dart';
 import 'package:fladder/models/library_search/library_search_options.dart';
 import 'package:fladder/providers/library_search_provider.dart';
 import 'package:fladder/providers/settings/client_settings_provider.dart';
@@ -84,7 +83,8 @@ class LibraryViews extends ConsumerWidget {
 
     List<ItemAction> otherActions(ItemBaseModel item) {
       return [
-        if (ref.watch(librarySearchProvider(key!).select((value) => value.nestedCurrentItem is BoxSetModel))) ...{
+        if (ref.watch(
+            librarySearchProvider(key!).select((value) => value.folderOverwrite.firstOrNull?.type is BoxSetModel))) ...{
           ItemActionButton(
             label: Text(context.localized.removeFromCollection),
             icon: const Icon(IconsaxPlusLinear.archive_slash),
@@ -96,7 +96,8 @@ class LibraryViews extends ConsumerWidget {
             },
           )
         },
-        if (ref.watch(librarySearchProvider(key!).select((value) => value.nestedCurrentItem is PlaylistModel))) ...{
+        if (ref.watch(librarySearchProvider(key!)
+            .select((value) => value.folderOverwrite.firstOrNull?.type is PlaylistModel))) ...{
           ItemActionButton(
             label: Text(context.localized.removeFromPlaylist),
             icon: const Icon(IconsaxPlusLinear.archive_minus),

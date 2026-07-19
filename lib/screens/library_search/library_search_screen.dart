@@ -17,6 +17,7 @@ import 'package:fladder/models/library_search/library_search_options.dart';
 import 'package:fladder/models/settings/client_settings_model.dart';
 import 'package:fladder/providers/library_search_provider.dart';
 import 'package:fladder/providers/settings/client_settings_provider.dart';
+import 'package:fladder/routes/auto_router.gr.dart';
 import 'package:fladder/screens/collections/add_to_collection.dart';
 import 'package:fladder/screens/library_search/widgets/library_filter_chips.dart';
 import 'package:fladder/screens/library_search/widgets/library_play_options_.dart';
@@ -162,7 +163,7 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
       (value) => value.backgroundImage == BackgroundType.blurred && value.enableBlurEffects,
     ));
 
-    List<ItemAction>? itemActions = librarySearchResults.nestedCurrentItem?.generateActions(
+    List<ItemAction>? itemActions = librarySearchResults.folderOverwrite.firstOrNull?.generateActions(
       context,
       ref,
       exclude: {
@@ -309,10 +310,23 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
 
       final hasSelection = librarySearchResults.selectedPosters.isNotEmpty;
 
+      final selectedPostersId = librarySearchResults.selectedPosters.map((e) => e.id).toList();
+
       if (isSelectMode) {
         return [
           if (inlinedPlayButtons) playButton,
           shuffleButton,
+          if (librarySearchResults.showOpenMultiple)
+            ItemActionButton(
+              action: () {
+                LibrarySearchRoute(
+                  parentId: selectedPostersId,
+                  key: Key(selectedPostersId.join(',')),
+                ).push(context);
+              },
+              label: Text(context.localized.openSelected),
+              icon: const Icon(IconsaxPlusLinear.folder_open),
+            ),
           ItemActionDivider(),
           ItemActionButton(
             action: () {
@@ -385,7 +399,7 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
             label: Text(context.localized.markAsUnwatched),
             icon: const Icon(IconsaxPlusLinear.eye_slash),
           ),
-          if (librarySearchResults.nestedCurrentItem is BoxSetModel)
+          if (librarySearchResults.folderOverwrite.firstOrNull is BoxSetModel)
             ItemActionButton(
                 action: hasSelection
                     ? () async {
@@ -402,7 +416,7 @@ class _LibrarySearchScreenState extends ConsumerState<LibrarySearchScreen> {
                     child: Icon(IconsaxPlusLinear.save_remove, size: 20),
                   ),
                 )),
-          if (librarySearchResults.nestedCurrentItem is PlaylistModel)
+          if (librarySearchResults.folderOverwrite.firstOrNull is PlaylistModel)
             ItemActionButton(
               action: hasSelection
                   ? () async {
@@ -765,13 +779,13 @@ class LibraryAppBar extends ConsumerWidget {
                         borderRadius: FladderTheme.defaultShape.borderRadius,
                       ),
                       child: Tooltip(
-                        message: librarySearchResults.nestedCurrentItem?.type.label(context.localized) ??
+                        message: librarySearchResults.folderOverwrite.firstOrNull?.type.label(context.localized) ??
                             context.localized.library(1),
                         child: AdaptiveLayout.inputDeviceOf(context) == InputDevice.pointer
                             ? PopupMenuButton(
                                 tooltip: context.localized.library(1),
-                                icon: Icon(
-                                    librarySearchResults.nestedCurrentItem?.type.icon ?? IconsaxPlusLinear.document),
+                                icon: Icon(librarySearchResults.folderOverwrite.firstOrNull?.type.icon ??
+                                    IconsaxPlusLinear.document),
                                 itemBuilder: (context) => menuActions.toList().popupMenuItems(useIcons: true),
                               )
                             : IconButton(
@@ -792,10 +806,12 @@ class LibraryAppBar extends ConsumerWidget {
                                 icon: Padding(
                                   padding: const EdgeInsets.all(6),
                                   child: Icon(
-                                    librarySearchResults.nestedCurrentItem?.type.icon ?? IconsaxPlusLinear.document,
-                                    color: librarySearchResults.nestedCurrentItem?.userData.isFavourite == true
-                                        ? Theme.of(context).colorScheme.primary
-                                        : null,
+                                    librarySearchResults.folderOverwrite.firstOrNull?.type.icon ??
+                                        IconsaxPlusLinear.document,
+                                    color:
+                                        librarySearchResults.folderOverwrite.firstOrNull?.userData.isFavourite == true
+                                            ? Theme.of(context).colorScheme.primary
+                                            : null,
                                   ),
                                 ),
                               ),

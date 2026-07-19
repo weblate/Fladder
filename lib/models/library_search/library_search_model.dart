@@ -57,16 +57,31 @@ extension LibrarySearchModelX on LibrarySearchModel {
 
   String searchBarTitle(BuildContext context) {
     if (folderOverwrite.isNotEmpty) {
-      return "${context.localized.search} ${folderOverwrite.last.name}...";
+      return "${context.localized.search} ${folderOverwrite.map((e) => e.name).join(",")}...";
     }
     return views.included.length == 1
         ? "${context.localized.search} ${views.included.first.name}..."
         : "${context.localized.search} ${context.localized.library(2)}...";
   }
 
-  ItemBaseModel? get nestedCurrentItem => folderOverwrite.lastOrNull;
-
   List<ItemBaseModel> get activePosters => selectedPosters.isNotEmpty ? selectedPosters : posters;
+
+  bool get showOpenMultiple {
+    if (totalItemCount == 0) return false;
+    if (selectedPosters.isNotEmpty) {
+      return selectedPosters.none(
+        (element) => !{
+          FladderItemType.folder,
+          FladderItemType.photoAlbum,
+          FladderItemType.musicAlbum,
+          FladderItemType.musicArtist,
+          FladderItemType.series,
+          FladderItemType.season,
+        }.contains(element.type),
+      );
+    }
+    return false;
+  }
 
   bool get showPlayButtons {
     if (totalItemCount == 0) return false;

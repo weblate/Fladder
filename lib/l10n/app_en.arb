@@ -2821,5 +2821,6 @@
   "applyFilter": "Apply filter",
   "playerSettingsAmbientBlurTitle": "Enable ambient blur",
   "playerSettingsAmbientBlurDesc": "Enable ambient blur in the player. This will blur the background behind the player to reduce distractions.",
-  "playerSettingsAmbientBlurDescWarning": "Ambient blur can cause performance issues on lower-end devices."
+  "playerSettingsAmbientBlurDescWarning": "Ambient blur can cause performance issues on lower-end devices.",
+  "openSelected": "Open selected"
 }

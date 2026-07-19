@@ -38,6 +38,7 @@ abstract class LibraryFiltersModel with _$LibraryFiltersModel {
     bool? isFavourite,
     String? id,
     bool showInSideBar = false,
+    List<String>? viewNames,
   }) {
     return LibraryFiltersModel(
       id: id ?? Xid().toString(),
@@ -46,6 +47,7 @@ abstract class LibraryFiltersModel with _$LibraryFiltersModel {
       ids: searchModel.currentIds,
       filter: searchModel.filters,
       showInSideBar: showInSideBar,
+      viewNames: viewNames ?? [],
     );
   }
 

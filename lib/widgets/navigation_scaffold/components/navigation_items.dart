@@ -288,8 +288,6 @@ class FilterNavigationItem extends ConsumerWidget {
       )
     ];
 
-    final viewNames = views.map((e) => e.name).join(", ");
-
     return CustomTooltip(
       tooltipContent: Container(
         decoration: BoxDecoration(
@@ -304,9 +302,9 @@ class FilterNavigationItem extends ConsumerWidget {
                 filter.name,
                 style: Theme.of(context).textTheme.titleSmall,
               ),
-              if (viewNames.isNotEmpty)
+              if (filter.viewNames.isNotEmpty)
                 Text(
-                  viewNames,
+                  filter.viewNames.join(", "),
                   style: Theme.of(context).textTheme.bodySmall,
                 )
             ],

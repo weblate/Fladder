@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:fladder/jellyfin/jellyfin_open_api.swagger.dart';
 import 'package:fladder/models/items/photos_model.dart';
 import 'package:fladder/models/library_search/library_search_model.dart';
@@ -7,14 +9,14 @@ import 'package:fladder/util/map_bool_helper.dart';
 
 class PhotoQueueSource {
   final LibrarySearchModel libraryState;
-  final String? parentId;
+  final List<String>? parentIds;
   final bool? recursive;
   final bool shuffle;
   final int limit;
 
   const PhotoQueueSource({
     required this.libraryState,
-    required this.parentId,
+    required this.parentIds,
     required this.recursive,
     required this.shuffle,
     required this.limit,
@@ -25,7 +27,75 @@ class PhotoQueueSource {
     int? startIndex,
   }) async {
     final filters = libraryState.filters;
-    final searchTerm = libraryState.filters.searchQuery.isNotEmpty ? libraryState.filters.searchQuery : null;
+    final searchTerm = filters.searchQuery.isNotEmpty ? filters.searchQuery : null;
+    final effectiveParentIds = (parentIds == null || parentIds!.isEmpty) ? [null] : parentIds!;
+
+    final countFutures = effectiveParentIds.map((id) => _fetchFromJellyfin(
+          read: read,
+          parentId: id,
+          searchTerm: searchTerm,
+          startIndex: 0,
+          localLimit: 0,
+        ));
+
+    final countResponses = await Future.wait(countFutures);
+
+    int currentGlobalIndex = 0;
+    int itemsNeeded = limit;
+    int aggregatedTotalCount = 0;
+
+    final targetStart = startIndex ?? 0;
+    final targetEnd = targetStart + limit;
+
+    final fetchFutures = <Future<({List<PhotoModel> items, int count})>>[];
+
+    for (int i = 0; i < effectiveParentIds.length; i++) {
+      final parentId = effectiveParentIds[i];
+      final parentTotal = countResponses[i].count;
+      aggregatedTotalCount += parentTotal;
+
+      if (itemsNeeded <= 0) continue;
+
+      final parentStart = currentGlobalIndex;
+      final parentEnd = currentGlobalIndex + parentTotal;
+
+      if (targetStart < parentEnd && targetEnd > parentStart) {
+        final localStartIndex = math.max(0, targetStart - parentStart);
+        final maxAvailable = parentTotal - localStartIndex;
+        final localLimit = math.min(itemsNeeded, maxAvailable);
+
+        fetchFutures.add(_fetchFromJellyfin(
+          read: read,
+          parentId: parentId,
+          searchTerm: searchTerm,
+          startIndex: localStartIndex,
+          localLimit: localLimit,
+        ));
+
+        itemsNeeded -= localLimit;
+      }
+
+      currentGlobalIndex += parentTotal;
+    }
+
+    final fetchResponses = await Future.wait(fetchFutures);
+    final finalItems = fetchResponses.expand((r) => r.items).toList();
+
+    if (shuffle) {
+      finalItems.shuffle();
+    }
+
+    return (items: finalItems, totalCount: aggregatedTotalCount);
+  }
+
+  Future<({List<PhotoModel> items, int count})> _fetchFromJellyfin({
+    required ProviderReader read,
+    required String? parentId,
+    required String? searchTerm,
+    required int startIndex,
+    required int localLimit,
+  }) async {
+    final filters = libraryState.filters;
 
     final response = await read(jellyApiProvider).itemsGet(
       parentId: parentId,
@@ -36,7 +106,7 @@ class PhotoQueueSource {
       officialRatings: filters.officialRatings.included,
       years: filters.years.included,
       isMissing: false,
-      limit: limit,
+      limit: localLimit,
       startIndex: startIndex,
       collapseBoxSetItems: false,
       studioIds: filters.studios.included.map((e) => e.id).toList(),
@@ -62,8 +132,8 @@ class PhotoQueueSource {
     );
 
     final items = response.body?.items.whereType<PhotoModel>().toList() ?? [];
-    final totalCount = response.body?.totalRecordCount ?? items.length;
-    //Addiotional shuffle because server shuffle does not work in certain occasions
-    return (items: shuffle ? (items..shuffle()) : items, totalCount: totalCount);
+    final count = response.body?.totalRecordCount ?? items.length;
+
+    return (items: items, count: count);
   }
 }
