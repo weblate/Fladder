@@ -2112,5 +2112,26 @@
             }
         }
     },
-    "applyFilter": "Appliquer le filtre"
+    "applyFilter": "Appliquer le filtre",
+    "closeWindow": "Fermer la fenêtre",
+    "incognitoModeGlobal": "Mode Incognito (App)",
+    "discography": "Discographie",
+    "latestTracksBy": "Derniers titres par {artist}",
+    "@latestTracksBy": {
+        "description": "Latest tracks by artist",
+        "placeholders": {
+            "artist": {
+                "type": "String"
+            }
+        }
+    },
+    "favoritesOf": "Favoris de {artist}",
+    "@favoritesOf": {
+        "description": "Favorites of artist",
+        "placeholders": {
+            "artist": {
+                "type": "String"
+            }
+        }
+    }
 }
