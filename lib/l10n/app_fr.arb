@@ -2038,5 +2038,79 @@
     "showInSideBarDesc": "Afficher ce filtre dans la barre latérale pour un accès rapide",
     "playerSettingsAmbientBlurTitle": "Activer le flou ambiant",
     "posterColorsTitle": "Couleurs d'affiche générées",
-    "setAs": "Définir comme"
+    "setAs": "Définir comme",
+    "mediaTypeMusicVideo": "{count, plural, one{Vidéoclip} other{Vidéoclips}}",
+    "@mediaTypeMusicVideo": {
+        "description": "Music Video (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "mediaTypeCollection": "{count, plural, one{Collection} other{Collections}}",
+    "@mediaTypeCollection": {
+        "description": "Collection (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "authenticateWithBiometrics": "Utiliser la biométrie pour authentifier {user}",
+    "@authenticateWithBiometrics": {
+        "description": "Prompt shown to the user when biometric authentication is requested",
+        "placeholders": {
+            "user": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    },
+    "pictureInPictureTitle": "Incrustation d'image",
+    "@pictureInPictureTitle": {
+        "description": "Tooltip on the in-player PiP button"
+    },
+    "pictureInPictureAutoTitle": "Incrustation d'image automatique",
+    "@pictureInPictureAutoTitle": {
+        "description": "Title of the auto-enter Picture-in-Picture setting toggle"
+    },
+    "pictureInPictureSubtitle": "Entrer automatiquement en mode incrustation d'image quand vous quittez le lecteur. Le bouton d'incrustation d'image (PiP) restera fonctionel.",
+    "@pictureInPictureSubtitle": {
+        "description": "Subtitle of the auto-enter Picture-in-Picture setting toggle"
+    },
+    "pictureInPictureNotSupported": "L'incrustation d'image n'est pas disponible sur cet appareil",
+    "@pictureInPictureNotSupported": {
+        "description": "Snackbar shown when the user taps the PiP button and the OS reports it unsupported"
+    },
+    "quitMultipleWindowsDesc": "Vous avez {count} fenêtres ouvertes. Quitter Fladder les fermera toutes. Voulez-vous continuez ?",
+    "@quitMultipleWindowsDesc": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
+    "selectRandom": "Sélection aléatoire",
+    "playItems": "Jouer la sélection",
+    "shuffleItems": "Mélanger la sélection",
+    "incognitoModeLocal": "Mode Incognito (Profil)",
+    "incognitoModeDesc": "Le mode Incognito désactive l'envoi du statut de lecture au serveur",
+    "playerSettingsAmbientBlurDesc": "Activer le flou ambiant dans le lecteur. Cela floutera le fond derrière le lecteur pour réduire les distractions.",
+    "playerSettingsAmbientBlurDescWarning": "Le flou ambiant peut causer des problèmes de performance sur les appareils moins puissants.",
+    "openSelected": "Ouvrir la sélection",
+    "youLiked": "Vous avez apprécié",
+    "instantMixBy": "Instant Mix de {artist}",
+    "@instantMixBy": {
+        "description": "Instant Mix of artist",
+        "placeholders": {
+            "artist": {
+                "type": "String"
+            }
+        }
+    },
+    "applyFilter": "Appliquer le filtre"
 }
