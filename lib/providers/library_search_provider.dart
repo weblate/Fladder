@@ -238,14 +238,23 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
     if (loadedFilters == true) return;
     loadedFilters = true;
 
+    final disabledYearTypes = {
+      FladderItemType.photo,
+      FladderItemType.photoAlbum,
+      FladderItemType.video,
+    };
+
     final itemIds = state.currentIds;
 
     final enabledCollections = state.views.included.map((e) => e.collectionType.itemKinds).expand((element) => element);
+    final disableYearFetching =
+        state.folderOverwrite.isNotEmpty || enabledCollections.any((e) => disabledYearTypes.contains(e));
 
     final mappedListFuture = Future.wait(itemIds.map((id) => _loadFilters(id)));
     final studiosFuture = Future.wait(itemIds.map((id) => _loadStudios(id)));
     final genresFuture = Future.wait(itemIds.map((id) => _loadGenres(id)));
-    final yearsFuture = Future.wait(itemIds.map((id) => _loadYears(id)));
+    final yearsFuture =
+        disableYearFetching ? Future.value(<List<int>>[]) : Future.wait(itemIds.map((id) => _loadYears(id)));
 
     final mappedList = await mappedListFuture;
     final studiosRaw = await studiosFuture;
@@ -740,7 +749,6 @@ class LibrarySearchNotifier extends StateNotifier<LibrarySearchModel> {
     }
 
     if (state.views.hasEnabled) {
-      if (state.views.included.length != 1) return null;
       return _buildPhotoQueueSource(
         parentId: state.views.included.map((e) => e.id).toList(),
         recursive: recursive,
