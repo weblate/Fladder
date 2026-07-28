@@ -630,6 +630,8 @@ class JellyService {
       sortBy: sortBy,
       includeItemTypes: includeItemTypes,
       sortOrder: sortOrder,
+      recursive: false,
+      enableImages: false,
     );
   }
 
