@@ -44,7 +44,7 @@
     },
     "amoledBlack": "Amoled černá",
     "appLockAutoLogin": "Automatické přihlášení",
-    "audio": "Zvuk",
+    "audio": "{count, plural, one{Zvuk} few{Zvuky} many{Zvuku} other{Zvuků}}",
     "autoPlay": "Automatické přehrávání",
     "backgroundOpacity": "Průhlednost pozadí",
     "biometricsFailedCheckAgain": "Biometrické údaje selhaly. Zkontrolujte nastavení a zkuste to znovu.",
@@ -1077,5 +1077,114 @@
     "showMore": "Zobrazit více",
     "itemColorsTitle": "Barva položky",
     "clientSettingsUseSystemIMETitle": "Použití systémové klávesnice",
-    "homeBannerTV": "TV"
+    "homeBannerTV": "TV",
+    "instantMix": "Okamžitý mix",
+    "addedToQueue": "{count, plural, one{Přidána {count} skladba do fronty} few{Přidány {count} skladby do fronty} many{Přidáno {count} skladby do fronty} other{Přidáno {count} skladeb do fronty}}",
+    "@addedToQueue": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "audioPlayerRepeatAll": "Zopakovat všechny",
+    "audioPlayerRepeatOff": "Neopakovat",
+    "audioPlayerShuffle": "Zamíchat",
+    "showArtist": "Ukázat umělce",
+    "track": "{count, plural, one{Skladba} many{Skladby} many{Skladby} other{Skladeb}}",
+    "@track": {
+        "description": "track",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "shareLoginLink": "Sdílet odkaz pro přihlášení",
+    "shareQRCode": "Sdílet QR kód",
+    "gestures": "Gesta",
+    "mediaTypeArtists": "{count, plural, one{Umělec} few{Umělci} many{Umělce} other{Umělců}}",
+    "@mediaTypeArtists": {
+        "description": "Artist (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "mediaTypeMusicVideo": "{count, plural, one{Hudební video} few{Hudební videa} many{Hudebního videa} other{Hudebních videí}}",
+    "@mediaTypeMusicVideo": {
+        "description": "Music Video (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "mediaTypeTV": "{count, plural, one{Televizní kanál} few{Televizní kanály} many{Televizních kanálů} other{Televizních kanálů}}",
+    "@mediaTypeTV": {
+        "description": "TV Channel (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "mediaTypeCollection": "{count, plural, one{Kolekce} few{Kolekce} many{Kolekce} other{Kolekcí}}",
+    "@mediaTypeCollection": {
+        "description": "Collection (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "playMusic": "Přehrát hudbu",
+    "popularity": "Popularita",
+    "runtimeMinutesTitle": "Délka (minuty)",
+    "runtimeRangeMinutes": "{min} - {max} minut",
+    "@runtimeRangeMinutes": {
+        "placeholders": {
+            "min": {
+                "type": "int"
+            },
+            "max": {
+                "type": "int"
+            }
+        }
+    },
+    "minutesShort": "{count} min",
+    "@minutesShort": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "5"
+            }
+        }
+    },
+    "streamingServices": "Služby ({count})",
+    "@streamingServices": {
+        "description": "Streaming providers (Netflix,HBO, etc.)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
+    "authenticateWithBiometrics": "Ověřte se pomocí biometrických údajů jako {user}",
+    "@authenticateWithBiometrics": {
+        "description": "Prompt shown to the user when biometric authentication is requested",
+        "placeholders": {
+            "user": {
+                "type": "String",
+                "example": "Jane"
+            }
+        }
+    }
 }
