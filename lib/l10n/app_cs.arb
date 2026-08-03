@@ -1087,7 +1087,7 @@
             }
         }
     },
-    "audioPlayerRepeatAll": "Zopakovat všechny",
+    "audioPlayerRepeatAll": "Opakovat všechny",
     "audioPlayerRepeatOff": "Neopakovat",
     "audioPlayerShuffle": "Zamíchat",
     "showArtist": "Ukázat umělce",
@@ -1186,5 +1186,31 @@
                 "example": "Jane"
             }
         }
-    }
+    },
+    "addToQueue": "Přidat do fronty",
+    "audioPlayerPlaybackOptionsTitle": "Možnosti přehrávání",
+    "generateLoginLink": "Kód pro {userName}",
+    "@generateLoginLink": {
+        "description": "Code for a user to share",
+        "placeholders": {
+            "userName": {
+                "type": "String"
+            }
+        }
+    },
+    "copyLoginLink": "Kopírovat odkaz",
+    "includePassword": "Zahrnout heslo",
+    "invalidAuthLink": "Neplatný přihlašovací odkaz",
+    "dashboardRecentlyAddedItems": "Nedávno přidané {name}",
+    "@dashboardRecentlyAddedItems": {
+        "description": "Recently added items on home screen",
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
+    "contentRating": "Hodnocení obsahu",
+    "audioPlayerRepeatOne": "Opakovat jeden",
+    "enableSpeedBoostTitle": "Povolit zvýšení rychlosti"
 }
