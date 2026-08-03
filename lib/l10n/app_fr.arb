@@ -2133,5 +2133,7 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "leanBackModeTitle": "Mode Lean-back",
+    "leanBackModeInfo": "Le mode Lean-back est réactivé par défaut sur les appareils AndroidTV. Activer cette option sur les appareils non-AndroidTV peut entraîner un comportement inattendu."
 }
