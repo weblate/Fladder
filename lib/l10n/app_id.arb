@@ -410,7 +410,7 @@
     "unableToPlayMedia": "Tidak dapat memutar media",
     "errorOpeningMedia": "Kesalahan saat membuka media",
     "unableToPlayBooksOnWeb": "Buku saat ini belum didukung di web",
-    "defaultFilterForLibrary": "Filter default untuk perpustakaan",
+    "defaultFilterForLibrary": "Atur filter default untuk pustaka",
     "updateFilterForLibrary": "Perbarui filter",
     "deleteFilterConfirmation": "Apakah Anda yakin ingin menghapus filter ini?",
     "deleteRequestConfirmation": "Apakah Anda yakin ingin menghapus permintaan ini?",
@@ -2218,5 +2218,69 @@
                 "type": "int"
             }
         }
-    }
+    },
+    "mediaTypeMusicVideo": "{count, plural, one{Video Musik} other{Video Musik}}",
+    "@mediaTypeMusicVideo": {
+        "description": "Music Video (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "mediaTypeCollection": "{count, plural, one{Koleksi} other{Koleksi}}",
+    "@mediaTypeCollection": {
+        "description": "Collection (plural)",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    },
+    "incognito": "Mode Samaran",
+    "incognitoModeGlobal": "Mode Samaran (Aplikasi)",
+    "incognitoModeLocal": "Mode Samaran (Profil)",
+    "incognitoModeDesc": "Mode Samaran menonaktifkan pengiriman status pemutaran ke server",
+    "showInSideBar": "Tampilkan di bilah sisi",
+    "hideInSideBar": "Sembunyikan dari bilah sisi",
+    "showInSideBarDesc": "Tampilkan filter ini di bilah sisi untuk akses cepat",
+    "applyFilter": "Terapkan filter",
+    "playerSettingsAmbientBlurTitle": "Aktifkan blur ambient",
+    "playerSettingsAmbientBlurDesc": "Aktifkan blur ambient di pemutar. Ini akan memburamkan latar belakang di belakang pemutar untuk mengurangi gangguan.",
+    "playerSettingsAmbientBlurDescWarning": "Blur ambient dapat menyebabkan masalah kinerja pada perangkat berkelas rendah.",
+    "openSelected": "Buka yang dipilih",
+    "discography": "Diskografi",
+    "youLiked": "Anda menyukai",
+    "instantMixBy": "Mix Instan dari {artist}",
+    "@instantMixBy": {
+        "description": "Instant Mix of artist",
+        "placeholders": {
+            "artist": {
+                "type": "String"
+            }
+        }
+    },
+    "latestTracksBy": "Trek terbaru oleh {artist}",
+    "@latestTracksBy": {
+        "description": "Latest tracks by artist",
+        "placeholders": {
+            "artist": {
+                "type": "String"
+            }
+        }
+    },
+    "favoritesOf": "Favorit dari {artist}",
+    "@favoritesOf": {
+        "description": "Favorites of artist",
+        "placeholders": {
+            "artist": {
+                "type": "String"
+            }
+        }
+    },
+    "leanBackModeTitle": "Mode Santai",
+    "leanBackModeDesc": "Aktifkan mode santai pada perangkat Android, bahkan jika perangkat melaporkan sebagai false.",
+    "leanBackModeInfo": "Mode santai diaktifkan ulang secara default pada perangkat AndroidTV. Mengaktifkan opsi ini pada perangkat non-AndroidTV dapat menyebabkan perilaku yang tidak diharapkan."
 }
