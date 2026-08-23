@@ -68,6 +68,8 @@ extension AudioQueueHandler on MediaControlsWrapper {
       ref.read(windowTitleProvider.notifier).setPlayTitle(currentItem.windowTitle(context.localized));
     }
 
+    unawaited(ref.read(audioLyricsProvider.notifier).loadForTrack(currentItem.id));
+
     final playbackModel = ref.read(playBackModel);
     if (playbackModel != null) {
       await _refreshMediaControls(model: playbackModel, playing: false);
@@ -253,6 +255,7 @@ extension AudioQueueHandler on MediaControlsWrapper {
     }
 
     await updatedModel.playbackStarted(startPosition, ref);
+    unawaited(ref.read(audioLyricsProvider.notifier).loadForTrack(item.id));
     await _refreshMediaControls(model: updatedModel, playing: true);
   }
 
