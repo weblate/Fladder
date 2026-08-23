@@ -7,5 +7,19 @@
     "addToCollection": "Idagdag sa koleksyon",
     "addToPlaylist": "Idagdag sa playlist",
     "addToQueue": "idagdag sa pila",
-    "all": "Lahat"
+    "all": "Lahat",
+    "enableSpeedBoostDesc": "Hawakan ang screen (mobile) o spacebar (desktop) upang pansamantalang pabilisin ang playback",
+    "preferredDownloadLanguage": "Mas gustong wika sa pag-download",
+    "metadataImageLongPressClick": "I-right-click upang tanggalin ang larawan",
+    "enableAccessAllLibraries": "Pahintulutan ang pag-access sa lahat ng library",
+    "actor": "{count, plural, other{Aktor} one{Aktor}}",
+    "@actor": {
+        "description": "actor",
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "1"
+            }
+        }
+    }
 }
