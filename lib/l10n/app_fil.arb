@@ -1,1 +1,10 @@
-{}
+{
+    "nativeName": "Filipino",
+    "accept": "Tanggapin",
+    "about": "Tungkol sa",
+    "active": "Aktibo",
+    "addAsFavorite": "Idagdag sa mga paborito",
+    "addToCollection": "Idagdag sa koleksyon",
+    "addToPlaylist": "Idagdag sa playlist",
+    "addToQueue": "idagdag sa pila"
+}
