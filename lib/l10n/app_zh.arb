@@ -2165,5 +2165,8 @@
     },
     "leanBackModeTitle": "休闲模式",
     "leanBackModeDesc": "即使设备报告为 false，也要在 Android 设备上启用休闲模式。",
-    "leanBackModeInfo": "在 Android TV 设备上，默认重新启用“休闲模式”。在非 Android TV 设备上切换此选项可能会导致意外情况。"
+    "leanBackModeInfo": "在 Android TV 设备上，默认重新启用“休闲模式”。在非 Android TV 设备上切换此选项可能会导致意外情况。",
+    "lyrics": "歌词",
+    "returnToSyncedLyrics": "返回同步歌词",
+    "noSyncedLyrics": "暂无同步歌词"
 }
