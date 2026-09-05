@@ -2171,5 +2171,9 @@
     "leanBackModeInfo": "وضع الاسترخاء مُفعّل افتراضياً على أجهزة AndroidTV. تفعيل هذا الخيار على أجهزة أخرى قد يسبب سلوكاً غير متوقع.",
     "lyrics": "كلمات الأغنية",
     "returnToSyncedLyrics": "العودة إلى الكلمات المتزامنة",
-    "noSyncedLyrics": "لا توجد كلمات متزامنة متاحة"
+    "noSyncedLyrics": "لا توجد كلمات متزامنة متاحة",
+    "localNetworkPermissionRequest": "السماح بالوصول إلى الشبكة المحلية لاكتشاف الخوادم.",
+    "requestPermission": "طلب الإذن",
+    "localNetworkPermissionDenied": "الوصول إلى الشبكة المحلية مطلوب. قم بتمكين إذن الأجهزة القريبة من إعدادات النظام.",
+    "openSettings": "فتح الإعدادات"
 }
