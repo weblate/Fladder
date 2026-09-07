@@ -2099,5 +2099,18 @@
     "incognito": "Tryb incognito",
     "incognitoModeGlobal": "Tryb incognito (Aplikacja)",
     "incognitoModeLocal": "Tryb incognito (Profil)",
-    "incognitoModeDesc": "Tryb incognito wyłącza wysyłanie statusu odtwarzania do serwera"
+    "incognitoModeDesc": "Tryb incognito wyłącza wysyłanie statusu odtwarzania do serwera",
+    "localNetworkPermissionRequest": "Zezwalaj na dostęp do sieci lokalnej, aby odkryć serwery.",
+    "requestPermission": "Poproś o dostęp",
+    "localNetworkPermissionDenied": "Wymagany jest dostęp do sieci lokalnej. Zezwól na do urządzeń w pobliżu w ustawieniach systemu.",
+    "openSettings": "Otwórz ustawienia",
+    "lyrics": "Tekst piosenki",
+    "returnToSyncedLyrics": "Wróć do zsynchronizowanego tekstu",
+    "noSyncedLyrics": "Zsynchronizowany tekst niedostępny",
+    "playerSettingsAmbientBlurTitle": "Włącz rozmycie otoczenia",
+    "playerSettingsAmbientBlurDesc": "Włącz rozmycie otoczenia w odtwarzaczu. To rozmyje tło za odtwarzaczem, aby zmniejszyć rozproszenie uwagi.",
+    "playerSettingsAmbientBlurDescWarning": "Rozmycie otoczenia może powodować problemy z wydajnością na słabszych urządzeniach.",
+    "openSelected": "Otwórz wybrane",
+    "discography": "Dyskografia",
+    "youLiked": "Polubiłeś"
 }
