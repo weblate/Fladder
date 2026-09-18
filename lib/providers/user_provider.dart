@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chopper/chopper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -18,6 +20,7 @@ import 'package:fladder/providers/service_provider.dart';
 import 'package:fladder/providers/shared_provider.dart';
 import 'package:fladder/providers/sync_provider.dart';
 import 'package:fladder/providers/video_player_provider.dart';
+import 'package:fladder/util/debouncer.dart';
 import 'package:fladder/util/map_bool_helper.dart';
 
 part 'user_provider.g.dart';
@@ -132,9 +135,26 @@ class User extends _$User {
     }
   }
 
+  Completer<Response<dynamic>>? _configCompleter;
+  final debouncer = Debouncer(const Duration(seconds: 1));
+
   Future<Response<dynamic>> updateCustomConfig(UserSettings settings) async {
     state = state?.copyWith(userSettings: settings);
-    return api.setCustomConfig(settings);
+
+    _configCompleter ??= Completer<Response<dynamic>>();
+
+    debouncer.run(() async {
+      try {
+        final response = await api.setCustomConfig(settings);
+        _configCompleter?.complete(response);
+      } catch (e, st) {
+        _configCompleter?.completeError(e, st);
+      } finally {
+        _configCompleter = null;
+      }
+    });
+
+    return _configCompleter?.future ?? Future.error("Failed to update custom config");
   }
 
   Future<ApiResult> refreshMetaData(

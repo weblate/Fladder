@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fladder/jellyfin/jellyfin_open_api.enums.swagger.dart';
@@ -19,7 +20,16 @@ final dashboardProvider = StateNotifierProvider<DashboardNotifier, HomeModel>((r
 
 class DashboardNotifier extends StateNotifier<HomeModel> {
   DashboardNotifier(this.ref) : super(HomeModel()) {
-    ref.listen(libraryFiltersByKeyProvider(FilterSortKey.dashboard), (_, __) => fetchNextUpAndResume());
+    ref.listen(
+      libraryFiltersByKeyProvider(FilterSortKey.dashboard),
+      (previous, next) {
+        const listEquality = ListEquality<LibraryFiltersModel>();
+        if (!listEquality.equals(previous, next)) {
+          fetchNextUpAndResume();
+        }
+      },
+      fireImmediately: false,
+    );
   }
 
   final Ref ref;

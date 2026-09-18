@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fladder/jellyfin/jellyfin_open_api.enums.swagger.dart';
@@ -70,7 +71,16 @@ class MusicDashboardModel {
 
 class MusicDashboardNotifier extends StateNotifier<MusicDashboardModel> {
   MusicDashboardNotifier(this.ref) : super(const MusicDashboardModel()) {
-    ref.listen(libraryFiltersByKeyProvider(FilterSortKey.musicDashboard), (_, __) => fetchMusicHome());
+    ref.listen(
+      libraryFiltersByKeyProvider(FilterSortKey.musicDashboard),
+      (previous, next) {
+        const listEquality = ListEquality<LibraryFiltersModel>();
+        if (!listEquality.equals(previous, next)) {
+          fetchMusicHome();
+        }
+      },
+      fireImmediately: false,
+    );
   }
 
   final Ref ref;
