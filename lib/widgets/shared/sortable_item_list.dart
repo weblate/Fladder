@@ -27,6 +27,7 @@ class SortableItemList<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bigDragHandles = AdaptiveLayout.inputDeviceOf(context) == InputDevice.pointer;
+    final isDpad = AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad;
     final list = ReorderableListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -90,11 +91,12 @@ class SortableItemList<T> extends StatelessWidget {
                                 }
                               : null,
                         ),
-                        ReorderableDragStartListener(
-                          index: index,
-                          enabled: !bigDragHandles,
-                          child: const Icon(IconsaxPlusBold.settings),
-                        ),
+                        if (!isDpad)
+                          ReorderableDragStartListener(
+                            index: index,
+                            enabled: !bigDragHandles,
+                            child: const Icon(IconsaxPlusBold.settings),
+                          ),
                         const SizedBox(width: 16),
                       ],
                     ),

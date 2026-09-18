@@ -51,7 +51,9 @@ class SideNavigationButtons extends ConsumerWidget {
     final musicDashboard = ref.watch(musicDashboardModeProvider);
     final playLists = ref.watch(playlistProvider.select((value) => value.collections));
 
-    final filters = ref.watch(libraryFiltersByKeyProvider(FilterSortKey.sideBar));
+    final filters = ref.watch(libraryFiltersByKeyProvider(
+      musicDashboard ? FilterSortKey.musicDashboard : FilterSortKey.sideBar,
+    ));
 
     final List<Widget> navItems = [
       if (filters.isNotEmpty)
@@ -62,6 +64,7 @@ class SideNavigationButtons extends ConsumerWidget {
                   onPressed: () => showFiltersDialogue(context),
                   icon: const Icon(IconsaxPlusLinear.arrow_right_3, size: 16),
                   tooltip: context.localized.applyFilter,
+                  visualDensity: VisualDensity.compact,
                 )
               : null,
           shouldExpand: shouldExpand,

@@ -107,7 +107,7 @@ class MusicDashboardNotifier extends StateNotifier<MusicDashboardModel> {
   static const _dashboardFilterLimit = 15;
 
   Future<List<DashboardFilterModel>> _fetchDashboardFilters() async {
-    final filters = ref.read(libraryFiltersByKeyProvider(FilterSortKey.dashboard));
+    final filters = ref.read(libraryFiltersByKeyProvider(FilterSortKey.musicDashboard));
     return Future.wait(
       filters.map(
         (e) => e.fetchDashboardFilter(ref, limit: _dashboardFilterLimit),
