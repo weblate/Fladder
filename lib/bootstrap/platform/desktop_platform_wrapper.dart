@@ -16,6 +16,7 @@ import 'package:fladder/providers/video_player_provider.dart';
 import 'package:fladder/src/application_menu.g.dart';
 import 'package:fladder/util/macos_window_helpers.dart';
 import 'package:fladder/util/window_helper.dart';
+import 'package:fladder/wrappers/multi_window_media_session.dart';
 
 class DesktopAppWrapper extends BaseAppWrapper {
   const DesktopAppWrapper({super.key, required super.builder});
@@ -35,6 +36,8 @@ class _DesktopAppWrapperState extends BaseAppWrapperState<DesktopAppWrapper> wit
     }
 
     ApplicationMenu.setUp(ApplicationMenuImp());
+
+    await MultiWindowMediaSession.instance.init(isHub: !ref.read(argumentsStateProvider).newWindow);
 
     await WindowManager.instance.ensureInitialized();
     windowManager.addListener(this);
