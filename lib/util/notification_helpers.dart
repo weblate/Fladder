@@ -183,6 +183,8 @@ class NotificationHelpers {
     } catch (e) {
       log('Error fetching latest items: $e');
       return [];
+    } finally {
+      api?.client.dispose();
     }
   }
 }
