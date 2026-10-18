@@ -1839,7 +1839,7 @@
     "passwordNotRequired": "非必填，留空表示連結中不包含密碼",
     "authLinkButtonToolTip": "開啟身份驗證連結對話框",
     "connectWithAuthLink": "使用身份驗證連結連線",
-    "pasteFladderAuthLink": "請貼上 Fladder 驗證連結：fladder:///login?authLink=...",
+    "pasteFladderAuthLink": "請貼上 Fladder 驗證連結：fladder://login?authLink=...",
     "connect": "連線",
     "authLinkDesc": "請伺服器管理員提供驗證連結。該連結包含驗證資訊，請務必妥善保管，確保安全。",
     "deletedItem": "刪除 {itemName}",
