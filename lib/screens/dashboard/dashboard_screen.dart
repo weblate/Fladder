@@ -70,8 +70,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   Future<void> _refreshHome() async {
     if (mounted) {
       await ref.read(userProvider.notifier).updateInformation();
-      await ref.read(viewsProvider.notifier).fetchViews();
-      await ref.read(dashboardProvider.notifier).fetchNextUpAndResume();
+      await ref.read(dashboardProvider.notifier).refreshDashboard();
     }
   }
 

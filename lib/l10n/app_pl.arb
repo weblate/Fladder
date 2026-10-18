@@ -1849,7 +1849,7 @@
     "passwordNotRequired": "Nie wymagane, pozostaw puste aby nie uwzględniać hasła w łączu",
     "authLinkButtonToolTip": "Otwórz dialog łącza auth",
     "connectWithAuthLink": "Połącz z linkiem uwierzytelniania",
-    "pasteFladderAuthLink": "Wklej fladder auth link fladder:///login?authLink=...",
+    "pasteFladderAuthLink": "Wklej fladder auth link fladder://login?authLink=...",
     "connect": "Połącz",
     "authLinkDesc": "Poproś admina serwera aby dostarczył link auth. Link zawiera informacje uwierzytelniające, więc upewnij się aby go zabezpieczać.",
     "deletedItem": "Usunięto {itemName}",

@@ -15,6 +15,7 @@ import 'package:fladder/providers/settings/client_settings_provider.dart';
 import 'package:fladder/providers/video_player_provider.dart';
 import 'package:fladder/src/application_menu.g.dart';
 import 'package:fladder/util/macos_window_helpers.dart';
+import 'package:fladder/util/protocol_registration.dart';
 import 'package:fladder/util/window_helper.dart';
 import 'package:fladder/wrappers/multi_window_media_session.dart';
 
@@ -27,9 +28,20 @@ class DesktopAppWrapper extends BaseAppWrapper {
 
 class _DesktopAppWrapperState extends BaseAppWrapperState<DesktopAppWrapper> with WindowListener {
   @override
+  bool get enableAppLinks => !ref.read(argumentsStateProvider).newWindow;
+
+  @override
+  Future<void> onAppLinkReceived() async {
+    if (await windowManager.isMinimized()) await windowManager.restore();
+    await windowManager.show();
+    await windowManager.focus();
+  }
+
+  @override
   Future<void> platformInit() async {
     if (defaultTargetPlatform == TargetPlatform.windows) {
       await SMTCWindows.initialize();
+      if (enableAppLinks) unawaited(ensureWindowsProtocolRegistered());
     }
     if (defaultTargetPlatform == TargetPlatform.macOS) {
       await WindowManipulator.initialize(enableWindowDelegate: true);

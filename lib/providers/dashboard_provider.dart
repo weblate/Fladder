@@ -11,6 +11,7 @@ import 'package:fladder/providers/library_filters_provider.dart';
 import 'package:fladder/providers/live_tv_provider.dart';
 import 'package:fladder/providers/service_provider.dart';
 import 'package:fladder/providers/settings/client_settings_provider.dart';
+import 'package:fladder/providers/user_provider.dart';
 import 'package:fladder/providers/views_provider.dart';
 import 'package:fladder/util/list_extensions.dart';
 
@@ -30,6 +31,14 @@ class DashboardNotifier extends StateNotifier<HomeModel> {
       },
       fireImmediately: false,
     );
+    ref.listen(
+      userProvider.select((value) => value?.id),
+      (previous, next) {
+        if (next != null && previous != next) {
+          refreshDashboard();
+        }
+      },
+    );
   }
 
   final Ref ref;
@@ -46,6 +55,11 @@ class DashboardNotifier extends StateNotifier<HomeModel> {
         (e) => e.fetchDashboardFilter(ref, limit: _dashboardFilterLimit),
       ),
     );
+  }
+
+  Future<void> refreshDashboard() async {
+    await ref.read(viewsProvider.notifier).fetchViews();
+    await fetchNextUpAndResume();
   }
 
   Future<void> fetchNextUpAndResume() async {
