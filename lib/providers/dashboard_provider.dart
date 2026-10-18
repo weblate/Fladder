@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:fladder/jellyfin/jellyfin_open_api.enums.swagger.dart';
@@ -11,7 +10,6 @@ import 'package:fladder/providers/library_filters_provider.dart';
 import 'package:fladder/providers/live_tv_provider.dart';
 import 'package:fladder/providers/service_provider.dart';
 import 'package:fladder/providers/settings/client_settings_provider.dart';
-import 'package:fladder/providers/user_provider.dart';
 import 'package:fladder/providers/views_provider.dart';
 import 'package:fladder/util/list_extensions.dart';
 
@@ -20,26 +18,7 @@ final dashboardProvider = StateNotifierProvider<DashboardNotifier, HomeModel>((r
 });
 
 class DashboardNotifier extends StateNotifier<HomeModel> {
-  DashboardNotifier(this.ref) : super(HomeModel()) {
-    ref.listen(
-      libraryFiltersByKeyProvider(FilterSortKey.dashboard),
-      (previous, next) {
-        const listEquality = ListEquality<LibraryFiltersModel>();
-        if (!listEquality.equals(previous, next)) {
-          fetchNextUpAndResume();
-        }
-      },
-      fireImmediately: false,
-    );
-    ref.listen(
-      userProvider.select((value) => value?.id),
-      (previous, next) {
-        if (next != null && previous != next) {
-          refreshDashboard();
-        }
-      },
-    );
-  }
+  DashboardNotifier(this.ref) : super(HomeModel());
 
   final Ref ref;
   bool _refreshRequested = false;
@@ -55,6 +34,11 @@ class DashboardNotifier extends StateNotifier<HomeModel> {
         (e) => e.fetchDashboardFilter(ref, limit: _dashboardFilterLimit),
       ),
     );
+  }
+
+  Future<void> fetchDashboardFilters() async {
+    final dashboardFilters = await _fetchDashboardFilters();
+    state = state.copyWith(dashboardFilters: dashboardFilters);
   }
 
   Future<void> refreshDashboard() async {

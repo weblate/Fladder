@@ -10,10 +10,12 @@ import 'package:fladder/jellyfin/jellyfin_open_api.enums.swagger.dart';
 import 'package:fladder/jellyfin/jellyfin_open_api.swagger.dart';
 import 'package:fladder/models/collection_types.dart';
 import 'package:fladder/models/item_base_model.dart';
+import 'package:fladder/models/library_filters_model.dart';
 import 'package:fladder/models/library_search/library_search_options.dart';
 import 'package:fladder/models/settings/home_settings_model.dart';
 import 'package:fladder/providers/dashboard_mode_provider.dart';
 import 'package:fladder/providers/dashboard_provider.dart';
+import 'package:fladder/providers/library_filters_provider.dart';
 import 'package:fladder/providers/settings/client_settings_provider.dart';
 import 'package:fladder/providers/settings/home_settings_provider.dart';
 import 'package:fladder/providers/user_provider.dart';
@@ -53,6 +55,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   final selectedPoster = ValueNotifier<ItemBaseModel?>(null);
 
+  bool _refreshing = false;
+
   @override
   void initState() {
     super.initState();
@@ -68,9 +72,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }
 
   Future<void> _refreshHome() async {
-    if (mounted) {
+    if (!mounted) return;
+    _refreshing = true;
+    try {
       await ref.read(userProvider.notifier).updateInformation();
       await ref.read(dashboardProvider.notifier).refreshDashboard();
+    } finally {
+      _refreshing = false;
     }
   }
 
@@ -79,6 +87,11 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     if (ref.watch(musicDashboardModeProvider)) {
       return const MusicDashboardScreen();
     }
+
+    ref.listen(libraryFiltersByKeyProvider(FilterSortKey.dashboard), (previous, next) {
+      if (_refreshing || const ListEquality<LibraryFiltersModel>().equals(previous, next)) return;
+      ref.read(dashboardProvider.notifier).fetchDashboardFilters();
+    });
 
     final padding = AdaptiveLayout.adaptivePadding(context);
     final bannerType = ref.watch(homeSettingsProvider.select((value) => value.homeBanner));
