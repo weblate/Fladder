@@ -1745,6 +1745,7 @@
   "screensaverBlack": "Black",
   "playerSettingsScreensaverTitle": "Screensaver",
   "playerSettingsScreensaverDesc": "Select screen saver that will be shown after no player activity",
+  "settingsServerUrlSetDesc": "Change the address used to connect to your Jellyfin server. The new URL must point to the same server.",
   "settingsLocalUrlTitle": "Local Jellyfin URL",
   "settingsLocalUrlSetTitle": "Configure Local Jellyfin URL",
   "settingsLocalUrlSetDesc": "Specify the local Jellyfin address. Fladder will automatically use this URL when your device is on the same network.",
