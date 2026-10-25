@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:fladder/util/back_gesture_arbiter.dart';
 import 'package:fladder/util/frontmost_route.dart';
 
 class TabBackGesture extends StatefulWidget {
@@ -21,52 +22,30 @@ class TabBackGesture extends StatefulWidget {
   State<TabBackGesture> createState() => _TabBackGestureState();
 }
 
-class _TabBackGestureState extends State<TabBackGesture> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
-  late final AnimationController _progress = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 160),
-  );
+class _TabBackGestureState extends State<TabBackGesture>
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver, BackGestureProgressState {
   SwipeEdge _edge = SwipeEdge.left;
   double? _commitStart;
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _progress.dispose();
-    super.dispose();
-  }
+  bool get canHandleBackGesture => widget.enabled && isFrontmostRoute(context);
 
   @override
   bool handleStartBackGesture(PredictiveBackEvent backEvent) {
-    final accepts = widget.enabled && !backEvent.isButtonEvent && isFrontmostRoute(context);
-    if (accepts) {
-      _edge = backEvent.swipeEdge;
-      _progress.value = 0;
-    }
+    final accepts = super.handleStartBackGesture(backEvent);
+    if (accepts) _edge = backEvent.swipeEdge;
     return accepts;
   }
 
   @override
-  void handleUpdateBackGestureProgress(PredictiveBackEvent backEvent) => _progress.value = backEvent.progress;
-
-  @override
-  void handleCancelBackGesture() => unawaited(_progress.animateBack(0));
-
-  @override
   void handleCommitBackGesture() {
-    _commitStart = _progress.value;
+    _commitStart = backProgress.value;
     unawaited(
-      _progress.animateTo(1).then((_) {
+      backProgress.animateTo(1).then((_) {
         if (!mounted) return;
         widget.onBack();
         _commitStart = null;
-        _progress.value = 0;
+        backProgress.value = 0;
       }),
     );
   }
@@ -74,13 +53,14 @@ class _TabBackGestureState extends State<TabBackGesture> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _progress,
+      animation: backProgress,
       builder: (context, child) {
-        final eased = Curves.easeOut.transform(_progress.value);
+        final eased = Curves.easeOut.transform(backProgress.value);
         final direction = _edge == SwipeEdge.left ? 1 : -1;
         final commitStart = _commitStart;
-        final opacity =
-            commitStart == null || commitStart >= 1 ? 1.0 : ((1 - _progress.value) / (1 - commitStart)).clamp(0.0, 1.0);
+        final opacity = commitStart == null || commitStart >= 1
+            ? 1.0
+            : ((1 - backProgress.value) / (1 - commitStart)).clamp(0.0, 1.0);
         return Opacity(
           opacity: opacity,
           child: Transform.translate(

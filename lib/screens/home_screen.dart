@@ -7,7 +7,6 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 
 import 'package:fladder/models/settings/client_settings_model.dart';
 import 'package:fladder/providers/dashboard_mode_provider.dart';
-import 'package:fladder/providers/low_resource_provider.dart';
 import 'package:fladder/providers/sync_provider.dart';
 import 'package:fladder/providers/user_provider.dart';
 import 'package:fladder/providers/window_title_provider.dart';
@@ -56,9 +55,9 @@ enum HomeTabs {
       HomeTabs.seerr => const SeerrRoute(),
       HomeTabs.sync => const SyncedRoute(),
     };
-    if (ProviderScope.containerOf(context, listen: false).read(lowResourceModeProvider)) {
-      context.router.innerRouterOf<StackRouter>(HomeRoute.name)?.popUntilRoot();
-    }
+    context.router
+        .innerRouterOf<StackRouter>(HomeRoute.name)
+        ?.popUntil((page) => page.settings.name == DashboardRoute.name || page.settings.name == route.routeName);
     return context.router.navigate(route);
   }
 

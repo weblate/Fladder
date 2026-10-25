@@ -1,9 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
+import 'package:fladder/util/back_gesture_arbiter.dart';
 import 'package:fladder/util/frontmost_route.dart';
 
 class RoundedPredictiveBackPageTransitionsBuilder extends PageTransitionsBuilder {
@@ -77,7 +75,7 @@ class _CoveredRouteGestureBlockerState extends State<_CoveredRouteGestureBlocker
   @override
   void initState() {
     super.initState();
-    _BackGestureStart.ensureObserving();
+    BackGestureArbiter.ensureInitialized();
   }
 
   @override
@@ -101,7 +99,9 @@ class _CoveredRouteGestureBlockerState extends State<_CoveredRouteGestureBlocker
 
 class _BackGestureStartPopEntry extends PopEntry<Object?> {
   _BackGestureStartPopEntry(bool Function() isFrontmost)
-      : canPopNotifier = _ComputedListenable(() => !_BackGestureStart.active || isFrontmost());
+      : canPopNotifier = _ComputedListenable(
+          () => !BackGestureArbiter.starting || (!BackGestureArbiter.claimed && isFrontmost()),
+        );
 
   @override
   final ValueListenable<bool> canPopNotifier;
@@ -113,22 +113,4 @@ class _ComputedListenable extends ChangeNotifier implements ValueListenable<bool
 
   @override
   bool get value => _compute();
-}
-
-class _BackGestureStart with WidgetsBindingObserver {
-  static final _BackGestureStart _instance = _BackGestureStart._();
-  static bool active = false;
-
-  _BackGestureStart._() {
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  static void ensureObserving() => _instance;
-
-  @override
-  bool handleStartBackGesture(PredictiveBackEvent backEvent) {
-    active = true;
-    scheduleMicrotask(() => active = false);
-    return false;
-  }
 }

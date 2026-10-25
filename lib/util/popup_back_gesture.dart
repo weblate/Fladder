@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:fladder/util/back_gesture_arbiter.dart';
 import 'package:fladder/util/frontmost_route.dart';
 
 class PopupBackGestureObserver extends NavigatorObserver {
@@ -33,7 +34,7 @@ class _PopupBackGestureHandler with WidgetsBindingObserver {
   static final List<PopupRoute<dynamic>> routes = [];
 
   _PopupBackGestureHandler._() {
-    WidgetsBinding.instance.addObserver(this);
+    BackGestureArbiter.add(this);
   }
 
   static void ensureObserving() => _instance;
@@ -51,7 +52,6 @@ class _PopupBackGestureHandler with WidgetsBindingObserver {
 
   @override
   bool handleStartBackGesture(PredictiveBackEvent backEvent) {
-    if (backEvent.isButtonEvent) return false;
     final route = routes.reversed.where(_canHandle).firstOrNull;
     if (route == null) return false;
     _activeRoute = route;

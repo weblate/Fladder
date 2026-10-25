@@ -16,6 +16,7 @@ import 'package:fladder/screens/shared/nested_bottom_appbar.dart';
 import 'package:fladder/screens/video_player/audio_player_full_screen.dart';
 import 'package:fladder/util/adaptive_layout/adaptive_layout.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/destination_model.dart';
+import 'package:fladder/widgets/navigation_scaffold/components/drawer_back_gesture.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/drawer_peek.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/fladder_app_bar.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/floating_player_bar.dart';
@@ -130,7 +131,7 @@ class _NavigationScaffoldState extends ConsumerState<NavigationScaffold> {
             !showAudioFullScreen && AdaptiveLayout.layoutModeOf(scaffoldContext) == LayoutMode.single && isHomeScreen
                 ? widget.destinations.elementAtOrNull(currentIndex)?.floatingActionButton?.normal
                 : null,
-        drawer: drawer,
+        drawer: drawer != null ? DrawerBackGesture(child: drawer) : null,
         bottomNavigationBar: AdaptiveLayout.viewSizeOf(scaffoldContext) == ViewSize.television
             ? SizedBox(height: calculatedBottomViewPadding)
             : AnimatedVisibility(
@@ -167,7 +168,7 @@ class _NavigationScaffoldState extends ConsumerState<NavigationScaffold> {
                 children: [
                   NavigationBody(
                     child: TabBackGesture(
-                      enabled: !showAudioOverlay && currentIndex > 0,
+                      enabled: !showAudioOverlay && currentIndex > 0 && context.router.stackData.length < 2,
                       onBack: () => widget.destinations.first.action!(),
                       child: widget.nestedChild!,
                     ),
@@ -255,7 +256,14 @@ class _NavigationScaffoldState extends ConsumerState<NavigationScaffold> {
               ),
             ),
           ),
-          if (showAudioOverlay) audioOverlay,
+          if (showAudioOverlay)
+            TabBackGesture(
+              enabled: true,
+              onBack: () => ref
+                  .read(mediaPlaybackProvider.notifier)
+                  .update((state) => state.copyWith(state: VideoPlayerState.minimized)),
+              child: audioOverlay,
+            ),
           if (!AdaptiveLayout.of(context).isDesktop) const Align(alignment: Alignment.topCenter, child: StatusBanners())
         ],
       ),
