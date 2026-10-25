@@ -18,6 +18,7 @@ import 'package:fladder/util/adaptive_layout/adaptive_layout.dart';
 import 'package:fladder/util/application_info.dart';
 import 'package:fladder/util/deep_link_helper.dart';
 import 'package:fladder/util/localization_helper.dart';
+import 'package:fladder/util/popup_back_gesture.dart';
 import 'package:fladder/util/themes_data.dart';
 import 'package:fladder/widgets/media_query_scaler.dart';
 import 'package:fladder/widgets/pip_lifecycle_controller.dart';
@@ -125,6 +126,7 @@ class _FladderApp extends ConsumerWidget {
           ),
           themeMode: themeMode,
           routerConfig: autoRouter.config(
+            navigatorObservers: () => [PopupBackGestureObserver()],
             deepLinkBuilder: (deepLink) => deepLinkBuilder(deepLink.uri),
           ),
         ),

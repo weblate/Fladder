@@ -16,6 +16,7 @@ import 'package:fladder/screens/shared/nested_bottom_appbar.dart';
 import 'package:fladder/screens/video_player/audio_player_full_screen.dart';
 import 'package:fladder/util/adaptive_layout/adaptive_layout.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/destination_model.dart';
+import 'package:fladder/widgets/navigation_scaffold/components/drawer_peek.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/fladder_app_bar.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/floating_player_bar.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/navigation_body.dart';
@@ -23,6 +24,7 @@ import 'package:fladder/widgets/navigation_scaffold/components/navigation_drawer
 import 'package:fladder/widgets/shared/animated_visibility.dart';
 import 'package:fladder/widgets/shared/hide_on_scroll.dart';
 import 'package:fladder/widgets/shared/status_banners.dart';
+import 'package:fladder/widgets/shared/tab_back_gesture.dart';
 import 'package:fladder/widgets/split_area/split_area.dart';
 
 class NavigationScaffold extends ConsumerStatefulWidget {
@@ -101,8 +103,18 @@ class _NavigationScaffoldState extends ConsumerState<NavigationScaffold> {
 
     final fullScreenChildRoute = fullScreenRoutes.contains(context.router.current.name);
 
+    final drawer = !showAudioFullScreen && homeRoutes.any((element) => element.name.contains(currentLocation))
+        ? NestedNavigationDrawer(
+            toggleExpanded: (value) => _key.currentState?.closeDrawer(),
+            views: views,
+            destinations: widget.destinations,
+            currentLocation: currentLocation,
+            currentIndex: currentIndex,
+          )
+        : null;
+
     Widget buildMainScaffold(BuildContext scaffoldContext) {
-      return Scaffold(
+      final scaffold = Scaffold(
         key: _key,
         appBar: fullScreenChildRoute ||
                 (showAudioFullScreen && AdaptiveLayout.layoutModeOf(scaffoldContext) == LayoutMode.single)
@@ -118,15 +130,7 @@ class _NavigationScaffoldState extends ConsumerState<NavigationScaffold> {
             !showAudioFullScreen && AdaptiveLayout.layoutModeOf(scaffoldContext) == LayoutMode.single && isHomeScreen
                 ? widget.destinations.elementAtOrNull(currentIndex)?.floatingActionButton?.normal
                 : null,
-        drawer: !showAudioFullScreen && homeRoutes.any((element) => element.name.contains(currentLocation))
-            ? NestedNavigationDrawer(
-                toggleExpanded: (value) => _key.currentState?.closeDrawer(),
-                views: views,
-                destinations: widget.destinations,
-                currentLocation: currentLocation,
-                currentIndex: currentIndex,
-              )
-            : null,
+        drawer: drawer,
         bottomNavigationBar: AdaptiveLayout.viewSizeOf(scaffoldContext) == ViewSize.television
             ? SizedBox(height: calculatedBottomViewPadding)
             : AnimatedVisibility(
@@ -158,15 +162,32 @@ class _NavigationScaffoldState extends ConsumerState<NavigationScaffold> {
                 ),
               ),
         body: widget.nestedChild != null
-            ? NavigationBody(
-                child: widget.nestedChild!,
-                parentContext: scaffoldContext,
-                currentIndex: currentIndex,
-                destinations: widget.destinations,
-                currentLocation: currentLocation,
-                drawerKey: _key,
+            ? Stack(
+                fit: StackFit.expand,
+                children: [
+                  NavigationBody(
+                    child: TabBackGesture(
+                      enabled: !showAudioOverlay && currentIndex > 0,
+                      onBack: () => widget.destinations.first.action!(),
+                      child: widget.nestedChild!,
+                    ),
+                    parentContext: scaffoldContext,
+                    currentIndex: currentIndex,
+                    destinations: widget.destinations,
+                    currentLocation: currentLocation,
+                    drawerKey: _key,
+                  ),
+                  if (drawer != null && AdaptiveLayout.inputDeviceOf(scaffoldContext) == InputDevice.touch)
+                    const DrawerEdgeBlocker(),
+                ],
               )
             : null,
+      );
+      if (drawer == null) return scaffold;
+      return DrawerPeek(
+        drawer: drawer,
+        canPeek: () => _key.currentState?.isDrawerOpen == false,
+        child: scaffold,
       );
     }
 
