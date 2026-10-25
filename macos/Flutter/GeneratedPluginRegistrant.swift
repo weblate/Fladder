@@ -13,7 +13,7 @@ import desktop_drop
 import desktop_multi_window
 import device_info_plus
 import dynamic_color
-import file_picker
+import file_picker_darwin
 import flutter_local_notifications
 import fvp
 import just_audio

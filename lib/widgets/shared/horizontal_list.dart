@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
@@ -370,7 +371,7 @@ class _HorizontalListState extends ConsumerState<HorizontalList> with TickerProv
                 clipBehavior: Clip.none,
                 scrollDirection: Axis.horizontal,
                 padding: widget.contentPadding,
-                cacheExtent: _firstItemWidth ?? 250,
+                scrollCacheExtent: ScrollCacheExtent.pixels(_firstItemWidth ?? 250),
                 itemBuilder: (context, index) => index == widget.items.length
                     ? PosterPlaceHolder(
                         onTap: widget.onLabelClick ?? () {},

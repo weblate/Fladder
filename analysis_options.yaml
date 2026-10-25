@@ -25,8 +25,6 @@ analyzer:
   language:
     # strict-casts: false
     # strict-raw-types: true
-  plugins:
-    - custom_lint
 
 linter:
   rules:

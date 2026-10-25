@@ -349,7 +349,7 @@ class SyncNotifier extends StateNotifier<SyncSettingsModel> {
 
       if (saveDirectory == null) {
         String? selectedDirectory =
-            await FilePicker.platform.getDirectoryPath(dialogTitle: context.localized.syncSelectDownloadsFolder);
+            await FilePicker.getDirectoryPath(dialogTitle: context.localized.syncSelectDownloadsFolder);
         if (selectedDirectory?.isEmpty == true && context.mounted) {
           FladderSnack.show(context.localized.syncNoFolderSetup, context: context);
           return;

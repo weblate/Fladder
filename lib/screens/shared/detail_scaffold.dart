@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -282,7 +283,7 @@ class _DetailScaffoldState extends ConsumerState<DetailScaffold> {
                 child: CustomScrollView(
                   controller: _scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
-                  cacheExtent: size.height,
+                  scrollCacheExtent: ScrollCacheExtent.pixels(size.height),
                   slivers: [
                     SliverPadding(
                       padding: const EdgeInsets.only(bottom: 64),
