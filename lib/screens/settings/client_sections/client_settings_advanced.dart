@@ -6,6 +6,7 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 
 import 'package:fladder/models/settings/client_settings_model.dart';
 import 'package:fladder/providers/incognito_mode_provider.dart';
+import 'package:fladder/providers/low_resource_provider.dart';
 import 'package:fladder/providers/settings/client_settings_provider.dart';
 import 'package:fladder/providers/settings/home_settings_provider.dart';
 import 'package:fladder/screens/settings/settings_list_tile.dart';
@@ -145,7 +146,11 @@ List<Widget> buildClientSettingsAdvanced(BuildContext context, WidgetRef ref) {
       SettingsListTileEnum(
         label: Text(context.localized.lowResourceModeTitle),
         subLabel: Text(context.localized.lowResourceModeDesc),
-        current: ref.watch(clientSettingsProvider.select((value) => value.lowResourceMode)).label(context),
+        current: switch (ref.watch(clientSettingsProvider.select((value) => value.lowResourceMode))) {
+          LowResourceMode.auto =>
+            "${LowResourceMode.auto.label(context)} (${ref.watch(lowResourceModeProvider) ? context.localized.enabled : context.localized.disabled})",
+          final mode => mode.label(context),
+        },
         itemBuilder: (context) => LowResourceMode.values
             .map(
               (e) => ItemActionButton(
