@@ -2,11 +2,11 @@ PODS:
   - desktop_multi_window (0.0.1):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
-  - fvp (0.35.0):
+  - fvp (0.35.2):
     - Flutter
     - FlutterMacOS
-    - mdk (~> 0.35.0)
-  - mdk (0.35.0)
+    - mdk (~> 0.35.1)
+  - mdk (0.35.1)
   - media_kit_libs_macos_video (1.0.4):
     - FlutterMacOS
   - media_kit_video (0.0.1):
@@ -47,9 +47,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   desktop_multi_window: 566489c048b501134f9d7fb6a2354c60a9126486
-  FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
-  fvp: f4fdb89279e863eb09869bde7ba7fce9e81a16ab
-  mdk: baa616b93f696c7066df0e5ebe057badfa9c462b
+  FlutterMacOS: c232990155153907050900a2e175c7773903ba4e
+  fvp: 56f8d6682e0282ded5b0f9c485ab8d50123400b8
+  mdk: 59bbe9e2ac2a052455ab1b076c245680d66cf6c0
   media_kit_libs_macos_video: b3e2bbec2eef97c285f2b1baa7963c67c753fb82
   media_kit_video: c75b07f14d59706c775778e4dd47dd027de8d1e5
   screen_brightness_macos: 2d6d3af2165592d9a55ffcd95b7550970e41ebda
