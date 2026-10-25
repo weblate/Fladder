@@ -80,6 +80,7 @@ class LibMPV extends BasePlayer {
       configuration: mpv.PlayerConfiguration(
         title: "nl.jknaapen.fladder",
         libassAndroidFont: libassFallbackFont,
+        libassAndroidFontName: libassFallbackFontName,
         libass: !kIsWeb && settings.useLibass,
         bufferSize: settings.bufferSize * 1024 * 1024, // MPV uses buffer size in bytes
       ),
@@ -183,6 +184,7 @@ class LibMPV extends BasePlayer {
       configuration: mpv.PlayerConfiguration(
         title: "nl.jknaapen.fladder",
         libassAndroidFont: libassFallbackFont,
+        libassAndroidFontName: libassFallbackFontName,
         libass: !kIsWeb && _settings.useLibass,
         bufferSize: _settings.bufferSize * 1024 * 1024,
       ),
