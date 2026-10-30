@@ -206,6 +206,24 @@ class _HorizontalListState extends ConsumerState<HorizontalList> with TickerProv
     );
   }
 
+  bool _focusPreviousOffscreen(FocusNode node) {
+    final index = _getCorrectIndexForNode(node);
+    if (index <= 0) return false;
+    final targetIndex = index - 1;
+    _scrollAnimation?.dispose();
+    _scrollAnimation = null;
+    _scrollController.jumpTo(_cumulativeOffset(targetIndex).clamp(0, _scrollController.position.maxScrollExtent));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final target = _nodesInRow(parentNode).where((n) => _getCorrectIndexForNode(n) == targetIndex).firstOrNull;
+      if (target == null) return;
+      lastFocused = target;
+      target.requestFocus();
+      widget.onFocused?.call(targetIndex);
+    });
+    return true;
+  }
+
   void _scrollToStart() {
     _scrollController.animateTo(
       0,
@@ -247,7 +265,7 @@ class _HorizontalListState extends ConsumerState<HorizontalList> with TickerProv
 
     final correctIndex = _getCorrectIndexForNode(currentNode);
     if (correctIndex != -1) {
-      widget.onFocused?.call(correctIndex);
+      if (correctIndex < widget.items.length) widget.onFocused?.call(correctIndex);
       _scrollToPosition(correctIndex, node: currentNode);
     }
 
@@ -378,13 +396,12 @@ class _HorizontalListState extends ConsumerState<HorizontalList> with TickerProv
           FocusTraversalGroup(
             policy: HorizontalRailFocus(
               parentNode: parentNode,
-              scrollController: _scrollController,
-              firstItemWidth: _firstItemWidth ?? 250,
+              focusPreviousOffscreen: _focusPreviousOffscreen,
               onFocused: (node, {int? intervalMillis}) {
                 lastFocused = node;
                 final correctIndex = _getCorrectIndexForNode(node);
                 if (correctIndex != -1) {
-                  widget.onFocused?.call(correctIndex);
+                  if (correctIndex < widget.items.length) widget.onFocused?.call(correctIndex);
                   final duration = _durationForInterval(intervalMillis);
                   _scrollToPosition(correctIndex, node: node, duration: duration);
                 }
@@ -407,15 +424,16 @@ class _HorizontalListState extends ConsumerState<HorizontalList> with TickerProv
                   scrollDirection: Axis.horizontal,
                   padding: widget.contentPadding.add(EdgeInsetsDirectional.only(end: widget.trailingSpace)),
                   scrollCacheExtent: ScrollCacheExtent.pixels(_firstItemWidth ?? 250),
-                  itemBuilder: (context, index) => index == widget.items.length
-                      ? PosterPlaceHolder(
-                          onTap: widget.onLabelClick ?? () {},
-                          aspectRatio: widget.dominantRatio ?? AdaptiveLayout.poster(context).ratio,
-                        )
-                      : Container(
-                          key: index == 0 ? _firstItemKey : null,
-                          child: widget.itemBuilder(context, index),
-                        ),
+                  itemBuilder: (context, index) => _RailItem(
+                    key: index == 0 ? _firstItemKey : null,
+                    index: index,
+                    child: index == widget.items.length
+                        ? PosterPlaceHolder(
+                            onTap: widget.onLabelClick ?? () {},
+                            aspectRatio: widget.dominantRatio ?? AdaptiveLayout.poster(context).ratio,
+                          )
+                        : widget.itemBuilder(context, index),
+                  ),
                   separatorBuilder: (context, index) => SizedBox(width: contentPadding),
                   itemCount: widget.onLabelClick != null && AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad
                       ? widget.items.length + 1
@@ -430,39 +448,7 @@ class _HorizontalListState extends ConsumerState<HorizontalList> with TickerProv
     );
   }
 
-  int _getCorrectIndexForNode(FocusNode node) {
-    if (!mounted || _firstItemWidth == null || !_scrollController.hasClients || node.context == null) return -1;
-
-    final scrollableContext = _listViewKey.currentContext;
-    if (scrollableContext == null || !scrollableContext.mounted) return -1;
-
-    final scrollableBox = scrollableContext.findRenderObject() as RenderBox?;
-    final itemBox = node.context!.findRenderObject() as RenderBox?;
-    if (scrollableBox == null || itemBox == null) return -1;
-
-    final isRtl = Directionality.of(context) == TextDirection.rtl;
-    final itemTopLeft = itemBox.localToGlobal(Offset.zero, ancestor: scrollableBox);
-    final itemTopRight = itemBox.localToGlobal(Offset(itemBox.size.width, 0), ancestor: scrollableBox);
-    final viewportWidth = scrollableBox.size.width;
-    final startPadding = isRtl ? widget.contentPadding.right : widget.contentPadding.left;
-    final leadingInViewport = isRtl ? (viewportWidth - itemTopRight.dx) : itemTopLeft.dx;
-    final offset = leadingInViewport + _scrollController.offset - startPadding;
-
-    if (widget.itemWidthBuilder != null) {
-      double cumulative = 0;
-      for (var i = 0; i < widget.items.length; i++) {
-        final w = widget.itemWidthBuilder!(i);
-        if (offset < cumulative + w + contentPadding / 2) return i;
-        cumulative += w + contentPadding;
-      }
-      return widget.items.length - 1;
-    }
-
-    final totalItemWidth = _firstItemWidth! + contentPadding;
-    final index = ((offset + totalItemWidth / 2) ~/ totalItemWidth).clamp(0, widget.items.length - 1);
-
-    return index;
-  }
+  int _getCorrectIndexForNode(FocusNode node) => node.context?.findAncestorWidgetOfExactType<_RailItem>()?.index ?? -1;
 }
 
 FocusNode? _firstFullyVisibleNode(
@@ -507,6 +493,16 @@ FocusNode? _nodeForItemIndex(BuildContext context, List<FocusNode> nodes, int in
 
 class RailFocusNode extends FocusNode {}
 
+class _RailItem extends StatelessWidget {
+  final int index;
+  final Widget child;
+
+  const _RailItem({required this.index, required this.child, super.key});
+
+  @override
+  Widget build(BuildContext context) => child;
+}
+
 void railAwareRequestFocus(
   FocusNode node, {
   ScrollPositionAlignmentPolicy? alignmentPolicy,
@@ -535,16 +531,14 @@ List<FocusNode> _nodesInRow(FocusNode parentNode) {
 class HorizontalRailFocus extends WidgetOrderTraversalPolicy {
   final FocusNode parentNode;
   final void Function(FocusNode node, {int? intervalMillis}) onFocused;
-  final ScrollController scrollController;
-  final double firstItemWidth;
+  final bool Function(FocusNode node) focusPreviousOffscreen;
   static DateTime? _lastMoveTime;
   static TraversalDirection? _lastDirection;
 
   HorizontalRailFocus({
     required this.parentNode,
     required this.onFocused,
-    required this.scrollController,
-    required this.firstItemWidth,
+    required this.focusPreviousOffscreen,
   }) : super(requestFocusCallback: railAwareRequestFocus);
 
   @override
@@ -557,14 +551,8 @@ class HorizontalRailFocus extends WidgetOrderTraversalPolicy {
 
     if (direction == TraversalDirection.left) {
       if (index == 0) {
-        if (direction == towardsSidebar &&
-            scrollController.hasClients &&
-            scrollController.offset > firstItemWidth * 0.5) {
-          if (scrollController.hasClients) scrollController.jumpTo(0);
-          return true;
-        }
-
         if (direction == towardsSidebar) {
+          if (focusPreviousOffscreen(currentNode)) return true;
           lastMainFocus = currentNode;
           if (navBarNode.canRequestFocus && navBarNode.context?.mounted == true) {
             navBarNode.requestFocus();
@@ -600,6 +588,7 @@ class HorizontalRailFocus extends WidgetOrderTraversalPolicy {
         target.requestFocus();
         onFocused(target, intervalMillis: interval);
       } else if (direction == towardsSidebar) {
+        if (focusPreviousOffscreen(currentNode)) return true;
         lastMainFocus = currentNode;
         if (navBarNode.canRequestFocus && navBarNode.context?.mounted == true) {
           navBarNode.requestFocus();
