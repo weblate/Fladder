@@ -14,8 +14,6 @@ import 'package:fladder/util/list_padding.dart';
 import 'package:fladder/util/sticky_header_text.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/navigation_body.dart';
 import 'package:fladder/widgets/navigation_scaffold/components/side_navigation_bar.dart';
-import 'package:fladder/widgets/shared/ensure_visible.dart';
-import 'package:fladder/widgets/shared/focus_row.dart';
 
 class HorizontalList<T> extends ConsumerStatefulWidget {
   final bool autoFocus;
@@ -35,6 +33,8 @@ class HorizontalList<T> extends ConsumerStatefulWidget {
   final bool shrinkWrap;
   final double Function(int index)? itemWidthBuilder;
   final ValueChanged<bool>? onFocusChange;
+  final BuildContext? revealContext;
+  final double trailingSpace;
 
   const HorizontalList({
     this.autoFocus = false,
@@ -54,6 +54,8 @@ class HorizontalList<T> extends ConsumerStatefulWidget {
     this.dominantRatio,
     this.itemWidthBuilder,
     this.onFocusChange,
+    this.revealContext,
+    this.trailingSpace = 0,
     super.key,
   });
 
@@ -62,17 +64,22 @@ class HorizontalList<T> extends ConsumerStatefulWidget {
 }
 
 class _HorizontalListState extends ConsumerState<HorizontalList> with TickerProviderStateMixin {
-  final FocusNode parentNode = FocusNode();
+  final FocusNode parentNode = RailFocusNode();
   FocusNode? lastFocused;
   final GlobalKey _firstItemKey = GlobalKey();
   final GlobalKey _listViewKey = GlobalKey();
   final ScrollController _scrollController = ScrollController();
   final contentPadding = 8.0;
-  double? contentWidth;
   double? _firstItemWidth;
   bool hasFocus = false;
 
   AnimationController? _scrollAnimation;
+
+  AnimationController? _revealAnimation;
+
+  static DateTime? _lastVerticalEntry;
+  static AnimationController? _activeReveal;
+  static const Duration _trackSettle = Duration(milliseconds: 250);
 
   @override
   void initState() {
@@ -93,6 +100,10 @@ class _HorizontalListState extends ConsumerState<HorizontalList> with TickerProv
   @override
   void dispose() {
     _scrollAnimation?.dispose();
+    if (_activeReveal == _revealAnimation) _activeReveal = null;
+    _revealAnimation?.dispose();
+    parentNode.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -145,45 +156,54 @@ class _HorizontalListState extends ConsumerState<HorizontalList> with TickerProv
     return offset;
   }
 
-  Future<void> _scrollToPosition(int index, {Duration? duration, bool instant = false}) async {
-    if (_firstItemWidth == null || !_scrollController.hasClients) return;
+  double? _liveOffsetFor(FocusNode node) {
+    final listBox = _listViewKey.currentContext?.findRenderObject() as RenderBox?;
+    final itemBox = node.context?.findRenderObject() as RenderBox?;
+    if (listBox == null || itemBox == null || !listBox.attached || !itemBox.attached) return null;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+    final itemStart = itemBox.localToGlobal(Offset.zero, ancestor: listBox).dx;
+    final leading = isRtl ? listBox.size.width - itemStart - itemBox.size.width : itemStart;
+    final startPadding = isRtl ? widget.contentPadding.right : widget.contentPadding.left;
+    return _scrollController.offset + leading - startPadding;
+  }
 
-    final target = _cumulativeOffset(index).clamp(0, _scrollController.position.maxScrollExtent);
-
-    _scrollAnimation?.stop();
-
-    if (instant) {
-      if (_scrollController.hasClients) _scrollController.jumpTo(target.toDouble());
-      return;
-    }
-
-    final controller = AnimationController(
-      vsync: this,
-      duration: duration ?? scrollMaxDuration,
-    );
-
-    _scrollAnimation = controller;
-
-    final tween = Tween<double>(
-      begin: _scrollController.offset,
-      end: target.toDouble(),
-    );
-
-    final animation = CurvedAnimation(
+  AnimationController _animateTracking(
+    Duration duration,
+    ScrollPosition? Function() position,
+    double? Function() measure,
+  ) {
+    final total = duration + _trackSettle;
+    final controller = AnimationController(vsync: this, duration: total);
+    final progress = CurvedAnimation(
       parent: controller,
-      curve: Curves.fastOutSlowIn,
+      curve: Interval(0, duration.inMicroseconds / total.inMicroseconds, curve: Curves.fastOutSlowIn),
     );
 
+    double? startDistance;
+    double? lastMeasured;
     controller.addListener(() {
-      if (_scrollController.hasClients) {
-        _scrollController.jumpTo(tween.evaluate(animation));
-      }
+      final pos = position();
+      final measured = measure();
+      if (pos == null || !pos.hasPixels || measured == null) return;
+      final target = (2 * measured - (lastMeasured ?? measured)).clamp(pos.minScrollExtent, pos.maxScrollExtent);
+      lastMeasured = measured;
+      startDistance ??= target - pos.pixels;
+      final next = (target - startDistance! * (1 - progress.value)).clamp(pos.minScrollExtent, pos.maxScrollExtent);
+      if ((next - pos.pixels).abs() > 0.1) pos.jumpTo(next);
     });
+    controller.forward();
+    return controller;
+  }
 
-    await controller.forward();
-
-    if (_scrollAnimation == controller) _scrollAnimation = null;
-    controller.dispose();
+  void _scrollToPosition(int index, {FocusNode? node, Duration? duration}) {
+    if (_firstItemWidth == null || !_scrollController.hasClients) return;
+    final target = _cumulativeOffset(index);
+    _scrollAnimation?.dispose();
+    _scrollAnimation = _animateTracking(
+      duration ?? scrollMaxDuration,
+      () => _scrollController.hasClients ? _scrollController.position : null,
+      () => (node != null ? _liveOffsetFor(node) : null) ?? target,
+    );
   }
 
   void _scrollToStart() {
@@ -203,8 +223,62 @@ class _HorizontalListState extends ConsumerState<HorizontalList> with TickerProv
     );
   }
 
+  void _onRailFocusChange(bool value) {
+    widget.onFocusChange?.call(value);
+    if (!value) {
+      hasFocus = false;
+      return;
+    }
+    if (hasFocus || AdaptiveLayout.inputDeviceOf(context) != InputDevice.dPad) return;
+    hasFocus = true;
+
+    final nodesOnSameRow = _nodesInRow(parentNode);
+    final primary = FocusManager.instance.primaryFocus;
+    final currentNode = primary != parentNode && nodesOnSameRow.contains(primary)
+        ? primary
+        : nodesOnSameRow.contains(lastFocused)
+            ? lastFocused
+            : _firstFullyVisibleNode(
+                context, _listViewKey.currentContext?.findRenderObject() as RenderBox?, nodesOnSameRow);
+    if (currentNode == null) return;
+
+    lastFocused = currentNode;
+    if (primary != currentNode) currentNode.requestFocus();
+
+    final correctIndex = _getCorrectIndexForNode(currentNode);
+    if (correctIndex != -1) {
+      widget.onFocused?.call(correctIndex);
+      _scrollToPosition(correctIndex, node: currentNode);
+    }
+
+    final now = DateTime.now();
+    final interval = _lastVerticalEntry == null ? null : now.difference(_lastVerticalEntry!).inMilliseconds;
+    _lastVerticalEntry = now;
+    _revealVertically(_durationForInterval(interval));
+  }
+
+  void _revealVertically(Duration duration) {
+    final revealContext = widget.revealContext ?? context;
+    final scrollable = Scrollable.maybeOf(revealContext, axis: Axis.vertical);
+    if (scrollable == null) return;
+
+    _activeReveal?.stop();
+    _revealAnimation?.dispose();
+    _revealAnimation = _animateTracking(
+      duration,
+      () => revealContext.mounted && scrollable.mounted ? scrollable.position : null,
+      () {
+        final box = revealContext.mounted ? revealContext.findRenderObject() : null;
+        if (box == null || !box.attached) return null;
+        return RenderAbstractViewport.maybeOf(box)?.getOffsetToReveal(box, 0.5).offset;
+      },
+    );
+    _activeReveal = _revealAnimation;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDpad = AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad;
     final hasPointer = AdaptiveLayout.inputDeviceOf(context) == InputDevice.pointer;
     final titleBarWidget = Padding(
       padding: widget.contentPadding,
@@ -301,9 +375,8 @@ class _HorizontalListState extends ConsumerState<HorizontalList> with TickerProv
         spacing: 8,
         children: [
           if (hasLabel && widget.titleActionsPosition == VerticalDirection.up) titleBarWidget,
-          FocusRow(
-            focusNode: parentNode,
-            traversalPolicy: HorizontalRailFocus(
+          FocusTraversalGroup(
+            policy: HorizontalRailFocus(
               parentNode: parentNode,
               scrollController: _scrollController,
               firstItemWidth: _firstItemWidth ?? 250,
@@ -313,78 +386,41 @@ class _HorizontalListState extends ConsumerState<HorizontalList> with TickerProv
                 if (correctIndex != -1) {
                   widget.onFocused?.call(correctIndex);
                   final duration = _durationForInterval(intervalMillis);
-                  _scrollToPosition(correctIndex, duration: duration);
+                  _scrollToPosition(correctIndex, node: node, duration: duration);
                 }
               },
             ),
-            onFocusChange: (value) {
-              widget.onFocusChange?.call(value);
-              if (value && hasFocus != value) {
-                hasFocus = value;
-                final nodesOnSameRow = _nodesInRow(parentNode);
-                final currentNode = nodesOnSameRow.contains(lastFocused)
-                    ? lastFocused
-                    : _firstFullyVisibleNode(context, nodesOnSameRow);
-
-                if (currentNode != null) {
-                  lastFocused = currentNode;
-                  final correctIndex = _getCorrectIndexForNode(currentNode);
-
-                  if (widget.onFocused != null) {
-                    if (correctIndex != -1) {
-                      widget.onFocused!(correctIndex);
-                    }
-                  } else {
-                    context.ensureVisible();
-                  }
-                  currentNode.requestFocus();
-                }
-              } else {
-                hasFocus = false;
-              }
-            },
-            onGroupFocused: (groupNode) {
-              final nodesOnSameRow = _nodesInRow(parentNode);
-              final currentNode =
-                  nodesOnSameRow.contains(lastFocused) ? lastFocused : _firstFullyVisibleNode(context, nodesOnSameRow);
-
-              if (currentNode != null) {
-                lastFocused = currentNode;
-                final correctIndex = _getCorrectIndexForNode(currentNode);
-                if (widget.onFocused != null) {
-                  if (correctIndex != -1) widget.onFocused!(correctIndex);
-                } else {
-                  context.ensureVisible();
-                }
-                currentNode.requestFocus();
-              }
-            },
-            child: SizedBox(
-              height: widget.height ??
-                  ((AdaptiveLayout.poster(context).size *
-                              ref.watch(clientSettingsProvider.select((value) => value.posterSize))) /
-                          math.pow((widget.dominantRatio ?? 1.0), 0.55)) *
-                      0.72,
-              child: ListView.separated(
-                key: _listViewKey,
-                controller: _scrollController,
-                clipBehavior: Clip.none,
-                scrollDirection: Axis.horizontal,
-                padding: widget.contentPadding,
-                scrollCacheExtent: ScrollCacheExtent.pixels(_firstItemWidth ?? 250),
-                itemBuilder: (context, index) => index == widget.items.length
-                    ? PosterPlaceHolder(
-                        onTap: widget.onLabelClick ?? () {},
-                        aspectRatio: widget.dominantRatio ?? AdaptiveLayout.poster(context).ratio,
-                      )
-                    : Container(
-                        key: index == 0 ? _firstItemKey : null,
-                        child: widget.itemBuilder(context, index),
-                      ),
-                separatorBuilder: (context, index) => SizedBox(width: contentPadding),
-                itemCount: widget.onLabelClick != null && AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad
-                    ? widget.items.length + 1
-                    : widget.items.length,
+            child: Focus(
+              focusNode: parentNode,
+              descendantsAreTraversable: !isDpad,
+              onFocusChange: _onRailFocusChange,
+              child: SizedBox(
+                height: widget.height ??
+                    ((AdaptiveLayout.poster(context).size *
+                                ref.watch(clientSettingsProvider.select((value) => value.posterSize))) /
+                            math.pow((widget.dominantRatio ?? 1.0), 0.55)) *
+                        0.72,
+                child: ListView.separated(
+                  key: _listViewKey,
+                  controller: _scrollController,
+                  clipBehavior: Clip.none,
+                  scrollDirection: Axis.horizontal,
+                  padding: widget.contentPadding.add(EdgeInsetsDirectional.only(end: widget.trailingSpace)),
+                  scrollCacheExtent: ScrollCacheExtent.pixels(_firstItemWidth ?? 250),
+                  itemBuilder: (context, index) => index == widget.items.length
+                      ? PosterPlaceHolder(
+                          onTap: widget.onLabelClick ?? () {},
+                          aspectRatio: widget.dominantRatio ?? AdaptiveLayout.poster(context).ratio,
+                        )
+                      : Container(
+                          key: index == 0 ? _firstItemKey : null,
+                          child: widget.itemBuilder(context, index),
+                        ),
+                  separatorBuilder: (context, index) => SizedBox(width: contentPadding),
+                  itemCount: widget.onLabelClick != null && AdaptiveLayout.inputDeviceOf(context) == InputDevice.dPad
+                      ? widget.items.length + 1
+                      : widget.items.length,
+                ),
               ),
             ),
           ),
@@ -431,14 +467,12 @@ class _HorizontalListState extends ConsumerState<HorizontalList> with TickerProv
 
 FocusNode? _firstFullyVisibleNode(
   BuildContext context,
+  RenderBox? viewportBox,
   List<FocusNode> nodes,
 ) {
   if (nodes.isEmpty) return null;
   final isRtl = Directionality.of(context) == TextDirection.rtl;
-
-  final scrollable = Scrollable.of(context);
-
-  final viewportBox = scrollable.context.findRenderObject() as RenderBox;
+  if (viewportBox == null || !viewportBox.attached) return isRtl ? nodes.lastOrNull : nodes.firstOrNull;
   final viewportSize = viewportBox.size;
 
   for (final node in isRtl ? nodes.reversed : nodes) {
@@ -449,10 +483,7 @@ FocusNode? _firstFullyVisibleNode(
 
       final nodeRect = Rect.fromPoints(topLeft, bottomRight);
 
-      final fullyVisible = nodeRect.left >= 0 &&
-          nodeRect.right <= viewportSize.width &&
-          nodeRect.top >= 0 &&
-          nodeRect.bottom <= viewportSize.height;
+      final fullyVisible = nodeRect.left >= 0 && nodeRect.right <= viewportSize.width;
 
       if (fullyVisible) {
         return node;
@@ -474,6 +505,28 @@ FocusNode? _nodeForItemIndex(BuildContext context, List<FocusNode> nodes, int in
   return nodes[visualIndex];
 }
 
+class RailFocusNode extends FocusNode {}
+
+void railAwareRequestFocus(
+  FocusNode node, {
+  ScrollPositionAlignmentPolicy? alignmentPolicy,
+  double? alignment,
+  Duration? duration,
+  Curve? curve,
+}) {
+  if (node is RailFocusNode || node.ancestors.any((n) => n is RailFocusNode)) {
+    node.requestFocus();
+    return;
+  }
+  FocusTraversalPolicy.defaultTraversalRequestFocusCallback(
+    node,
+    alignmentPolicy: alignmentPolicy,
+    alignment: alignment,
+    duration: duration,
+    curve: curve,
+  );
+}
+
 List<FocusNode> _nodesInRow(FocusNode parentNode) {
   return parentNode.descendants.where((n) => n.canRequestFocus && n.context != null).toList()
     ..sort((a, b) => a.rect.center.dx.compareTo(b.rect.center.dx));
@@ -492,7 +545,7 @@ class HorizontalRailFocus extends WidgetOrderTraversalPolicy {
     required this.onFocused,
     required this.scrollController,
     required this.firstItemWidth,
-  });
+  }) : super(requestFocusCallback: railAwareRequestFocus);
 
   @override
   bool inDirection(FocusNode currentNode, TraversalDirection direction) {
@@ -500,7 +553,7 @@ class HorizontalRailFocus extends WidgetOrderTraversalPolicy {
     final towardsSidebar = isRtl ? TraversalDirection.right : TraversalDirection.left;
     final rowNodes = _nodesInRow(parentNode);
     final index = rowNodes.indexOf(currentNode);
-    if (index == -1) return false;
+    if (index == -1) return super.inDirection(currentNode, direction);
 
     if (direction == TraversalDirection.left) {
       if (index == 0) {
@@ -556,7 +609,8 @@ class HorizontalRailFocus extends WidgetOrderTraversalPolicy {
       return true;
     }
 
-    parentNode.requestFocus();
+    final scope = currentNode.nearestScope;
+    if (scope != null) invalidateScopeData(scope);
     return super.inDirection(currentNode, direction);
   }
 }
