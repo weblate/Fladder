@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:chopper/chopper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 import 'package:fladder/jellyfin/jellyfin_open_api.swagger.dart';
 import 'package:fladder/models/account_model.dart';
@@ -42,7 +43,7 @@ class AuthNotifier extends StateNotifier<LoginScreenModel> {
 
   Future<void> initModel() async {
     ref.read(userProvider.notifier).clear();
-    final currentAccounts = ref.read(authProvider.notifier).getSavedAccounts();
+    final currentAccounts = getSavedAccounts();
     ref.read(lockScreenActiveProvider.notifier).update((state) => true);
     if (FladderConfig.baseUrl != null) {
       final url = FladderConfig.baseUrl;
@@ -167,7 +168,7 @@ class AuthNotifier extends StateNotifier<LoginScreenModel> {
           loggedIn;
       ref.read(sharedUtilityProvider).addAccount(newUser);
       ref.read(userProvider.notifier).userState = newUser;
-      final currentAccounts = ref.read(authProvider.notifier).getSavedAccounts();
+      final currentAccounts = getSavedAccounts();
 
       state = state.copyWith(
         accounts: currentAccounts,

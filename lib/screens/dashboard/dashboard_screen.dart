@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
@@ -171,7 +171,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     return NestedScaffold(
       background: ValueListenableBuilder<ItemBaseModel?>(
         valueListenable: selectedPoster,
-        builder: (_, value, __) {
+        builder: (_, value, _) {
           return BackgroundImage(
             images: (value != null
                     ? [value]
