@@ -373,6 +373,8 @@
   "@patternTooShort": {},
   "codeMismatch": "Doesn't match. Try again.",
   "@codeMismatch": {},
+  "unreadableAccountsLogInAgain": "Some saved accounts could not be loaded. Log in again to restore them.",
+  "@unreadableAccountsLogInAgain": {},
   "info": "Info",
   "@info": {},
   "invalidUrl": "Invalid URL",

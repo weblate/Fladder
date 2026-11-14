@@ -57,6 +57,10 @@ class AuthNotifier extends StateNotifier<LoginScreenModel> {
       accounts: currentAccounts,
       screen: currentAccounts.isEmpty ? LoginScreenType.login : LoginScreenType.users,
     );
+    final message = localContext?.localized.unreadableAccountsLogInAgain;
+    if (message != null && ref.read(sharedUtilityProvider).hasUnreadableAccounts) {
+      FladderSnack.show(message, duration: const Duration(seconds: 8));
+    }
   }
 
   Future<void> _fetchServerInfo(String url) async {
@@ -144,13 +148,23 @@ class AuthNotifier extends StateNotifier<LoginScreenModel> {
         serverName: serverResponse.body?.serverName ?? "",
       );
       var imageUrl = ref.read(imageUtilityProvider).getUserImageUrl(response.body?.user?.id ?? "");
-      AccountModel newUser = AccountModel(
+      final loggedIn = AccountModel(
         name: response.body?.user?.name ?? "",
         id: response.body?.user?.id ?? "",
         avatar: imageUrl,
         credentials: credentials,
         lastUsed: DateTime.now(),
       );
+      final existing = ref.read(sharedUtilityProvider).getAccounts().where(loggedIn.sameIdentity).firstOrNull;
+      final newUser = existing?.copyWith(
+            name: loggedIn.name,
+            avatar: loggedIn.avatar,
+            credentials: credentials.copyWith(localUrl: credentials.localUrl ?? existing.credentials.localUrl),
+            lastUsed: loggedIn.lastUsed,
+            authMethod: Authentication.autoLogin,
+            localPin: "",
+          ) ??
+          loggedIn;
       ref.read(sharedUtilityProvider).addAccount(newUser);
       ref.read(userProvider.notifier).userState = newUser;
       final currentAccounts = ref.read(authProvider.notifier).getSavedAccounts();
