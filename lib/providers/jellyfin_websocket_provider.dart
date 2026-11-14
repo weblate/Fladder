@@ -100,8 +100,9 @@ class _JellyfinWebSocket {
   Timer? _keepAliveTimer;
   Timer? _reconnectTimer;
   int _retryDelay = 1;
-  bool _connected = false;
   bool _closed = false;
+
+  static bool _connectedBefore = false;
 
   Stream<JellyfinWebSocketEvent> get events => _events.stream;
 
@@ -117,8 +118,8 @@ class _JellyfinWebSocket {
     }
     if (_closed) return;
     _retryDelay = 1;
-    if (_connected) _events.add(JellyfinWebSocketReconnected());
-    _connected = true;
+    if (_connectedBefore) _events.add(JellyfinWebSocketReconnected());
+    _connectedBefore = true;
     onConnectionChanged(true);
     _subscription = channel.stream.listen(_handleMessage, onDone: _reconnect, onError: (_) {});
   }

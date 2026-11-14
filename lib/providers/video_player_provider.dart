@@ -37,11 +37,6 @@ class VideoPlayerNotifier extends StateNotifier<MediaControlsWrapper> {
 
   MediaPlaybackModel get playbackState => ref.read(mediaPlaybackProvider);
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   void applySettingsChanged(VideoPlayerSettingsModel settings) {
     final currentItem = ref.read(playBackModel)?.item;
     if (currentItem != null) {
