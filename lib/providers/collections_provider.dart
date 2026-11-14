@@ -62,6 +62,7 @@ class BoxSetNotifier extends StateNotifier<_CollectionSetModel> {
         BaseItemKind.boxset,
       ],
     );
+    if (!mounted) return;
 
     final boxSets = collections.body?.items?.map((e) => BoxSetModel.fromBaseDto(e, ref)).toList();
 

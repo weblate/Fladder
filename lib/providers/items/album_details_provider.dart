@@ -51,7 +51,7 @@ class AlbumDetailsNotifier extends StateNotifier<AlbumModel?> {
   }
 
   Future<void> fetchTracks() async {
-    if (state == null) return;
+    if (!mounted || state == null) return;
     if (ref.read(connectivityStatusProvider) == ConnectionState.offline) {
       final tracks = (await ref.read(syncProvider.notifier).getChildren(state!.id))
           .map((item) => item.itemModel)
@@ -89,7 +89,7 @@ class AlbumDetailsNotifier extends StateNotifier<AlbumModel?> {
   }
 
   Future<void> fetchArtistRelated() async {
-    if (state == null) return;
+    if (!mounted || state == null) return;
     if (ref.read(connectivityStatusProvider) == ConnectionState.offline) {
       final parentId = state!.parentId;
       if (parentId == null) return;

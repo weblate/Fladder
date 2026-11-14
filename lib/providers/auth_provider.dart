@@ -196,13 +196,14 @@ class AuthNotifier extends StateNotifier<LoginScreenModel> {
   Future<void> switchUser() async => clearAllProviders();
 
   void clearAllProviders() {
-    ref.read(dashboardProvider.notifier).clear();
-    ref.read(viewsProvider.notifier).clear();
-    ref.read(favouritesProvider.notifier).clear();
-    ref.read(userProvider.notifier).clear();
-    ref.read(libraryScreenProvider.notifier).clear();
-    ref.read(seerrDashboardProvider.notifier).clear();
-    ref.read(musicDashboardProvider.notifier).clear();
+    final container = ref.container;
+    container.read(dashboardProvider.notifier).clear();
+    container.read(viewsProvider.notifier).clear();
+    container.read(favouritesProvider.notifier).clear();
+    container.read(userProvider.notifier).clear();
+    container.read(libraryScreenProvider.notifier).clear();
+    container.read(seerrDashboardProvider.notifier).clear();
+    container.read(musicDashboardProvider.notifier).clear();
   }
 
   Future<void> setServer(String server) async {

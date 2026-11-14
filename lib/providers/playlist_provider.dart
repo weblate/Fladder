@@ -62,6 +62,7 @@ class PlaylistNotifier extends StateNotifier<_PlaylistProviderModel> {
         BaseItemKind.playlist,
       ],
     );
+    if (!mounted) return;
 
     final playlists = serverPlaylists.body?.items?.map((e) => PlaylistModel.fromBaseDto(e, ref)).toList();
 
