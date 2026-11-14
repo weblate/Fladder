@@ -60,6 +60,7 @@ const _$AuthenticationEnumMap = {
   Authentication.biometrics: 'biometrics',
   Authentication.passcode: 'passcode',
   Authentication.none: 'none',
+  Authentication.pattern: 'pattern',
 };
 
 _UserSettings _$UserSettingsFromJson(Map<String, dynamic> json) => _UserSettings(

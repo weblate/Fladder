@@ -46,6 +46,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             case Authentication.biometrics:
             case Authentication.none:
             case Authentication.passcode:
+            case Authentication.pattern:
               callBackOrNavigate(false);
               break;
           }
